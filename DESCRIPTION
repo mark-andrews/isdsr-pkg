@@ -1,0 +1,12 @@
+Package: isdsr
+Title: Tools and Datasets to Accompany ISDSR Textbook
+Version: 0.0.0.9000
+Authors@R: 
+    person("Mark", "Andrews", , "mark.andrews@ntu.ac.uk", role = c("aut", "cre"))
+Description: Tools and datasets that are used in the textbook "Introduction to
+    Statistics and Data Science Using R" by Mark Andrews & Lucy V. Justice
+    (forthcoming), SAGE.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
