@@ -67,3 +67,58 @@
 #'   The arXiv-ed preprint is available at
 #'   \href{https://arxiv.org/abs/1506.06297}{https://arxiv.org/abs/1506.06297}.
 NULL
+
+
+
+#' @title YouGov 2017 Poll of Illegal Drug Use
+#' @description Data concerning the question "Have you ever taken an illegal
+#'   drug?" that was in a 2017 poll of 1300 British young adults. Individual
+#'   respondents' data are not available but respondents were grouped into
+#'   various demographic groups, including age group and gender. Here, we report
+#'   the number of respondents in each combination of gender and age group who
+#'   gave each of the 8 possible responses to the question.
+#' @name yougov17drugs
+#' @format A data frame with 48 rows and 4 variables: 
+#' \describe{
+#'   \item{\code{gender}}{(factor) Respondents' gender (male/female)}
+#'   \item{\code{age}}{(ordinal) Age group (16-18, 19-21, 22-24)}
+#'   \item{\code{response}}{(factor) Each possible response to the question
+#'   "Have you ever taken an illegal drug". There were 8 possible responses: 1) "I
+#'   have taken illegal drugs frequently and still do", 2) "I have taken illegal
+#'   drugs frequently but have now stopped completely", 3) "I have taken illegal
+#'   drugs occasionally and still do", 4) "I have taken illegal drugs occasionally
+#'   but have now stopped completely", 5) "I have only taken illegal drugs once or
+#'   twice", 6) "I’ve never taken any illegal drugs", 7) "Not sure", 8) "Prefer not to
+#'   say".} 
+#'   \item{\code{count}}{(numeric) The number of respondents who gave each
+#'   particular response to the question.}
+#'   }
+#' @details The poll in which this question occurred was conducted between the
+#'   27th June and the 5th July 2017. A total of 1300 young adults were
+#'   surveyed, all of whom were residents of the Britain (England, Wales, or
+#'   Scotland), and whose ages ranged from 16 to 24. The individual respondent
+#'   level data were not made available. However, the number of individuals in
+#'   various demographic categories, including age, gender, etc., were provided.
+#'   In addition, the percentage of individuals in each category that chose each
+#'   possible response to the question was provided. For example, the report of
+#'   the poll results states that there were 162 males in the 16-18 age group.
+#'   It also states that 12% of respondents in this male 16-18 group responded
+#'   to the question with "I have taken illegal drugs occasionally and still
+#'   do". If we assume that this entails that 12% of the 162 individuals in this
+#'   group responded in this way, then this is approximately 19 individuals in
+#'   this gender and age group who responded this way. It should be noted,
+#'   however, that it is not obvious that the count of the number of individuals
+#'   in each group who responded in any given way can be obtained simply by
+#'   multiplying the reported percentage by the reported total, as we have just
+#'   done. The percentages may have been calculated using some weighting
+#'   formula. Although it is not explicitly stated that this was done, the
+#'   report does provide unweighted as well as weighted totals in each
+#'   demographic category, and thus it may be that some weighting was applied to
+#'   obtain the reported percentage. Notwithstanding this possibility, here we
+#'   report counts for each category and response type obtaining by simply
+#'   multiplying the stated unweighted total for each category by the stated
+#'   percentage for each possible response.
+#' @source The results of the YouGov poll are available in pdf form at
+#'   \href{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}.
+#'   
+NULL
