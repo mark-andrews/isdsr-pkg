@@ -14,9 +14,11 @@ Suggests:
     assertthat (>= 0.2.1),
     dplyr (>= 1.0.7),
     here (>= 1.0.1),
-    readr (>= 2.0.2)
+    readr (>= 2.0.2),
+    testthat (>= 3.0.0)
 Depends: 
     R (>= 2.10)
 LazyData: true
 Imports: 
     tibble
+Config/testthat/edition: 3
