@@ -9,7 +9,8 @@ urn_sampler(
   black = 50,
   sample_size = 25,
   replace = TRUE,
-  repetitions = 1
+  repetitions = 1,
+  tally = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,10 @@ urn_sampler(
 \item{replace}{Is the sampling with or without replacement}
 
 \item{repetitions}{The number of repetitions of this sampling to be done.}
+
+\item{tally}{If TRUE, instead of returning the data frame of all samples,
+return a data frame of the number of times each combination of red and
+black marbles occur in the samples.}
 }
 \value{
 A data frame with two columns: \code{n_red} and \code{n_black}, which give the
