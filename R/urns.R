@@ -38,9 +38,16 @@ urn_sampler <- function(red = 50,
   }
   
   # return a tibble with two integer columns
-  tibble::tibble(
+  # unless repetitions is just 1, and then
+  # return a vector
+  result_df <- tibble::tibble(
     red = red,
     black = as.integer(sample_size) - red
   )
   
+  if (repetitions > 1){
+    result_df
+  } else {
+    unlist(result_df)
+  }
 }
