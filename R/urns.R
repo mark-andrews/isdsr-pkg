@@ -61,7 +61,9 @@ urn_sampler <- function(red = 50,
     result_df %>%
       dplyr::group_by(red, black) %>% 
       dplyr::tally(name = 'tally') %>% 
-      dplyr::ungroup()
+      dplyr::ungroup() %>%
+      mutate(prob = tally/sum(tally)) %>% 
+      arrange(red) # sort by `red`, which I think may always happen anyway
   }
 
 }
