@@ -1,10 +1,11 @@
 `%>%` <- magrittr::`%>%`
 
-#' Sample red and black marbles from an urn of marbles #'
+#' Sample red and black marbles from an urn of marbles 
+#' #'
 #' @param red The number of red marbles in the urn.
 #' @param black The number of black marbles in the urn.
 #' @param sample_size The number of marbles to draw from the urn.
-#' @param replace Is the sampling with or without replacement
+#' @param replace Is the sampling with or without replacement?
 #' @param repetitions The number of repetitions of this sampling to be done.
 #' @param tally If TRUE, instead of returning the data frame of all samples,
 #'   return a data frame of the number of times each combination of red and
@@ -36,6 +37,8 @@ urn_sampler <- function(red = 50,
     
   } else {
     
+    # TODO We need to do error checking here
+    
     # sampling without replace: sample from hypergeometric dist
     red <- rhyper(nn = repetitions,
                   m = red,
@@ -66,4 +69,39 @@ urn_sampler <- function(red = 50,
       dplyr::arrange(red) # sort by `red`, which I think may always happen anyway
   }
 
+}
+
+
+#' The exact sampling distribution for an urn problem
+#'
+#' @param red The number of red marbles in the urn.
+#' @param black The number of black marbles in the urn.
+#' @param sample_size The number of marbles to draw from the urn.
+#' @param replace Is the sampling with or without replacement?
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' urn_sampling_distribution(sample_size = 10)
+urn_sampling_distribution <- function(red = 50,
+                                      black = 50,
+                                      sample_size = 25,
+                                      replace = TRUE){
+  
+  N <- red + black # total number of marbles in the urn
+  
+  # sequence of all possible values of
+  # the number of red marbles in sample
+  red_seq <- seq(0, sample_size) 
+  
+  if (replace){
+    prob <- dbinom(red_seq, size = sample_size, prob = red/N)
+  } else {
+    prob <- dhyper(red_seq, m = red, n = black, k = sample_size)
+  }
+  
+  tibble(red = red_seq,
+         black = as.integer(sample_size) - red,
+         prob = prob)
 }

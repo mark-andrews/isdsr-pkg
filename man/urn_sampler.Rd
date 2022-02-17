@@ -2,7 +2,8 @@
 % Please edit documentation in R/urns.R
 \name{urn_sampler}
 \alias{urn_sampler}
-\title{Sample red and black marbles from an urn of marbles #'}
+\title{Sample red and black marbles from an urn of marbles
+#'}
 \usage{
 urn_sampler(
   red = 50,
@@ -20,7 +21,7 @@ urn_sampler(
 
 \item{sample_size}{The number of marbles to draw from the urn.}
 
-\item{replace}{Is the sampling with or without replacement}
+\item{replace}{Is the sampling with or without replacement?}
 
 \item{repetitions}{The number of repetitions of this sampling to be done.}
 
@@ -35,7 +36,8 @@ number of red and black marbles, respectively, in the sample of size
 repetition of this experiment.
 }
 \description{
-Sample red and black marbles from an urn of marbles #'
+Sample red and black marbles from an urn of marbles
+#'
 }
 \examples{
 urn_sampler(repetitions = 5)
