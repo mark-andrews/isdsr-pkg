@@ -151,3 +151,24 @@ urn_sampling_distribution <- function(red = 50,
 
 
 }
+
+#' Calculate p-value for a hypothesis in binomial problem
+#'
+#' Assuming that we have observed a certain number of successes from a binomial
+#' distribution, obtain the p-value for a hypothesis about the binomial
+#' distribution probability parameter, i.e. the probability of a success on each
+#' trial.
+#' 
+#' @param sample_size The sample size.
+#' @param hypothesis The hypothesized probability parameter.
+#' @param observed The observed number of successes in the sample.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' # p-value for hypothesis that prob=0.4, given 3 successes in 10 trials
+#' binomial_pvalue(10, 3, 0.4)
+binomial_pvalue <- function(sample_size, observed, hypothesis) {
+  binom.test(x = observed, n = sample_size, p = hypothesis)$p.value
+}
