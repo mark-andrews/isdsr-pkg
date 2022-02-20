@@ -9,6 +9,8 @@ urn_sampler(
   red = 50,
   black = 50,
   sample_size = 25,
+  red_proportion = NULL,
+  urn_size = NULL,
   replace = TRUE,
   repetitions = 1,
   tally = FALSE

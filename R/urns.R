@@ -22,6 +22,8 @@
 urn_sampler <- function(red = 50,
                         black = 50,
                         sample_size = 25,
+                        red_proportion = NULL,
+                        urn_size = NULL,
                         replace = TRUE,
                         repetitions = 1, 
                         tally = FALSE){
@@ -77,6 +79,12 @@ urn_sampler <- function(red = 50,
 #' @param red The number of red marbles in the urn.
 #' @param black The number of black marbles in the urn.
 #' @param sample_size The number of marbles to draw from the urn.
+#' @param red_proportion As an alternative to specifying the number of 
+#' red and black marbles in the jar, the proportion of red marbles
+#' can be specified. If `red_proportion` is specified, then
+#' `red` and `black` will be ignored.
+#' @param observed_red The number of red marbles in a sample. This
+#' is optional. TODO more documentation here please
 #' @param replace Is the sampling with or without replacement?
 #'
 #' @return
@@ -87,21 +95,59 @@ urn_sampler <- function(red = 50,
 urn_sampling_distribution <- function(red = 50,
                                       black = 50,
                                       sample_size = 25,
+                                      red_proportion = NULL,
+                                      observed_red = NULL,
                                       replace = TRUE){
-  
-  N <- red + black # total number of marbles in the urn
   
   # sequence of all possible values of
   # the number of red marbles in sample
   red_seq <- seq(0, sample_size) 
   
-  if (replace){
-    prob <- dbinom(red_seq, size = sample_size, prob = red/N)
-  } else {
-    prob <- dhyper(red_seq, m = red, n = black, k = sample_size)
-  }
+  result <- tibble(red = red_seq, 
+                   black = as.integer(sample_size) - red)
   
-  tibble(red = red_seq,
-         black = as.integer(sample_size) - red,
-         prob = prob)
+  if (is.null(red_proportion)) {
+    
+    N <- red + black # total number of marbles in the urn
+
+    if (replace){
+      prob <- dbinom(red_seq, size = sample_size, prob = red/N)
+    } else {
+      prob <- dhyper(red_seq, m = red, n = black, k = sample_size)
+    }
+    
+    dplyr::mutate(result, prob = prob)
+    
+  } else {
+    
+    # TODO implement for case of without replacement
+    if (!replace) stop('Not yet implemented for sampling without replacement') 
+    
+    prob = dbinom(red_seq, size = sample_size, prob = red_proportion)
+    
+    sampling_distribution_centre <- sample_size * red_proportion
+    
+    if (!is.null(observed_red)) {
+      observed_result_dist_from_centre <- abs(observed_red - sampling_distribution_centre)
+      
+      epsilon <- 1e-10
+      
+      dplyr::mutate(result,
+                    prob = prob,
+                    delta = red - sampling_distribution_centre,
+                    as_extreme = abs(abs(delta) - observed_result_dist_from_centre) < epsilon,
+                    more_extreme = abs(abs(delta) > observed_result_dist_from_centre) > epsilon,
+                    as_or_more_extreme = as_extreme | more_extreme) %>%
+        dplyr::select(red, black, prob, as_or_more_extreme)
+      
+    } else {
+      
+      dplyr::mutate(result, prob = prob)
+    }
+    
+
+    
+  }
+
+
 }

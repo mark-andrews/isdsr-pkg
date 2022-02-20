@@ -8,6 +8,8 @@ urn_sampling_distribution(
   red = 50,
   black = 50,
   sample_size = 25,
+  red_proportion = NULL,
+  observed_red = NULL,
   replace = TRUE
 )
 }
@@ -17,6 +19,14 @@ urn_sampling_distribution(
 \item{black}{The number of black marbles in the urn.}
 
 \item{sample_size}{The number of marbles to draw from the urn.}
+
+\item{red_proportion}{As an alternative to specifying the number of
+red and black marbles in the jar, the proportion of red marbles
+can be specified. If \code{red_proportion} is specified, then
+\code{red} and \code{black} will be ignored.}
+
+\item{observed_red}{The number of red marbles in a sample. This
+is optional. TODO more documentation here please}
 
 \item{replace}{Is the sampling with or without replacement?}
 }
