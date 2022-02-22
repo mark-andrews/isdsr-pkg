@@ -3,4 +3,5 @@
 export(binomial_pvalue)
 export(urn_sampler)
 export(urn_sampling_distribution)
+import(purrr)
 importFrom(tibble,tibble)

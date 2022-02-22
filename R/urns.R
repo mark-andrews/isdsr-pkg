@@ -165,10 +165,18 @@ urn_sampling_distribution <- function(red = 50,
 #'
 #' @return
 #' @export
+#' @import purrr
 #'
 #' @examples
 #' # p-value for hypothesis that prob=0.4, given 3 successes in 10 trials
 #' binomial_pvalue(10, 3, 0.4)
 binomial_pvalue <- function(sample_size, observed, hypothesis) {
-  binom.test(x = observed, n = sample_size, p = hypothesis)$p.value
+  map_dbl(hypothesis, 
+          ~binom.test(x = observed, n = sample_size, p = .)$p.value
+  )
+}
+
+#' @describeIn binomial_pvalue Calculate s-value for a hypothesis in a binomial problem
+binomial_svalue <- function(sample_size, observed, hypothesis) {
+  -log2(binomial_pvalue(sample_size, observed, hypothesis))
 }

@@ -2,9 +2,12 @@
 % Please edit documentation in R/urns.R
 \name{binomial_pvalue}
 \alias{binomial_pvalue}
+\alias{binomial_svalue}
 \title{Calculate p-value for a hypothesis in binomial problem}
 \usage{
 binomial_pvalue(sample_size, observed, hypothesis)
+
+binomial_svalue(sample_size, observed, hypothesis)
 }
 \arguments{
 \item{sample_size}{The sample size.}
@@ -22,6 +25,11 @@ distribution, obtain the p-value for a hypothesis about the binomial
 distribution probability parameter, i.e. the probability of a success on each
 trial.
 }
+\section{Functions}{
+\itemize{
+\item \code{binomial_svalue}: Calculate s-value for a hypothesis in a binomial problem
+}}
+
 \examples{
 # p-value for hypothesis that prob=0.4, given 3 successes in 10 trials
 binomial_pvalue(10, 3, 0.4)
