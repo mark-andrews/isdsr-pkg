@@ -171,7 +171,7 @@ urn_sampling_distribution <- function(red = 50,
 #' # p-value for hypothesis that prob=0.4, given 3 successes in 10 trials
 #' binomial_pvalue(10, 3, 0.4)
 binomial_pvalue <- function(sample_size, observed, hypothesis) {
-  map_dbl(hypothesis, 
+  map_dbl(magrittr::set_names(hypothesis, hypothesis), 
           ~binom.test(x = observed, n = sample_size, p = .)$p.value
   )
 }
