@@ -177,12 +177,14 @@ binomial_pvalue <- function(sample_size, observed, hypothesis) {
 }
 
 #' @describeIn binomial_pvalue Calculate s-value for a hypothesis in a binomial problem
+#' @export
 binomial_svalue <- function(sample_size, observed, hypothesis) {
   -log2(binomial_pvalue(sample_size, observed, hypothesis))
 }
 
 
 #' @describeIn binomial_pvalue Calculate confidence interval in a binomial problem
+#' @export
 binomial_confint <- function(sample_size, observed, level = 0.95) {
   conf_interval <- binom.test(x = observed, 
                               n = sample_size, 
