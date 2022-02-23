@@ -180,3 +180,15 @@ binomial_pvalue <- function(sample_size, observed, hypothesis) {
 binomial_svalue <- function(sample_size, observed, hypothesis) {
   -log2(binomial_pvalue(sample_size, observed, hypothesis))
 }
+
+
+#' @describeIn binomial_pvalue Calculate confidence interval in a binomial problem
+binomial_confint <- function(sample_size, observed, level = 0.95) {
+  conf_interval <- binom.test(x = observed, 
+                              n = sample_size, 
+                              conf.level = level)$conf.int
+  attributes(conf_interval) <- NULL
+  alpha <- 1 - level
+  magrittr::set_names(conf_interval, c(alpha/2, 1-alpha/2))
+}
+

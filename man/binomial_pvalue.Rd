@@ -3,11 +3,14 @@
 \name{binomial_pvalue}
 \alias{binomial_pvalue}
 \alias{binomial_svalue}
+\alias{binomial_confint}
 \title{Calculate p-value for a hypothesis in binomial problem}
 \usage{
 binomial_pvalue(sample_size, observed, hypothesis)
 
 binomial_svalue(sample_size, observed, hypothesis)
+
+binomial_confint(sample_size, observed, level = 0.95)
 }
 \arguments{
 \item{sample_size}{The sample size.}
@@ -28,6 +31,8 @@ trial.
 \section{Functions}{
 \itemize{
 \item \code{binomial_svalue}: Calculate s-value for a hypothesis in a binomial problem
+
+\item \code{binomial_confint}: Calculate confidence interval in a binomial problem
 }}
 
 \examples{
