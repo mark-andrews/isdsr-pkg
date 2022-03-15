@@ -194,6 +194,39 @@ binomial_confint <- function(sample_size, observed, level = 0.95) {
   magrittr::set_names(conf_interval, c(alpha/2, 1-alpha/2))
 }
 
+likelihood_interval_roots <- function(m, n, z=1/4) {
+  
+  N <- n
+  n <- m
+  
+  likelihood <- function(x, N, n){
+    x^n * (1-x)^(N-n)
+  }
+  
+  f <- function(x, N, n, z) {
+    standardized.likelihood <- likelihood(x, N, n) / likelihood(n/N, N, n)
+    standardized.likelihood - z
+  }
+  
+  left_root <- uniroot(f, 
+                       c(0, n/N), 
+                       tol = 0.0001, 
+                       N = N, 
+                       n=n,
+                       z=z)
+  
+  right_root <- uniroot(f, 
+                        c(n/N, 1), 
+                        tol = 0.0001, 
+                        N = N, 
+                        n=n,
+                        z=z)
+  
+  list(x = left_root$root,
+       y = likelihood(left_root$root, N, n),
+       xend = right_root$root,
+       yend = likelihood(right_root$root, N, n))
+}
 
 
 
@@ -211,45 +244,9 @@ binomial_confint <- function(sample_size, observed, level = 0.95) {
 #' @import tibble
 #' @import ggplot2
 binomial_likelihood_plot <- function(m, n, lim = c(0, 1), interval = NULL){
-  
-  find_roots <- function(m, n, z=1/4) {
-    
-    N <- n
-    n <- m
-    
-    likelihood <- function(x, N, n){
-      x^n * (1-x)^(N-n)
-    }
-    
-    f <- function(x, N, n, z) {
-      standardized.likelihood <- likelihood(x, N, n) / likelihood(n/N, N, n)
-      standardized.likelihood - z
-    }
-    
-    left_root <- uniroot(f, 
-                         c(0, n/N), 
-                         tol = 0.0001, 
-                         N = N, 
-                         n=n,
-                         z=z)
-    
-    right_root <- uniroot(f, 
-                          c(n/N, 1), 
-                          tol = 0.0001, 
-                          N = N, 
-                          n=n,
-                          z=z)
-    
-    list(x = left_root$root,
-         y = likelihood(left_root$root, N, n),
-         xend = right_root$root,
-         yend = likelihood(right_root$root, N, n))
-  }
-  
+
   data_df <- tibble(x = seq(lim[1], lim[2], length.out = 1000),
                     y = x^m * (1-x)^(n-m))
-  
-
   
   p1 <- data_df %>%
     ggplot(aes(x = x, y = y)) +
@@ -264,8 +261,8 @@ binomial_likelihood_plot <- function(m, n, lim = c(0, 1), interval = NULL){
   if (is.null(interval)){
     p1
   } else {
-    
-    roots <- find_roots(m, n, z = 1/2^interval)
+  
+    roots <- likelihood_interval_roots(m, n, z = 1/2^interval)
     
     p1 + geom_segment(aes(x = roots$x,
                           y = roots$y,

@@ -4,12 +4,17 @@
 \alias{binomial_likelihood_plot}
 \title{Plot the likelihood function of a binomial model}
 \usage{
-binomial_likelihood_plot(m, n, lim = c(0, 1))
+binomial_likelihood_plot(m, n, lim = c(0, 1), interval = NULL)
 }
 \arguments{
 \item{m}{Number of successes}
 
 \item{n}{Number of trials}
+
+\item{lim}{x-axis limits}
+
+\item{interval}{Show likelihood interval? If NULL, no interval, if numeric,
+show likelihood interval 1/2^interval}
 }
 \value{
 A ggplot object
