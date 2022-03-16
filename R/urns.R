@@ -296,7 +296,7 @@ beta_plot <- function(alpha, beta, show_hpd = FALSE, level = 0.95){
     geom_line() +
     labs(x = latex2exp::TeX("$\\theta$"),
          y = latex2exp::TeX("$P(\\theta)$")) +
-    ggtitle(sprintf("Beta(%2.1f, %2.1f)", alpha, beta)) +
+    #ggtitle(sprintf("Beta(%2.1f, %2.1f)", alpha, beta)) +
     theme_classic()
   
   if (show_hpd){
