@@ -4,7 +4,15 @@
 \alias{binomial_posterior_plot}
 \title{Plot the posterior distribution of a binomial model with Beta prior}
 \usage{
-binomial_posterior_plot(n, m, alpha, beta, show_hpd = FALSE, level = 0.95)
+binomial_posterior_plot(
+  n,
+  m,
+  alpha = 1,
+  beta = 1,
+  show_hpd = TRUE,
+  level = 0.95,
+  xlim = c(0, 1)
+)
 }
 \arguments{
 \item{n}{Number of trials}
@@ -18,6 +26,8 @@ binomial_posterior_plot(n, m, alpha, beta, show_hpd = FALSE, level = 0.95)
 \item{show_hpd}{Show the HPD interval}
 
 \item{level}{The amount of mass in HPD interval}
+
+\item{xlim}{The limits on x-axis}
 }
 \value{
 

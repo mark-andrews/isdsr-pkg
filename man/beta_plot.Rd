@@ -4,7 +4,7 @@
 \alias{beta_plot}
 \title{Plot a Beta distribution}
 \usage{
-beta_plot(alpha, beta, show_hpd = FALSE, level = 0.95)
+beta_plot(alpha, beta, show_hpd = FALSE, level = 0.95, xlim = c(0, 1))
 }
 \arguments{
 \item{alpha}{First shape parameter of the Beta distribution.}

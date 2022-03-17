@@ -286,9 +286,9 @@ binomial_likelihood_plot <- function(m, n, lim = c(0, 1), interval = NULL){
 #' beta_plot(2, 2)
 #' beta_plot(10, 5)
 #' @export
-beta_plot <- function(alpha, beta, show_hpd = FALSE, level = 0.95){
+beta_plot <- function(alpha, beta, show_hpd = FALSE, level = 0.95, xlim = c(0, 1)){
   
-  data_df <- tibble(x = seq(0, 1, length.out = 1000),
+  data_df <- tibble(x = seq(xlim[1], xlim[2], length.out = 1000),
                     y = dbeta(x, shape1 = alpha, beta))
   
   p <- data_df %>%
@@ -322,13 +322,14 @@ beta_plot <- function(alpha, beta, show_hpd = FALSE, level = 0.95){
 #' @param beta Second shape parameter of the Beta prior
 #' @param show_hpd Show the HPD interval
 #' @param level The amount of mass in HPD interval
+#' @param xlim The limits on x-axis
 #' @return
 #' @examples
 #' binomial_posterior_plot(250, 139, 5, 5)
 #' binomial_posterior_plot(100, 60, 2, 2, level = 0.99)
 #' @export
-binomial_posterior_plot <- function(n, m, alpha, beta, show_hpd = FALSE, level = 0.95){
-  beta_plot(m + alpha, n - m + beta, show_hpd = show_hpd, level = level)
+binomial_posterior_plot <- function(n, m, alpha=1, beta=1, show_hpd = TRUE, level = 0.95, xlim = c(0, 1)){
+  beta_plot(m + alpha, n - m + beta, show_hpd = show_hpd, level = level, xlim = xlim)
 }
 
 #' The high posterior density interval of a Beta distribution.
@@ -340,9 +341,14 @@ binomial_posterior_plot <- function(n, m, alpha, beta, show_hpd = FALSE, level =
 #' get_beta_hpd(10, 5)
 #' @export
 get_beta_hpd <- function(alpha, beta, level = 0.95){
+  
   # This will break if either alpha < 1.0 or beta < 1.0
   # or alpha = beta = 1.0
   stopifnot(alpha >= 1.0, beta >= 1.0, !((alpha == 1) & (beta ==1)))
+  
+  integrand_lb <- qbeta(1e-4, alpha, beta)
+  integrand_ub <- qbeta(1 - 1e-5, alpha, beta)
+  beta_mode <- (alpha-1)/(alpha+beta-2)
   
   interval_mass <- function(p_star){
     # Return the area under the curve for the
@@ -351,12 +357,17 @@ get_beta_hpd <- function(alpha, beta, level = 0.95){
     f <- function(val){
       d <- dbeta(val, alpha, beta)
       if (d >= p_star){
-        return(d)
+        d
       }
-      else {return(0)}
+      else {
+        0
+      }
     }
     
-    return(integrate(Vectorize(f), 0.0, 1.0)$value)
+    integrate(Vectorize(f), 
+              integrand_lb, 
+              integrand_ub, 
+              subdivisions = 10000L)$value
     
   }
   
@@ -364,7 +375,9 @@ get_beta_hpd <- function(alpha, beta, level = 0.95){
     (hpd_mass-interval_mass(p_star))^2
   }
   
-  max_f <- dbeta((alpha-1)/(alpha+beta-2), alpha, beta)
+
+  
+  max_f <- dbeta(beta_mode, alpha, beta)
   
   Q <- optimize(err_fn,
                 interval = c(0, max_f)
@@ -373,26 +386,26 @@ get_beta_hpd <- function(alpha, beta, level = 0.95){
   precision <- 3
   p_star <- round(Q$minimum, precision)
   
-  inside <- FALSE
-  for (x in seq(0.0, 1.0, by=10^(-precision-1))) {
-    if (round(dbeta(x, alpha, beta), precision) >= p_star) {
-      if (inside){
-        stop_interval <- x
-      } else {
-        start_interval <- x
-        inside <- TRUE
-      }
-    } else
-    {
-      if (inside){
-        inside <- FALSE
-        interval <- c(start_interval, stop_interval)
-      }
-    }
+  dbeta_pstar <- function(x, alpha, beta, pstar) {
+    dbeta(x, alpha, beta) - pstar
   }
+
+  left_root <- uniroot(dbeta_pstar, 
+                       c(integrand_lb, beta_mode), 
+                       tol = 0.0001, 
+                       alpha = alpha,
+                       beta = beta,
+                       pstar = p_star)
   
-  list(lb = interval[1],
-       ub = interval[2],
+  right_root <- uniroot(dbeta_pstar, 
+                        c(beta_mode, integrand_ub), 
+                        tol = 0.0001, 
+                        alpha = alpha,
+                        beta = beta,
+                        pstar = p_star)
+  
+  list(lb = left_root$root,
+       ub = right_root$root,
        p_star = p_star)
   
 }
