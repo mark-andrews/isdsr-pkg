@@ -4,7 +4,7 @@
 \alias{binomial_posterior_hpd}
 \title{The high posterior density interval in a binomial problem with Beta prior.}
 \usage{
-binomial_posterior_hpd(m, n, alpha, beta, level = 0.95)
+binomial_posterior_hpd(m, n, alpha = 1, beta = 1, level = 0.95)
 }
 \arguments{
 \item{m}{Number of successes}
@@ -22,5 +22,5 @@ A vector with lower and upper bound of the HPD interval.
 The high posterior density interval in a binomial problem with Beta prior.
 }
 \examples{
-binomial_posterior_hpd(172, 1300, 1, 1)
+binomial_posterior_hpd(172, 1300)
 }

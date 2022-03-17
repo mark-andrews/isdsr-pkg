@@ -418,9 +418,9 @@ get_beta_hpd <- function(alpha, beta, level = 0.95){
 #' @param beta Second shape parameter of the Beta prior distribution.
 #' @return A vector with lower and upper bound of the HPD interval.
 #' @examples
-#' binomial_posterior_hpd(172, 1300, 1, 1)
+#' binomial_posterior_hpd(172, 1300)
 #' @export
-binomial_posterior_hpd <- function(m, n, alpha, beta, level = 0.95){
+binomial_posterior_hpd <- function(m, n, alpha=1, beta=1, level = 0.95){
   hpd_interval <- get_beta_hpd(m + alpha, n - m + beta, level = level)
   
   c(hpd_interval$lb, hpd_interval$ub)
