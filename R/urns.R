@@ -420,10 +420,14 @@ get_beta_hpd <- function(alpha, beta, level = 0.95){
 #' @examples
 #' binomial_posterior_hpd(172, 1300)
 #' @export
-binomial_posterior_hpd <- function(m, n, alpha=1, beta=1, level = 0.95){
+binomial_posterior_hpd <- function(sample_size, observed, alpha=1, beta=1, level = 0.95){
+  n <- sample_size
+  m <- observed
   hpd_interval <- get_beta_hpd(m + alpha, n - m + beta, level = level)
   
-  c(hpd_interval$lb, hpd_interval$ub)
+  hpd <- c(hpd_interval$lb, hpd_interval$ub)
+  names(hpd) <- c((1 - level)/2, level + (1 - level)/2)
+  hpd
 }
 
 #' Summary statistics of a Beta distribution

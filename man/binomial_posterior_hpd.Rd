@@ -4,16 +4,22 @@
 \alias{binomial_posterior_hpd}
 \title{The high posterior density interval in a binomial problem with Beta prior.}
 \usage{
-binomial_posterior_hpd(m, n, alpha = 1, beta = 1, level = 0.95)
+binomial_posterior_hpd(
+  sample_size,
+  observed,
+  alpha = 1,
+  beta = 1,
+  level = 0.95
+)
 }
 \arguments{
-\item{m}{Number of successes}
-
-\item{n}{Number of trials}
-
 \item{alpha}{First shape parameter of the Beta prior distribution.}
 
 \item{beta}{Second shape parameter of the Beta prior distribution.}
+
+\item{m}{Number of successes}
+
+\item{n}{Number of trials}
 }
 \value{
 A vector with lower and upper bound of the HPD interval.
