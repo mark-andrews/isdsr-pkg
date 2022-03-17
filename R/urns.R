@@ -444,10 +444,11 @@ beta_summary <- function(alpha, beta){
   sd <- sqrt(var)
   mode <- (alpha - 1)/(alpha + beta - 2)
   
-  list(mean = mean,
-       var = var,
-       sd = sqrt(var),
-       mode = mode)
+  # list(mean = mean,
+  #      var = var,
+  #      sd = sqrt(var),
+  #      mode = mode)
+  c(mean = mean, sd = sqrt(var))
 }
 
 #' Summary stats of posterior distribution of binomial model with Beta prior
@@ -460,6 +461,8 @@ beta_summary <- function(alpha, beta){
 #' @examples
 #' binomial_posterior_summary(3, 5)
 #' @export
-binomial_posterior_summary <- function(n, m, alpha, beta){
+binomial_posterior_summary <- function(sample_size, observed, alpha=1, beta=1){
+  n <- sample_size
+  m <- observed
   beta_summary(m + alpha, n - m + beta)
 }
