@@ -303,8 +303,8 @@ beta_plot <- function(alpha, beta, show_hpd = FALSE, level = 0.95, xlim = c(0, 1
     hpd_interval <- get_beta_hpd(alpha, beta, level = level)
     p + geom_segment(aes(x = hpd_interval$lb,
                          xend = hpd_interval$ub,
-                         y = hpd_interval$p_star,
-                         yend = hpd_interval$p_star),
+                         y = 0,#hpd_interval$p_star,
+                         yend = 0),#hpd_interval$p_star),
                      colour = 'red',
                      size = 0.5,
                      data = NULL)
