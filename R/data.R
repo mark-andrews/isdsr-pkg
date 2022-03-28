@@ -122,3 +122,17 @@ NULL
 #'   \href{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}.
 #'   
 NULL
+
+
+#' @title Scores from a Mathematics Placement Exam
+#' @description Scores on a mathematics placement exam in an unnaned liberal arts college, presumably in the US.
+#' @name mathplacement
+#' @format A data frame with 2696 rows and 1 variable
+#' \describe{
+#' \item{\code{score}}{(numeric) Score on exam}
+#' }
+#' 
+#'  
+#' @source This data set is a subset of the `MathPlacement` data set in the \href{https://cran.r-project.org/package=Stat2Data}{`Stats2Data` R package}.
+#' Specifically, the `score` variable is the the `PlcmtScore` variable from `MathPlacement`.
+NULL
