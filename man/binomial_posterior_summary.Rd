@@ -4,16 +4,16 @@
 \alias{binomial_posterior_summary}
 \title{Summary stats of posterior distribution of binomial model with Beta prior}
 \usage{
-binomial_posterior_summary(n, m, alpha, beta)
+binomial_posterior_summary(sample_size, observed, alpha = 1, beta = 1)
 }
 \arguments{
-\item{n}{Number of trials}
-
-\item{m}{Number of successes}
-
 \item{alpha}{First shape parameter of the Beta prior}
 
 \item{beta}{Second shape parameter of the Beta prior}
+
+\item{n}{Number of trials}
+
+\item{m}{Number of successes}
 }
 \value{
 A list with summary statistics of the posterior distribution
