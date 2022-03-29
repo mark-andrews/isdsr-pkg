@@ -35,7 +35,7 @@ normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
 #'
 #' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
 #' @param mu (numeric) The hypothesized mean of the normal distribution.
-#' @param sigma_known (logical) Is sigma, the standard deviation of the normal distribution, known?
+#' @param sigma (numeric) If not numeric, the assumed value of the standard deviation
 #' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
 #'
 #' @return (numeric) A p-value for the hypothesis
@@ -44,15 +44,20 @@ normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
 #' @examples
 #' y <- rnorm(10, mean = 1)
 #' normal_inference_pvalue(y, mu = 1)
-normal_inference_pvalue <- function(y, mu, sigma_known = FALSE, na.rm = T){
+normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = T){
   
   ybar <- mean(y, na.rm = na.rm)
-  s <- sd(y, na.rm = na.rm)
+  if (is.null(sigma)){
+    s <- sd(y, na.rm = na.rm)
+  } else {
+    s <- sigma
+  }
+  
   n <- sum(!is.na(y))
   standard_error <- s/sqrt(n)
   statistic <- (ybar - mu)/standard_error
   
-  if (sigma_known) {
+  if (!is.null(sigma)) {
     pnorm(q = abs(statistic), mean = 0, sd = 1, lower.tail = F) * 2
     
   } else {
@@ -96,7 +101,7 @@ normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
 #' 
 #' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
 #' @param level (numeric) The level of the confidence interval.
-#' @param sigma_known (logical) Is sigma, the standard deviation of the normal distribution, known?
+#' @param sigma (numeric) If not NULL, the assumed value of the standard deviation
 #' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
 #' 
 #' @return (numeric) The lower and upper bounds of the confidence interval
@@ -105,14 +110,19 @@ normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
 #' @examples
 #' y <- rnorm(10, mean = 5)
 #' normal_inference_confint(y)
-normal_inference_confint <- function(y, level = 0.95, sigma_known = FALSE, na.rm = T){
+normal_inference_confint <- function(y, level = 0.95, sigma = NULL, na.rm = T){
   
   ybar <- mean(y, na.rm = na.rm)
-  s <- sd(y, na.rm = na.rm)
+  if (is.null(sigma)){
+    s <- sd(y, na.rm = na.rm)
+  } else {
+    s <- sigma
+  }
+  
   n <- sum(!is.na(y))
   standard_error <- s/sqrt(n)
   
-  if (sigma_known) {
+  if (!is.null(sigma)) {
     scaling_factor <- qnorm(level + (1-level)/2)
     
   } else {

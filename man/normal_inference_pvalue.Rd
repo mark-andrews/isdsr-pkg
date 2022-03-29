@@ -4,14 +4,14 @@
 \alias{normal_inference_pvalue}
 \title{Calculate the p-value for a hypothesis test about mean of normal distribution}
 \usage{
-normal_inference_pvalue(y, mu, sigma_known = FALSE, na.rm = T)
+normal_inference_pvalue(y, mu, sigma = NULL, na.rm = T)
 }
 \arguments{
 \item{y}{(numeric) A set of values assumed to be drawn independently from a normal distribution.}
 
 \item{mu}{(numeric) The hypothesized mean of the normal distribution.}
 
-\item{sigma_known}{(logical) Is sigma, the standard deviation of the normal distribution, known?}
+\item{sigma}{(numeric) If not numeric, the assumed value of the standard deviation}
 
 \item{na.rm}{(logical) When calculating the sufficient statistics, do we remove NA's}
 }
