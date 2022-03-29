@@ -60,3 +60,24 @@ normal_inference_pvalue <- function(y, mu, sigma_known = FALSE, na.rm = T){
   }
   
 }
+
+
+#' Area under normal distribution between two bounds
+#'
+#' @param lower_bound (numeric) The lower boundary of the interval
+#' @param upper_bound (numeric) The upper boundary of the interval
+#' @param mean (numeric) The mean of the normal distribution
+#' @param sd (numeric) The standard deviaion of the normal distribution
+#'
+#' @return (numeric) The probability of being between the lower bound and upper
+#'   bound in a normally distributed random variable whose mean and standard
+#'   deviation are those specified.
+#' @export
+#'
+#' @examples
+#' normal_auc(lower_bound = 0)
+#' normal_auc(upper_bound = 1)
+#' normal_auc(lower_bound = -1, upper_bound = 2)
+normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
+  pnorm(upper_bound, mean = mean, sd = sd) - pnorm(lower_bound, mean = mean, sd = sd)
+}
