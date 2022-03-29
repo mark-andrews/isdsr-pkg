@@ -21,3 +21,42 @@ normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
   ub <- qnorm(p)
   mean + c(-ub, ub) * sd
 }
+
+
+#' Calculate the p-value for a hypothesis test about mean of normal distribution
+#' 
+#' Given a set of values assumed to sampled independently from a normal distribution,
+#' calculate the p-value for any hypothetical value of the distribution's mean.
+#' 
+#' The standard deviation of the normal distribution can assumed to be known to have the value of the sample standard deviation.
+#' If so, the p-value is calculated assuming a normal sampling distribution.
+#' 
+#' If the standard deviation is not assumed to be known, the p-value is calculated using the t-distribution.
+#'
+#' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
+#' @param mu (numeric) The hypothesized mean of the normal distribution.
+#' @param sigma_known (logical) Is sigma, the standard deviation of the normal distribution, known?
+#' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
+#'
+#' @return (numeric) A p-value for the hypothesis
+#' @export
+#'
+#' @examples
+#' y <- rnorm(10, mean = 1)
+#' normal_inference_pvalue(y, mu = 1)
+normal_inference_pvalue <- function(y, mu, sigma_known = FALSE, na.rm = T){
+  
+  ybar <- mean(y, na.rm = na.rm)
+  s <- sd(y, na.rm = na.rm)
+  n <- sum(!is.na(y))
+  standard_error <- s/sqrt(n)
+  statistic <- (ybar - mu)/standard_error
+  
+  if (sigma_known) {
+    pnorm(q = abs(statistic), mean = 0, sd = 1, lower.tail = F) * 2
+    
+  } else {
+    pt(q = abs(statistic), df = n - 1, lower.tail = F) * 2
+  }
+  
+}
