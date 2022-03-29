@@ -81,3 +81,44 @@ normal_inference_pvalue <- function(y, mu, sigma_known = FALSE, na.rm = T){
 normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
   pnorm(upper_bound, mean = mean, sd = sd) - pnorm(lower_bound, mean = mean, sd = sd)
 }
+
+#' Confidence interval for the mean of normal distribution
+#'
+#' Given a set of values assumed to sampled independently from a normal
+#' distribution, calculate the confidence interval of the distribution's mean.
+#'
+#' The standard deviation of the normal distribution can assumed to be known to
+#' have the value of the sample standard deviation. If so, the confidence
+#' interval is calculated assuming a normal sampling distribution.
+#'
+#' If the standard deviation is not assumed to be known, the confidence interval
+#' is calculated using the t-distribution.
+#' 
+#' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
+#' @param level (numeric) The level of the confidence interval.
+#' @param sigma_known (logical) Is sigma, the standard deviation of the normal distribution, known?
+#' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
+#' 
+#' @return (numeric) The lower and upper bounds of the confidence interval
+#' @export
+#' 
+#' @examples
+#' y <- rnorm(10, mean = 5)
+#' normal_inference_confint(y)
+normal_inference_confint <- function(y, level = 0.95, sigma_known = FALSE, na.rm = T){
+  
+  ybar <- mean(y, na.rm = na.rm)
+  s <- sd(y, na.rm = na.rm)
+  n <- sum(!is.na(y))
+  standard_error <- s/sqrt(n)
+  
+  if (sigma_known) {
+    scaling_factor <- qnorm(level + (1-level)/2)
+    
+  } else {
+    scaling_factor <- qt(level + (1-level)/2, df = n-1)
+  }
+  
+  ybar + c(-1, 1) * scaling_factor * standard_error
+}
+
