@@ -22,6 +22,28 @@ normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
   mean + c(-ub, ub) * sd
 }
 
+#' Prediction interval of a t-distribution
+#'
+#' @param nu (numeric) The degrees of freedom parameter of the t-distribution.
+#'   This is usually, but not necessarily, an integer.
+#' @param probability (numeric) The probability (area under curve) within the
+#'   interval
+#'
+#' @return A numeric vector giving the lower and upper bounds of the interval
+#'   containing the specified probability.
+#' @export
+#'
+#' @examples
+#' t_interval()
+#' t_interval(nu = 10, probability = 0.99)
+t_interval <- function(nu = 1, probability = 0.95) {
+  
+  p <- probability + (1 - probability)/2
+  
+  ub <- qt(p, df = nu)
+  c(-ub, ub)
+}
+
 
 #' Calculate the p-value for a hypothesis test about mean of normal distribution
 #' 
@@ -86,6 +108,27 @@ normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = T){
 normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
   pnorm(upper_bound, mean = mean, sd = sd) - pnorm(lower_bound, mean = mean, sd = sd)
 }
+
+#' Area under t-distribution between two bounds
+#'
+#' @param lower_bound (numeric) The lower boundary of the interval
+#' @param upper_bound (numeric) The upper boundary of the interval
+#' @param nu (numeric) The degrees of freedom parameter of the t-distribution.
+#'   This is usually, but not necessarily, an integer.
+#'
+#' @return (numeric) The probability of being between the lower bound and upper
+#'   bound in a t distributed random variable whose mean and standard
+#'   deviation are those specified.
+#' @export
+#'
+#' @examples
+#' t_auc(lower_bound = 0, nu = 1)
+#' t_auc(upper_bound = 1, nu = 10)
+#' t_auc(lower_bound = -1, upper_bound = 2, nu = 25)
+t_auc <- function(lower_bound=-Inf, upper_bound=Inf, nu = 1){
+  pt(upper_bound, df = nu) - pt(lower_bound, df = nu)
+}
+
 
 #' Confidence interval for the mean of normal distribution
 #'
