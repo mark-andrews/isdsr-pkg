@@ -188,3 +188,31 @@ normal_inference_confint <- function(y, level = 0.95, sigma = NULL, na.rm = T){
   ybar + c(-1, 1) * scaling_factor * standard_error
 }
 
+#' Plot a normal QQ-plot
+#' 
+#' Given a set of values, the quantiles (percentiles) of each value is
+#' calculated. The values in a standard normal corresponding to each quantile is
+#' calculated. The z-scores of the values of the variable are then plotted
+#' against their corresponding z-scores in the standard normal.
+#'
+#' @param var The variable to be compared to the 
+#' @param data The data frame contain the variable
+#'
+#' @return A ggplot object
+#' @export
+#'
+#' @examples
+#' qqnormplot(score, mathplacement)
+qqnormplot <- function(var, data){
+  
+  data %>% 
+    mutate(y = {{var}},
+           z = (y - mean(y))/sd(y)) %>%
+    mutate(p = ecdf(y)(y),
+           x = qnorm(p)) %>% 
+    ggplot(aes(x = x, y = z)) +
+    geom_point(size = 0.5) +
+    ylab('Sample quantiles') +
+    xlab('Theoretical quantiles') +
+    geom_abline(intercept = 0, slope = 1, col='red')
+}
