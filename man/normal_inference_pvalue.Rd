@@ -4,7 +4,7 @@
 \alias{normal_inference_pvalue}
 \title{Calculate the p-value for a hypothesis test about mean of normal distribution}
 \usage{
-normal_inference_pvalue(y, mu, sigma = NULL, na.rm = T)
+normal_inference_pvalue(y, mu, sigma = NULL, na.rm = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{y}{(numeric) A set of values assumed to be drawn independently from a normal distribution.}

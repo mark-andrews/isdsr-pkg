@@ -66,7 +66,7 @@ t_interval <- function(nu = 1, probability = 0.95) {
 #' @examples
 #' y <- rnorm(10, mean = 1)
 #' normal_inference_pvalue(y, mu = 1)
-normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = T){
+normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = TRUE, verbose = FALSE){
   
   ybar <- mean(y, na.rm = na.rm)
   if (is.null(sigma)){
@@ -80,10 +80,23 @@ normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = T){
   statistic <- (ybar - mu)/standard_error
   
   if (!is.null(sigma)) {
-    pnorm(q = abs(statistic), mean = 0, sd = 1, lower.tail = F) * 2
+    pvalue <- pnorm(q = abs(statistic), mean = 0, sd = 1, lower.tail = F) * 2
+    
+    if (!verbose){
+      pvalue
+    } else {
+      tibble::tibble(z = statistic, p = pvalue)
+    }
     
   } else {
-    pt(q = abs(statistic), df = n - 1, lower.tail = F) * 2
+    pvalue <- pt(q = abs(statistic), df = n - 1, lower.tail = F) * 2
+    
+    if (!verbose){
+      pvalue
+    } else {
+      tibble::tibble(t = statistic, nu = n - 1, p = pvalue)
+    }
+    
   }
   
 }
