@@ -136,3 +136,59 @@ NULL
 #' @source This data set is a subset of the `MathPlacement` data set in the \href{https://cran.r-project.org/package=Stat2Data}{`Stats2Data` R package}.
 #' Specifically, the `score` variable is the the `PlcmtScore` variable from `MathPlacement`.
 NULL
+
+#' @title Reaction times from one condition of a keyboard typing experiment
+#' @description Participants in an experiment were tasked to type the words or
+#'   nonwords that they were shown on a computer screen. The nonwords were
+#'   either completely random strings or else they consisted of letter bigrams
+#'   that are typical in written English. The words and nonwords were five
+#'   letters in length. In the experimental condition recorded in this data set, the
+#'   keyboard was visible as normal. On each trial, the time in milliseconds taken to type the first
+#'   letter was recorded. Only trials where the word was correctly typed are
+#'   recorded in this data set.
+#' @name behmercrump_vis
+#' @format A data frame with 114 rows and 3 variables 
+#' \describe{
+#'   \item{\code{subject}}{(factor) Identifier of participant in experiment.}
+#'   \item{\code{stimulus}}{(factor) The type of stimulus that was displayed on each trial
+#'   of the condition where the keyboard was visible. Either a normal English word (normal) or a
+#'   random string of letters (random) or a random string of letters with
+#'   typical English letter bigrams.} 
+#'   \item{\code{log_rt}}{(numeric) The natural
+#'   logarithm of the time to type the first letter on each trial.} }
+#'   
+#' @details This data is taken from the keyboard visible condition of Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
+#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
+#' @references 
+#' \insertRef{behmer2017spatial}{isdsr}
+#' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
+NULL
+
+#' @title Reaction times from two conditions of a keyboard typing experiment
+#' @description Participants in an experiment were tasked to type the words or
+#'   nonwords that they were shown on a computer screen. The nonwords were
+#'   either completely random strings or else they consisted of letter bigrams
+#'   that are typical in written English. The words and nonwords were five
+#'   letters in length. For all participants, there were two conditions. In one condition, the
+#'   keyboard was visible as normal. In the other condition, the keyboard was
+#'   occluded. On each trial, the time in milliseconds taken to type the first
+#'   letter was recorded. Only trials where the word was correctly typed are
+#'   recorded in this data set.
+#'   
+#' @name behmercrump
+#' @format A data frame with 228 rows and 4 variables 
+#' \describe{
+#'   \item{\code{subject}}{(factor) Identifier of participant in experiment.}
+#'   \item{\code{keyboard}}{(factor) Experiment condition indicating if the keyboard visible or occluded.}
+#'   \item{\code{stimulus}}{(factor) The type of stimulus that was displayed: either a normal English word (normal) or a
+#'   random string of letters (random) or a random string of letters with
+#'   typical English letter bigrams.} 
+#'   \item{\code{log_rt}}{(numeric) The natural
+#'   logarithm of the time to type the first letter on each trial.} }
+#' 
+#' @details This data is taken from Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
+#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
+#' @references 
+#' \insertRef{behmer2017spatial}{isdsr}
+#' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
+NULL
