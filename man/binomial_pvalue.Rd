@@ -19,9 +19,6 @@ binomial_confint(sample_size, observed, level = 0.95)
 
 \item{hypothesis}{The hypothesized probability parameter.}
 }
-\value{
-
-}
 \description{
 Assuming that we have observed a certain number of successes from a binomial
 distribution, obtain the p-value for a hypothesis about the binomial
@@ -30,11 +27,11 @@ trial.
 }
 \section{Functions}{
 \itemize{
-\item \code{binomial_svalue}: Calculate s-value for a hypothesis in a binomial problem
+\item \code{binomial_svalue()}: Calculate s-value for a hypothesis in a binomial problem
 
-\item \code{binomial_confint}: Calculate confidence interval in a binomial problem
+\item \code{binomial_confint()}: Calculate confidence interval in a binomial problem
+
 }}
-
 \examples{
 # p-value for hypothesis that prob=0.4, given 3 successes in 10 trials
 binomial_pvalue(10, 3, 0.4)

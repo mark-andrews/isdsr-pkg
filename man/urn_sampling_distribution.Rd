@@ -30,9 +30,6 @@ is optional. TODO more documentation here please}
 
 \item{replace}{Is the sampling with or without replacement?}
 }
-\value{
-
-}
 \description{
 The exact sampling distribution for an urn problem
 }

@@ -29,9 +29,6 @@ binomial_posterior_plot(
 
 \item{xlim}{The limits on x-axis}
 }
-\value{
-
-}
 \description{
 Plot the posterior distribution of a binomial model with Beta prior
 }
