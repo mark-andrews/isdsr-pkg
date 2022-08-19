@@ -41,7 +41,7 @@ exp1_data <-
   rename('keyboard' = 'Block') %>% 
   rename_with(.fn = str_to_lower) %>% 
   mutate(across(.cols = -log_rt, as.factor)) %>% 
-  mutate(stimulus = factor(stimulus, levels = c('normal', 'bigrams', 'random')),
+  mutate(condition = factor(stimulus, levels = c('normal', 'bigrams', 'random')),
          keyboard = factor(keyboard, levels = c('visible', 'covered'))
   )
   

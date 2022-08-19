@@ -7,7 +7,7 @@
 A data frame with 114 rows and 3 variables
 \describe{
 \item{\code{subject}}{(factor) Identifier of participant in experiment.}
-\item{\code{stimulus}}{(factor) The type of stimulus that was displayed on each trial
+\item{\code{condition}}{(factor) The experimental condition that determined the type of stimulus that was displayed on each trial
 of the condition where the keyboard was visible. Either a normal English word (normal) or a
 random string of letters (random) or a random string of letters with
 typical English letter bigrams.}

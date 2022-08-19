@@ -8,7 +8,7 @@ A data frame with 228 rows and 4 variables
 \describe{
 \item{\code{subject}}{(factor) Identifier of participant in experiment.}
 \item{\code{keyboard}}{(factor) Experiment condition indicating if the keyboard visible or occluded.}
-\item{\code{stimulus}}{(factor) The type of stimulus that was displayed: either a normal English word (normal) or a
+\item{\code{condition}}{(factor) The experimental condition that determined the type of stimulus that was displayed: either a normal English word (normal) or a
 random string of letters (random) or a random string of letters with
 typical English letter bigrams.}
 \item{\code{log_rt}}{(numeric) The natural
