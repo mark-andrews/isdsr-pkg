@@ -40,7 +40,7 @@ gg_epsilon <- function(Sigma){
 #' @examples
 hf_epsilon <- function(Sigma, n){
   
-  K <- nrow(Sigma)
+  k <- nrow(Sigma)
   eps_hat <- gg_epsilon(Sigma)
   
   ( n * (k - 1) * eps_hat - 2 ) / 
