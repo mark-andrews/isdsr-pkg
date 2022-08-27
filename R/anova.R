@@ -47,3 +47,55 @@ hf_epsilon <- function(Sigma, n){
     ( (k - 1) * (n - 1 - (k - 1) * eps_hat) )
   
 }
+
+
+#' Simple main effects Anova
+#'
+#' For each level of one independent variable, perform an Anova with another
+#' independent variable.
+#' 
+#' @param formula The `aov_car` formula
+#' @param by The independent variable for each of whose levels a separate Anova
+#'   is performed.
+#' @param data The data set.
+#' @param table_only If TRUE (default), only a data-frame of F-tests is
+#'   returned. If FALSE, a list with each `aov_car` model is returned.
+#'
+#' @return A list of `afex::afex_aov` objects
+#' @export
+#'
+#' @examples
+#' simple_main_effects(log_rt ~ Error(subject/condition), by = keyboard, data = behmercrump)
+simple_main_effects <- function(formula, by, data, table_only = TRUE){
+  
+  aov_table_summary <- function(model){
+    tibble::as_tibble(model$anova_table, rownames = 'IV')
+  }
+  
+  formula_check <- c(
+    formula.tools::is.two.sided(formula),
+    formula.tools::op(formula) == '~'
+  )
+  
+  if (!all(formula_check)) {
+    stop('The `formula` must be suitable for `aov_car`.')
+  }
+  
+  results <- 
+    dplyr::group_by(
+      .data = data, {{ by }}) %>%
+    tidyr::nest() %>%
+    dplyr::mutate(model = purrr::map(
+      data, 
+      ~afex::aov_car(formula = formula, data = .))
+    )
+  
+  models <- results$model
+  names(models) <- results[[ rlang::as_name(rlang::enquo(by)) ]]
+  
+  if (table_only){
+    purrr::map_dfr(models, aov_table_summary, .id = 'by')
+  } else {
+    models
+  }
+}
