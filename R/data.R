@@ -192,3 +192,42 @@ NULL
 #' \insertRef{behmer2017spatial}{isdsr}
 #' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
 NULL
+
+
+#' @title Category knowledge and change detection
+#' @description Infants (n=24) were divided into two experimental condition
+#'   groups. One group (n=12) were shown objects of familiar categories (e.g.,
+#'   balls, bottles, cars). The other group (n=12) were shown objects of
+#'   unfamiliar categories (e.g., feather, guitar, hedgehog). In both groups, on
+#'   each experimental trial, the object was occluded and when it reappeared it
+#'   was either unchanged, changed for a different object of the same category,
+#'   or change for an object of a different category. The research focus of the
+#'   experiment was the extent to which the change (or lack of change) affected
+#'   the amplitude of the negative central wave (Nc) event related potential
+#'   (ERP), which is believed to be a signal of change detection in infants.
+#' @name catknowledge
+#' @format A data frame with 72 rows and 4 variables
+#' \describe{
+#'   \item{\code{id}}{(factor) Identifier of participant (a 12 month old infant) in experiment.}
+#'   
+#'   \item{\code{category}}{(factor) Between subjects experimental condition indicating if the
+#'   objects were visible or occluded.}
+#'
+#'   \item{\code{change}}{(factor) The within-subjects experimental condition
+#'   that describes how the stimulus object changes, with values `no` (no change
+#'   to stimulus), `within` (the stimulus changes to another exemplar of the
+#'   same category), `across` (the stimulus changes to another category).}
+#'   
+#'   \item{\code{nc_erp}}{(numeric) The negative central wave (Nc) event related
+#'   potential (ERP) amplitude. The NC ERP is an ERP that occurs in infants at
+#'   frontocentral sites following modifications in a stimulus's appearance.}
+#'   }
+#'
+#' @details This data is from Experiment 1 in the paper "Nonverbal category
+#'     knowledge limits the amount of information encoded in object
+#'     representations: EEG evidence from 12-month-old infants" by Pomoiechowska
+#'     and Gliga (2021). \insertCite{pomiechowska2021nonverbal}{isdsr}.
+#' @references
+#'   \insertRef{pomiechowska2021nonverbal}{isdsr}
+#' @source The original raw data set is publicly available on the Open Science Foundation at \href{https://osf.io/652cp/}{https://osf.io/652cp/}.
+NULL

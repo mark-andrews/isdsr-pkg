@@ -17,7 +17,8 @@ Suggests:
     readr (>= 2.0.2),
     Stat2Data (>= 2.0.0),
     Rdpack (>= 2.4),
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    readxl (>= 1.4.0)
 Depends: 
     R (>= 2.10)
 LazyData: true
