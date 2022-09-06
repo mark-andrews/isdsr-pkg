@@ -2,6 +2,7 @@
 
 export(beta_plot)
 export(beta_summary)
+export(bin_mode)
 export(binomial_confint)
 export(binomial_likelihood_plot)
 export(binomial_posterior_hpd)
