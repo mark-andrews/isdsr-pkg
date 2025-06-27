@@ -83,7 +83,7 @@ wdi_panel <- WDI(
   start     = 1990,
   end       = 2024,
   extra     = TRUE # adds iso3c, region, income group, lending type
-)
+) |> tibble::as_tibble()
 
 ## ---------------------------------------------------------------------------
 ## 3. Save for package use (compressed = "xz" keeps file tiny)
