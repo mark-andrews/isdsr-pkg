@@ -9,7 +9,7 @@ Description: Tools and datasets that are used in the textbook "Introduction to
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2
 Suggests: 
     assertthat (>= 0.2.1),
     dplyr (>= 1.0.7),
@@ -20,7 +20,7 @@ Suggests:
     testthat (>= 3.0.0),
     readxl (>= 1.4.0)
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5)
 LazyData: true
 Imports: 
     afex (>= 1.1.1),

@@ -1,8 +1,75 @@
+#' @title World Development Indicators (1990 – 2024) panel
+#'
+#' @name wdi_panel
+#' @description
+#' `wdi_panel` is a country–year country-year panel of headline development
+#'  statistics (1990–2024).  Indicators come from the **World Development
+#'  Indicators (WDI)** web-API maintained by the World Bank. There are 30
+#'  indicators covering economy, people, environment, gender and governance,
+#'  with good coverage for >90 % of countries. This data was pulled with
+#'  the **WDI** R package. It also contains World-Bank metadata that come
+#'  from `WDI(extra = TRUE)`. Values are unmodified except for renaming.
+#'
+#' @format A tibble with 11697 rows (one per country × year) and 40 variables:
+#' \describe{
+#'   \item{\code{country}}{English short name of the economy.}
+#'   \item{\code{iso2c}}{ISO-3166 alpha-2 country code (e.g. “US”).}
+#'   \item{\code{iso3c}}{ISO-3166 alpha-3 code (e.g. “USA”).}
+#'   \item{\code{year}}{Calendar year of observation.}
+#'   \item{\code{status}}{API flag: actual (``A``), estimated (``E``) or blank.}
+#'   \item{\code{lastupdated}}{Date the value was last revised in WDI.}
+#'   \item{\code{gdp_ppp}}{Gross Domestic Product, PPP-adjusted, constant 2017 international dollars (total economy size).}
+#'   \item{\code{gdp_pc_ppp}}{GDP per capita, PPP-adjusted, constant 2017 international dollars.}
+#'   \item{\code{gdp_growth}}{Real GDP growth rate (\\% change from previous year).}
+#'   \item{\code{inflation}}{Consumer-price inflation (annual \\%).}
+#'   \item{\code{priv_credit}}{Domestic credit to the private sector (\\% of GDP); proxy for financial-sector depth.}
+#'   \item{\code{trade_open}}{Trade openness: exports + imports of goods and services (\\% of GDP).}
+#'   \item{\code{fdi_inflow}}{Net foreign-direct-investment inflows (\\% of GDP).}
+#'   \item{\code{pop_tot}}{Total resident population (mid-year, de-facto).}
+#'   \item{\code{urban_pct}}{Share of population in areas the country classifies as urban (\\%).}
+#'   \item{\code{life_exp}}{Life expectancy at birth (years) under current mortality rates.}
+#'   \item{\code{u5_mort}}{Under-5 mortality rate (deaths per 1 000 live births).}
+#'   \item{\code{sec_enrol}}{Gross secondary-school enrolment ratio (\\%; may exceed 100 \\%).}
+#'   \item{\code{health_pc}}{Current health expenditure per capita (current US\\$).}
+#'   \item{\code{unemployment}}{Unemployment rate (ILO modelled, \\% of labour force).}
+#'   \item{\code{poverty215}}{Population living on \\$ 2.15 a day or less (2017 PPP, \\%).}
+#'   \item{\code{gini}}{Gini index of income inequality (0 = equality, 100 = max).}
+#'   \item{\code{lab_part}}{Labour-force participation rate (\\% of adults 15\\+).}
+#'   \item{\code{lfp_ratio}}{Female-to-male labour-force participation ratio (=100 at parity).}
+#'   \item{\code{lfp_female}}{Female labour-force participation rate (\\%).}
+#'   \item{\code{lfp_male}}{Male labour-force participation rate (\\%).}
+#'   \item{\code{hci_all}}{Human Capital Index, overall (0–1 scale of future productivity).}
+#'   \item{\code{hci_female}}{Human Capital Index for girls only.}
+#'   \item{\code{hci_male}}{Human Capital Index for boys only.}
+#'   \item{\code{elec_acc}}{Access to electricity (\\% of population with a connection).}
+#'   \item{\code{net_users}}{Individuals using the Internet in the past three months (\\% of population).}
+#'   \item{\code{renew_elec}}{Renewable electricity output (\\% of total generation).}
+#'   \item{\code{forest_pct}}{Forest area (\\% of land area).}
+#'   \item{\code{homicide}}{Intentional homicides (per 100 000 population).}
+#'   \item{\code{region}}{World-Bank geographic region.}
+#'   \item{\code{capital}}{Capital-city name.}
+#'   \item{\code{longitude}}{Capital-city longitude (decimal degrees).}
+#'   \item{\code{latitude}}{Capital-city latitude (decimal degrees).}
+#'   \item{\code{income}}{Income-group classification: High, Upper-middle, Lower-middle, Low.}
+#'   \item{\code{lending}}{World-Bank lending typology: IBRD, Blend, IDA, or “Not classified”.}
+#' }
+#'
+#' @details
+#' Downloaded via World Bank data API on **27 June 2025** using `data-raw/wdi_panel.R`.
+#'
+#' @source World Bank (2025), *World Development Indicators* (database),
+#' retrieved 27 Jun 2025.  CC BY 4.0. <https://databank.worldbank.org/source/world-development-indicators>
+#'
+#' @seealso The \code{data-raw/wdi_panel.R} script in the source code of this
+#' package was used to download the data using the World Bank's API.
+NULL
+
+
 #' @title Personality risk factors for drug consumption
 #' @description Personality variables and drug consumption habits of 1885
 #'   individuals in mostly English speaking countries. Twelve personality
 #'   or demographic variables were measured, as was the respondent's consumption
-#'   of 18 mostly illegal drugs. 
+#'   of 18 mostly illegal drugs.
 #' @name drugriskfactors
 #' @format A data frame with 1885 rows and 32 variables: \describe{
 #'   \item{\code{id}}{(factor) A unique identifier of the survey respondent.}
@@ -45,8 +112,8 @@
 #'   \item{\code{mushrooms}}{(ordinal) Respondent's psilocybin mushrooms consumption. }
 #'   \item{\code{nicotine}}{(ordinal) Respondent's nicontine consumption. }
 #'   \item{\code{semer}}{(ordinal) Respondent's "semeron" consumption. Semeron is a fictitious drug that was used to identify over-claimers. }
-#'   \item{\code{vsa}}{(ordinal) Respondent's  volatile substance abuse (solvents etc) consumption.} 
-#'}
+#'   \item{\code{vsa}}{(ordinal) Respondent's  volatile substance abuse (solvents etc) consumption.}
+#' }
 #' @details This dataset is based on the dataset entitled
 #'   \href{https://archive.ics.uci.edu/ml/datasets/Drug+consumption+%28quantified%29#}{"Drug
 #'    consumption (quantified)" in the UCI Machine Learning Repository}. That
@@ -78,7 +145,7 @@ NULL
 #'   the number of respondents in each combination of gender and age group who
 #'   gave each of the 8 possible responses to the question.
 #' @name yougov17drugs
-#' @format A data frame with 48 rows and 4 variables: 
+#' @format A data frame with 48 rows and 4 variables:
 #' \describe{
 #'   \item{\code{gender}}{(factor) Respondents' gender (male/female)}
 #'   \item{\code{age}}{(ordinal) Age group (16-18, 19-21, 22-24)}
@@ -89,7 +156,7 @@ NULL
 #'   drugs occasionally and still do", 4) "I have taken illegal drugs occasionally
 #'   but have now stopped completely", 5) "I have only taken illegal drugs once or
 #'   twice", 6) "I’ve never taken any illegal drugs", 7) "Not sure", 8) "Prefer not to
-#'   say".} 
+#'   say".}
 #'   \item{\code{count}}{(numeric) The number of respondents who gave each
 #'   particular response to the question.}
 #'   }
@@ -120,7 +187,7 @@ NULL
 #'   percentage for each possible response.
 #' @source The results of the YouGov poll are available in pdf form at
 #'   \href{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}{https://d25d2506sfb94s.cloudfront.net/cumulus_uploads/document/h5xr6v0nr4/VICEResults_170706_Drugs_16-24_W.pdf}.
-#'   
+#'
 NULL
 
 
@@ -131,8 +198,8 @@ NULL
 #' \describe{
 #' \item{\code{score}}{(numeric) Score on exam}
 #' }
-#' 
-#'  
+#'
+#'
 #' @source This data set is a subset of the `MathPlacement` data set in the \href{https://cran.r-project.org/package=Stat2Data}{`Stats2Data` R package}.
 #' Specifically, the `score` variable is the the `PlcmtScore` variable from `MathPlacement`.
 NULL
@@ -147,19 +214,19 @@ NULL
 #'   letter was recorded. Only trials where the word was correctly typed are
 #'   recorded in this data set.
 #' @name behmercrump_vis
-#' @format A data frame with 114 rows and 3 variables 
+#' @format A data frame with 114 rows and 3 variables
 #' \describe{
 #'   \item{\code{subject}}{(factor) Identifier of participant in experiment.}
 #'   \item{\code{condition}}{(factor) The experimental condition that determined the type of stimulus that was displayed on each trial
 #'   of the condition where the keyboard was visible. Either a normal English word (normal) or a
 #'   random string of letters (random) or a random string of letters with
-#'   typical English letter bigrams.} 
+#'   typical English letter bigrams.}
 #'   \item{\code{log_rt}}{(numeric) The natural
 #'   logarithm of the time to type the first letter on each trial.} }
-#'   
+#'
 #' @details This data is taken from the keyboard visible condition of Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
 #' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
-#' @references 
+#' @references
 #' \insertRef{behmer2017spatial}{isdsr}
 #' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
 NULL
@@ -174,21 +241,21 @@ NULL
 #'   occluded. On each trial, the time in milliseconds taken to type the first
 #'   letter was recorded. Only trials where the word was correctly typed are
 #'   recorded in this data set.
-#'   
+#'
 #' @name behmercrump
-#' @format A data frame with 228 rows and 4 variables 
+#' @format A data frame with 228 rows and 4 variables
 #' \describe{
 #'   \item{\code{subject}}{(factor) Identifier of participant in experiment.}
 #'   \item{\code{keyboard}}{(factor) Experiment condition indicating if the keyboard visible or occluded.}
 #'   \item{\code{condition}}{(factor) The experimental condition that determined the type of stimulus that was displayed: either a normal English word (normal) or a
 #'   random string of letters (random) or a random string of letters with
-#'   typical English letter bigrams.} 
+#'   typical English letter bigrams.}
 #'   \item{\code{log_rt}}{(numeric) The natural
 #'   logarithm of the time to type the first letter on each trial.} }
-#' 
+#'
 #' @details This data is taken from Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
 #' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
-#' @references 
+#' @references
 #' \insertRef{behmer2017spatial}{isdsr}
 #' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
 NULL
@@ -209,7 +276,7 @@ NULL
 #' @format A data frame with 72 rows and 4 variables
 #' \describe{
 #'   \item{\code{id}}{(factor) Identifier of participant (a 12 month old infant) in experiment.}
-#'   
+#'
 #'   \item{\code{category}}{(factor) Between subjects experimental condition indicating if the
 #'   objects were visible or occluded.}
 #'
@@ -217,7 +284,7 @@ NULL
 #'   that describes how the stimulus object changes, with values `no` (no change
 #'   to stimulus), `within` (the stimulus changes to another exemplar of the
 #'   same category), `across` (the stimulus changes to another category).}
-#'   
+#'
 #'   \item{\code{nc_erp}}{(numeric) The negative central wave (Nc) event related
 #'   potential (ERP) amplitude. The NC ERP is an ERP that occurs in infants at
 #'   frontocentral sites following modifications in a stimulus's appearance.}
