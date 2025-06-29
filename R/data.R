@@ -1,3 +1,49 @@
+#' @title The effect of a mindfulness course on stress scores
+#'
+#' @name mindfulness
+#'
+#' @description
+#' A small longitudinal data set ( *n* = 100) that tracks perceived stress before
+#' and after completion of a 6-week online mindfulness course.
+#' Each participant completed the 10-item Perceived Stress Scale (PSS; range
+#' 0–40, higher = more stress) three times:
+#' * immediately before starting the course,
+#' * immediately after finishing the course,
+#' * one month later.
+#' Gender was recorded at enrolment; no other personal identifiers are present.
+#'
+#' @format A tibble with 100 rows and 5 variables:
+#' \describe{
+#'   \item{\code{id}}{(factor) Anonymous participant identifier (1–100).}
+#'   \item{\code{gender}}{(factor) Self-reported gender (\code{"Male"} /\code{"Female"}).}
+#'   \item{\code{pss_before}}{(numeric) PSS score \emph{before} the course.}
+#'   \item{\code{pss_after}}{(numeric) PSS score \emph{immediately after} the course.}
+#'   \item{\code{pss_followup}}{(numeric) PSS score \emph{one month} after course completion.}
+#' }
+#'
+#' @details
+#' The data originate from Krusche *et al.* (2012),
+#' “Mindfulness online: a preliminary evaluation of the feasibility of a
+#' web-based mindfulness course and the impact on stress,” *BMJ Open* 2:e000803.
+#' Participants self-referred to the course and
+#' completed the PSS online.
+#' In the published paper the authors report a significant reduction in stress
+#' from baseline to post-course that remained stable at follow-up.
+#' The original data XLSX file was downloaded from the Dryad repository (DOI
+#' 10.5061/dryad.f4688) on 29 June 2025 and lightly cleaned: only the columns
+#' shown above were kept, names were standardised, and an \code{id} column was
+#' added.
+#'
+#' @source
+#' Krusche A, Cyhlarova E, King S, Williams J MG (2012).
+#' *Mindfulness online: a preliminary evaluation of the feasibility of a
+#' web-based mindfulness course and the impact on stress.*
+#' \emph{BMJ Open} 2:e000803.
+#' Raw data file retrieved from Dryad: <https://doi.org/10.5061/dryad.f4688>.
+NULL
+
+
+
 #' @title World Development Indicators (1990 – 2024) panel
 #'
 #' @name wdi_panel
