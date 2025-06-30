@@ -24,7 +24,8 @@
 #
 ################################################################################
 
-library(WDI) # CRAN ≥ 2.7.9 recommended for up-to-date indicator cache
+library(WDI)
+library(tidyverse)
 
 ## ---------------------------------------------------------------------------
 ## 1. Indicator dictionary (friendly name  ->  WDI code)
@@ -77,16 +78,33 @@ wb_codes <- c(
 ## 2. Pull data from the API
 ## ---------------------------------------------------------------------------
 
-wdi_panel <- WDI(
+# last run: 30 June 2025
+wdi_full <- WDI(
   country   = "all", # 217 economies + aggregates
   indicator = wb_codes,
   start     = 1990,
   end       = 2024,
   extra     = TRUE # adds iso3c, region, income group, lending type
-) |> tibble::as_tibble()
+) |>
+  as_tibble() |>
+  mutate(gdp_ppp = gdp_ppp / 1e6)
+
+# A subset of variables, mostly econ
+# Just countries not aggregates
+# Minimize missing values
+wdi_panel <-
+  wdi_full |>
+  filter(region != "Aggregates") |>
+  select(country, iso2c, year,
+    gdp = gdp_ppp, gdp_growth,
+    inflation, lfp_male, lfp_female
+  ) |>
+  filter(!is.na(gdp), !if_all(gdp_growth:lfp_female, is.na))
+
+
 
 ## ---------------------------------------------------------------------------
 ## 3. Save for package use (compressed = "xz" keeps file tiny)
 ## ---------------------------------------------------------------------------
 
-usethis::use_data(wdi_panel, overwrite = TRUE, compress = "xz") # last run: 27 June 2025
+usethis::use_data(wdi_panel, overwrite = TRUE, compress = "xz")
