@@ -18,13 +18,18 @@ Suggests:
     Stat2Data (>= 2.0.0),
     Rdpack (>= 2.4),
     testthat (>= 3.0.0),
-    readxl (>= 1.4.0)
+    readxl (>= 1.4.5),
+    tidyverse (>= 2.0.0),
+    styler (>= 1.10.3),
+    usethis (>= 3.1.0),
+    haven (>= 2.5.4)
 Depends: 
     R (>= 3.5)
 LazyData: true
 Imports: 
     afex (>= 1.1.1),
     patchwork (>= 1.1.2),
+    psyntur (>= 0.1.0),
     tibble
 Config/testthat/edition: 3
 RdMacros: Rdpack
