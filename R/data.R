@@ -1,3 +1,67 @@
+#' Country–year panel of life-satisfaction and income (2011 – 2024)
+#'
+#' `owidwhr` combines the *Cantril ladder* measure of life-satisfaction
+#' (published in the *World Happiness Report*) with GDP per capita (PPP,
+#' constant 2021 international $) for every country in the Our World in Data
+#' “Self-reported life satisfaction vs GDP per capita” data package.
+#' The raw CSV was downloaded on **5 July 2025** and processed in
+#' `data-raw/whr2025.R`: rows with missing values or the aggregate
+#' observation “World” were removed and the log of GDP was added.
+#'
+#' @format A tibble with **1 765 rows** (country–year observations) and **6 variables**
+#' \describe{
+#'   \item{country}{Country or territory name (OWID *Entity* field).}
+#'   \item{iso3c}{Three-letter ISO-3166 country code.}
+#'   \item{year}{Calendar year, 2011 – 2024.}
+#'   \item{happiness}{Mean Cantril-ladder score, 0 = worst possible life … 10 = best.}
+#'   \item{gdp}{GDP per capita, PPP-adjusted, constant-2021 international $.}
+#'   \item{lgdp}{Natural logarithm of `gdp`.}
+#' }
+#'
+#' @source Wellbeing Research Centre (2025) &ndash; *World Happiness Report 2025*
+#'         and World Bank (2025) &ndash; *World Development Indicators*; processed by
+#'         Our World in Data, <https://ourworldindata.org/>, see <https://ourworldindata.org/grapher/gdp-vs-happiness>.
+#'
+#' @examples
+#' # Correlation between happiness and (log) income over time
+#' library(dplyr)
+#' owidwhr %>%
+#'   group_by(year) %>%
+#'   summarise(r = cor(happiness, lgdp)) %>%
+#'   arrange(desc(r))
+"owidwhr"
+
+#' World Happiness Report 2025 cross-section (survey year 2023)
+#'
+#' `whr2025` is a single-year slice of \code{\link{owidwhr}}, keeping the observations
+#' labelled **2023** that feed the headline ranking in the *World Happiness
+#' Report 2025*.  An ordered factor `income` classifies countries into GDP
+#' terciles (*low < medium < high*) for quick, colour-friendly graphics.
+#'
+#' @format A tibble with **139 rows** (one per country) and **6 variables**
+#' \describe{
+#'   \item{country}{Country or territory name.}
+#'   \item{iso3c}{Three-letter ISO-3166 country code.}
+#'   \item{happiness}{Average Cantril-ladder score for 2022 – 2024, reported by WHR as 2023.}
+#'   \item{gdp}{GDP per capita, PPP, constant-2021 international $.}
+#'   \item{lgdp}{Natural logarithm of `gdp`.}
+#'   \item{income}{Ordered factor with three levels: `low`, `medium`, `high`
+#'                 (terciles of `gdp`).}
+#' }
+#'
+#'
+#' @source See \code{\link{owidwhr}}.
+#'
+#' @examples
+#' library(ggplot2)
+#' ggplot(whr2025, aes(lgdp, happiness, colour = income)) +
+#'   geom_point() +
+#'   geom_smooth(se = FALSE, method = "lm")
+"whr2025"
+
+
+
+
 #' @title The effect of a mindfulness course on stress scores
 #'
 #' @name mindfulness

@@ -1,0 +1,75 @@
+{
+  "chart": {
+    "title": "Self-reported life satisfaction vs. GDP per capita",
+    "subtitle": "Self-reported life satisfaction is measured on a [scale](#dod:cantril-ladder) ranging from 0-10, where 10 is the highest possible life satisfaction. GDP per capita is adjusted for inflation and differences in living costs between countries.",
+    "note": "GDP per capita is expressed in [international-$](#dod:int_dollar_abbreviation) at 2021 prices.",
+    "citation": "Wellbeing Research Centre (2025); Eurostat, OECD, and World Bank (2025)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/gdp-vs-happiness?v=1&csvType=full&useColumnShortNames=false",
+    "selection": []
+  },
+  "columns": {
+    "Cantril ladder score": {
+      "titleShort": "Self-reported life satisfaction",
+      "titleLong": "Self-reported life satisfaction",
+      "descriptionShort": "Average of survey responses. The survey question asks respondents their current position on a hypothetical [ladder](#dod:cantril-ladder), where the best possible life for them is a 10, and the worst possible life is a 0.",
+      "descriptionKey": [
+        "The Cantril ladder asks respondents to think of a ladder, with the best possible life for them being a 10 and the worst possible life being a 0. They are then asked to rate their own current lives on that 0 to 10 scale.",
+        "The rankings are three-year averages, calculated by the World Happiness report based on nationally representative samples collected by the Gallup World Poll. The data for the 2025 report draws from survey data from 2022-2024.",
+        "We show the data for final year of the three-year survey period, i.e. we show the 2022-2024 survey data for the year 2024.",
+        "The number of people and countries surveyed varies year to year, but typically more than 100,000 people in 130 countries participate in the Gallup World Poll each year.",
+        "The rankings are based entirely on the survey scores, which are weighted by Gallup to make the estimates representative."
+      ],
+      "descriptionProcessing": "We calculated the average of regions by taking a population-weighted average over all countries within that region.",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "2011-2024",
+      "type": "Numeric",
+      "owidVariableId": 1025227,
+      "shortName": "cantril_ladder_score",
+      "lastUpdated": "2025-03-28",
+      "nextUpdate": "2026-03-28",
+      "citationShort": "Wellbeing Research Centre (2025) – with major processing by Our World in Data",
+      "citationLong": "Wellbeing Research Centre (2025) – with major processing by Our World in Data. “Self-reported life satisfaction” [dataset]. Wellbeing Research Centre, “World Happiness Report 2025” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1025227.metadata.json"
+    },
+    "GDP per capita, PPP (constant 2021 international $)": {
+      "titleShort": "GDP per capita",
+      "titleLong": "GDP per capita - World Bank – In constant international-$",
+      "descriptionShort": "Average economic output per person in a country or region per year. This data is adjusted for inflation and for differences in living costs between countries.",
+      "descriptionKey": [
+        "Gross domestic product (GDP) is a measure of the total value added from the production of goods and services in a country or region each year. GDP per capita is GDP divided by population.",
+        "This GDP per capita indicator provides information on economic growth and income levels from 1990.",
+        "This data is adjusted for inflation and for differences in living costs between countries.",
+        "This data is expressed in [international-$](#dod:int_dollar_abbreviation) at 2021 prices.",
+        "For GDP per capita estimates in the long run, explore the [Maddison Project Database's indicator](https://ourworldindata.org/grapher/gdp-per-capita-maddison)."
+      ],
+      "shortUnit": "$",
+      "unit": "international-$ in 2021 prices",
+      "timespan": "1990-2023",
+      "type": "Numeric",
+      "owidVariableId": 1008370,
+      "shortName": "ny_gdp_pcap_pp_kd",
+      "lastUpdated": "2025-01-24",
+      "nextUpdate": "2026-01-24",
+      "citationShort": "Eurostat, OECD, and World Bank (2025) – with minor processing by Our World in Data",
+      "citationLong": "Eurostat, OECD, and World Bank (2025) – with minor processing by Our World in Data. “GDP per capita – World Bank – In constant international-$” [dataset]. Eurostat, OECD, and World Bank, “World Development Indicators” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1008370.metadata.json"
+    },
+    "World regions according to OWID": {
+      "titleShort": "World regions according to OWID",
+      "titleLong": "World regions according to OWID",
+      "descriptionKey": [],
+      "unit": "",
+      "timespan": "2023-2023",
+      "type": "Continent",
+      "owidVariableId": 900801,
+      "shortName": "owid_region",
+      "lastUpdated": "2023-01-01",
+      "citationShort": "Our World in Data – processed by Our World in Data",
+      "citationLong": "Our World in Data – processed by Our World in Data. “World regions according to OWID” [dataset]. Our World in Data, “Regions” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/900801.metadata.json"
+    }
+  },
+  "dateDownloaded": "2025-07-05",
+  "activeFilters": {}
+}
