@@ -48,3 +48,80 @@ install_extras <- function() {
 
   invisible(extras)
 }
+
+
+#' Copy a file from *inst/extdata* into the working directory
+#'
+#' This helper lets users experiment with the small demo files that ship
+#' with **isdsr** (or any other package) without asking them to locate the
+#' installation directory.  It looks for `filename` inside the package’s
+#' *inst/extdata* folder, checks a few safety conditions, then copies the
+#' file to `getwd()`.
+#'
+#' The call aborts with an informative error when
+#' * the requested file is not present in *extdata*, or
+#' * a file of the same name already exists in the working directory and
+#'   `overwrite = FALSE`.
+#'
+#' @param filename A single character string giving the exact path to the
+#'   resource within *inst/extdata*.  Sub-directories are allowed, e.g.
+#'   `"csv/demo.csv"` or `"images/logo.png"`.
+#' @param overwrite Should an existing target file be replaced?  Defaults to
+#'   `FALSE`, in which case the function stops rather than overwrite data.
+#'
+#' @return Invisibly returns a logical scalar: `TRUE` when the copy succeeded
+#'   and `FALSE` otherwise.  The function is called for its side effect of
+#'   writing a file; on success it prints a short message, on failure it raises
+#'   an error or warning.
+#'
+#' @section See also:
+#' * [system.file()] for locating files inside installed packages.
+#' * [base::file.copy()] which does the low-level transfer.
+#'
+#' @examples
+#' ## copy the example CSV that ships with the package -----------------
+#' tmp <- tempdir()
+#' old <- setwd(tmp)
+#'
+#' copy_extdata("survey.csv") # writes survey.csv into tempdir()
+#' readr::read_csv("survey.csv") # inspect its contents
+#'
+#' unlink("survey.csv") # clean up
+#' setwd(old)
+#'
+#' ## overwrite protection --------------------------------------------
+#' copy_extdata("survey.csv") # first copy
+#' copy_extdata("survey.csv", overwrite = TRUE) # replace it silently
+#'
+#' @export
+copy_extdata <- function(filename, overwrite = FALSE) {
+  # Get the current package name automatically
+  pkg_name <- utils::packageName()
+
+  # Find the source file in extdata
+  source_file <- system.file("extdata", filename, package = pkg_name)
+
+  # Check if file exists
+  if (source_file == "" || !file.exists(source_file)) {
+    stop("File '", filename, "' not found in package extdata")
+  }
+
+  # Get destination path
+  dest_file <- file.path(getwd(), filename)
+
+  # Check if destination exists and overwrite is FALSE
+  if (file.exists(dest_file) && !overwrite) {
+    stop("File '", filename, "' already exists. Use overwrite = TRUE to replace it.")
+  }
+
+  # Copy to working directory
+  success <- file.copy(source_file, dest_file, overwrite = overwrite)
+
+  if (success) {
+    message("File '", filename, "' copied to: ", dest_file)
+  } else {
+    warning("Failed to copy file '", filename, "'")
+  }
+
+  return(invisible(success))
+}
