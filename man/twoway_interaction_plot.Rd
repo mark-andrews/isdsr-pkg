@@ -24,6 +24,6 @@ A \code{patchwork} object
 Interaction plot using expected marginal means
 }
 \examples{
-M <- afex::aov_car(nc_erp ~ category + Error(id/change), data = catknowledge)
-twoway_interaction_plot(M, 'category', 'change', ylab = 'Nc ERP amplitude')
+M <- afex::aov_car(nc_erp ~ category + Error(id / change), data = catknowledge)
+twoway_interaction_plot(M, "category", "change", ylab = "Nc ERP amplitude")
 }
