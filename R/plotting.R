@@ -170,7 +170,7 @@ tukeyboxplot <- function(y, x, data,
     p1 <- p1 + labs(y = ylab)
   }
 
-  p1
+  p1 + scale_y_continuous(labels = scales::comma)
 }
 
 #' A histogram
