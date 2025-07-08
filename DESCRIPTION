@@ -32,6 +32,7 @@ Imports:
     afex (>= 1.1.1),
     patchwork (>= 1.1.2),
     psyntur (>= 0.1.0),
-    tibble
+    scales (>= 1.3.0),
+    tibble (>= 3.2.1)
 Config/testthat/edition: 3
 RdMacros: Rdpack

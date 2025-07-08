@@ -259,10 +259,12 @@ histogram <- function(x, data, by = NULL, position = "stack", facet = NULL, face
 
   # minimal looks better than classic in a faceted plot
   if (is.null(enexpr(facet))) {
-    p1 + theme_classic() + scale_fill_brewer(palette = "Set1")
+    p1 <- p1 + theme_classic() + scale_fill_brewer(palette = "Set1")
   } else {
-    p1 + theme_minimal() + scale_fill_brewer(palette = "Set1")
+    p1 <- p1 + theme_minimal() + scale_fill_brewer(palette = "Set1")
   }
+
+  p1 + scale_x_continuous(labels = scales::comma)
 }
 
 #' Interaction plot using expected marginal means
