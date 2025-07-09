@@ -69,3 +69,38 @@ get_binned_mode <- function(data, var, n_bins = 10) {
     dplyr::slice_max(bin_count) |>
     dplyr::select({{ var }}, count = bin_count)
 }
+
+
+#' Range width (max minus min)
+#'
+#' Computes the distance between the smallest and largest finite values in a
+#' numeric vector.  If the vector is empty, contains only `NA`s (and
+#' `na.rm = TRUE`), or contains only `Inf`/`-Inf`, the function returns
+#' `NA_real_`.
+#'
+#' @param x      Numeric vector.
+#' @param na.rm  Logical; if `TRUE` (default) remove `NA` values before
+#'   computing the range.
+#'
+#' @return A single numeric value `max(x) - min(x)`, or `NA_real_` when the
+#'   range is undefined.
+#'
+#' @examples
+#' get_range(c(3, 10, 7, 4)) # 7
+#' get_range(42) # 0
+#' get_range(c(2, NA, 8)) # 6
+#' get_range(c(2, NA, 8), na.rm = FALSE) # NA
+#' get_range(numeric(0)) # NA
+#' get_range(c(Inf, -Inf)) # NA
+#'
+#' @export
+get_range <- function(x, na.rm = TRUE) {
+  if (na.rm) x <- x[!is.na(x)]
+
+  if (length(x) == 0L ||
+    all(is.infinite(x))) {
+    return(NA_real_)
+  }
+
+  max(x) - min(x)
+}
