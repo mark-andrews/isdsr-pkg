@@ -104,3 +104,57 @@ get_range <- function(x, na.rm = TRUE) {
 
   max(x) - min(x)
 }
+
+
+#' Inter-percentile range
+#'
+#' Computes the distance between the \eqn{p}-th and \eqn{(1 - p)}-th sample
+#' percentiles.  `ipr()` is the general work-horse; `idr()` (inter-decile
+#' range) and `itr()` (inter-tercile range) are thin wrappers that set
+#' \eqn{p = 0.10} and \eqn{p = 1/3}, respectively.
+#'
+#' @param x      Numeric vector.
+#' @param p      A proportion between 0 and 0.5 (exclusive).
+#'               Default `0.25` reproduces the inter-quartile range.
+#' @param na.rm  Logical; if `TRUE`, remove `NA`s before computing.
+#' @param type   Passed to [stats::quantile()].  Default `7` matches `IQR()`.
+#' @param ...    Additional arguments passed to [stats::quantile()].
+#'
+#' @return A single numeric value: the difference between
+#'   \eqn{Q_{1 - p}} and \eqn{Q_{p}}. Returns `NA_real_` if the range is
+#'   undefined (e.g. all observations missing).
+#'
+#' @examples
+#' x <- rnorm(100)
+#' ipr(x) # same idea as IQR, but p = 0.25 by default
+#' idr(x) # 10th–90th percentile range
+#' itr(x) # 33.3rd–66.7th percentile range
+#'
+#' @export
+ipr <- function(x, p = 0.25, na.rm = TRUE, type = 7, ...) {
+  stopifnot(
+    is.numeric(x),
+    is.numeric(p), length(p) == 1L,
+    p > 0, p < 0.5
+  )
+
+  if (na.rm) x <- x[!is.na(x)]
+  if (length(x) == 0L) {
+    return(NA_real_)
+  }
+
+  qs <- stats::quantile(x, probs = c(p, 1 - p), type = type, ...) |> unname()
+  diff(qs)
+}
+
+#' @describeIn ipr Inter-decile range (p = 0.10)
+#' @export
+idr <- function(x, na.rm = FALSE, type = 7, ...) {
+  ipr(x, p = 0.10, na.rm = na.rm, type = type, ...)
+}
+
+#' @describeIn ipr Inter-tercile range (p = 1/3)
+#' @export
+itr <- function(x, na.rm = FALSE, type = 7, ...) {
+  ipr(x, p = 1 / 3, na.rm = na.rm, type = type, ...)
+}
