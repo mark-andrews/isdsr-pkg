@@ -60,7 +60,7 @@ scatterplot <- function(x, y, data, by = NULL, best_fit_line = FALSE, xlab = NUL
     p1 <- p1 + labs(y = ylab)
   }
 
-  p1
+  p1 + scale_x_continuous(labels = scales::comma)
 }
 
 #' A Tukey box-and-whisker plot
