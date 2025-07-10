@@ -4,6 +4,8 @@
 \name{reexports}
 \alias{reexports}
 \alias{skim}
+\alias{skewness}
+\alias{kurtosis}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{moments}{\code{\link[moments]{kurtosis}}, \code{\link[moments]{skewness}}}
+
   \item{skimr}{\code{\link[skimr]{skim}}}
 }}
 
