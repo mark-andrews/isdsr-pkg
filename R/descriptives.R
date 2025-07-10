@@ -158,3 +158,54 @@ idr <- function(x, na.rm = FALSE, type = 7, ...) {
 itr <- function(x, na.rm = FALSE, type = 7, ...) {
   ipr(x, p = 1 / 3, na.rm = na.rm, type = type, ...)
 }
+
+
+#' Sample kurtosis (raw by default)
+#'
+#' Calculates the sample \emph{raw} kurtosis of a numeric vector using
+#' [moments::kurtosis()].  If you want \emph{excess} kurtosis
+#' (raw – 3) set `excess = TRUE`.
+#'
+#' @param x      Numeric vector.
+#' @param na.rm  Logical; if `TRUE` (default) remove `NA` values
+#'   before computing the statistic.
+#' @param excess Logical; if `TRUE` subtract 3 so the normal
+#'   distribution maps to 0.  Defaults to `FALSE` (raw kurtosis).
+#'
+#' @return A single numeric value: raw kurtosis by default, excess
+#'   kurtosis when `excess = TRUE`.  Returns `NA_real_` if the vector
+#'   has fewer than four non‐missing observations.
+#'
+#' @details
+#' *Raw* kurtosis equals 3 for a normal distribution.
+#' *Excess* kurtosis is raw – 3, so the normal benchmark is 0.
+#'
+#' | Excess value | Tail description | Raw value |
+#' |--------------|------------------|-----------|
+#' | > 0          | heavy‐tailed     | > 3       |
+#' | = 0          | normal‐tailed    | = 3       |
+#' | < 0          | light‐tailed     | < 3       |
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' # Raw kurtosis (normal ≈ 3)
+#' summarise(whr2025,
+#'   raw_kurt_happiness = kurtosis(happiness),
+#'   raw_kurt_gdp       = kurtosis(gdp)
+#' )
+#'
+#' # Excess kurtosis (normal ≈ 0)
+#' summarise(whr2025,
+#'   excess_kurt_happiness = kurtosis(happiness, excess = TRUE),
+#'   excess_kurt_gdp       = kurtosis(gdp, excess = TRUE)
+#' )
+#'
+#' @export
+kurtosis <- function(x, na.rm = TRUE, excess = FALSE) {
+  k_raw <- moments::kurtosis(x, na.rm = na.rm)
+  if (is.na(k_raw)) {
+    return(k_raw)
+  }
+  if (excess) k_raw - 3 else k_raw
+}
