@@ -4,16 +4,27 @@
 \alias{normal_inference_pvalue}
 \title{Calculate the p-value for a hypothesis test about mean of normal distribution}
 \usage{
-normal_inference_pvalue(y, mu, sigma = NULL, na.rm = TRUE, verbose = FALSE)
+normal_inference_pvalue(
+  y,
+  mu,
+  data,
+  sigma = NULL,
+  na.rm = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
-\item{y}{(numeric) A set of values assumed to be drawn independently from a normal distribution.}
+\item{y}{(numeric) A variable whose values are assumed to be drawn independently from a normal distribution.}
 
 \item{mu}{(numeric) The hypothesized mean of the normal distribution.}
 
-\item{sigma}{(numeric) If not numeric, the assumed value of the standard deviation}
+\item{data}{(data frame) The data frame containing the y variable.}
 
-\item{na.rm}{(logical) When calculating the sufficient statistics, do we remove NA's}
+\item{sigma}{(numeric) If not NULL, the assumed value of the standard deviation. If NULL, sigma is assumed to be unknown.}
+
+\item{na.rm}{(logical) When calculating the sufficient statistics, do we remove NA's.}
+
+\item{verbose}{(logical) If TRUE, return the test statistic and degree of freedom (when sigma is unknown).}
 }
 \value{
 (numeric) A p-value for the hypothesis
@@ -29,6 +40,5 @@ If so, the p-value is calculated assuming a normal sampling distribution.
 If the standard deviation is not assumed to be known, the p-value is calculated using the t-distribution.
 }
 \examples{
-y <- rnorm(10, mean = 1)
-normal_inference_pvalue(y, mu = 1)
+normal_inference_pvalue(score, mu = 32, data = mathplacement)
 }

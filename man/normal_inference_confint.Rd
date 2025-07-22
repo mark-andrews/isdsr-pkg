@@ -4,10 +4,12 @@
 \alias{normal_inference_confint}
 \title{Confidence interval for the mean of normal distribution}
 \usage{
-normal_inference_confint(y, level = 0.95, sigma = NULL, na.rm = T)
+normal_inference_confint(y, data, level = 0.95, sigma = NULL, na.rm = T)
 }
 \arguments{
-\item{y}{(numeric) A set of values assumed to be drawn independently from a normal distribution.}
+\item{y}{(numeric) A variable whose values are assumed to be drawn independently from a normal distribution.}
+
+\item{data}{(data frame) The data frame containing the y variable.}
 
 \item{level}{(numeric) The level of the confidence interval.}
 
@@ -31,6 +33,5 @@ If the standard deviation is not assumed to be known, the confidence interval
 is calculated using the t-distribution.
 }
 \examples{
-y <- rnorm(10, mean = 5)
-normal_inference_confint(y)
+normal_inference_confint(score, data = mathplacement)
 }

@@ -1,5 +1,5 @@
 #' Prediction interval of a normal distribution
-#' 
+#'
 #' This function calculates the (central) interval of a normal distribution that
 #' contains a specified probability. This interval will always extend from a
 #' certain distance below the mean to the same distance above the mean.
@@ -15,9 +15,8 @@
 #' normal_interval()
 #' normal_interval(mean = 100, sd = 15, probability = 0.99)
 normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
-  
-  p <- probability + (1 - probability)/2
-  
+  p <- probability + (1 - probability) / 2
+
   ub <- qnorm(p)
   mean + c(-ub, ub) * sd
 }
@@ -37,68 +36,65 @@ normal_interval <- function(mean = 0, sd = 1, probability = 0.95) {
 #' t_interval()
 #' t_interval(nu = 10, probability = 0.99)
 t_interval <- function(nu = 1, probability = 0.95) {
-  
-  p <- probability + (1 - probability)/2
-  
+  p <- probability + (1 - probability) / 2
+
   ub <- qt(p, df = nu)
   c(-ub, ub)
 }
 
 
 #' Calculate the p-value for a hypothesis test about mean of normal distribution
-#' 
+#'
 #' Given a set of values assumed to sampled independently from a normal distribution,
 #' calculate the p-value for any hypothetical value of the distribution's mean.
-#' 
+#'
 #' The standard deviation of the normal distribution can assumed to be known to have the value of the sample standard deviation.
 #' If so, the p-value is calculated assuming a normal sampling distribution.
-#' 
+#'
 #' If the standard deviation is not assumed to be known, the p-value is calculated using the t-distribution.
 #'
-#' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
+#' @param y (numeric) A variable whose values are assumed to be drawn independently from a normal distribution.
 #' @param mu (numeric) The hypothesized mean of the normal distribution.
-#' @param sigma (numeric) If not numeric, the assumed value of the standard deviation
-#' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
+#' @param data (data frame) The data frame containing the y variable.
+#' @param sigma (numeric) If not NULL, the assumed value of the standard deviation. If NULL, sigma is assumed to be unknown.
+#' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's.
+#' @param verbose (logical) If TRUE, return the test statistic and degree of freedom (when sigma is unknown).
 #'
 #' @return (numeric) A p-value for the hypothesis
 #' @export
 #'
 #' @examples
-#' y <- rnorm(10, mean = 1)
-#' normal_inference_pvalue(y, mu = 1)
-normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = TRUE, verbose = FALSE){
-  
+#' normal_inference_pvalue(score, mu = 32, data = mathplacement)
+normal_inference_pvalue <- function(y, mu, data, sigma = NULL, na.rm = TRUE, verbose = FALSE) {
+  y <- dplyr::pull(data, {{ y }})
   ybar <- mean(y, na.rm = na.rm)
-  if (is.null(sigma)){
+  if (is.null(sigma)) {
     s <- sd(y, na.rm = na.rm)
   } else {
     s <- sigma
   }
-  
+
   n <- sum(!is.na(y))
-  standard_error <- s/sqrt(n)
-  statistic <- (ybar - mu)/standard_error
-  
+  standard_error <- s / sqrt(n)
+  statistic <- (ybar - mu) / standard_error
+
   if (!is.null(sigma)) {
     pvalue <- pnorm(q = abs(statistic), mean = 0, sd = 1, lower.tail = F) * 2
-    
-    if (!verbose){
+
+    if (!verbose) {
       pvalue
     } else {
       tibble::tibble(z = statistic, p = pvalue)
     }
-    
   } else {
     pvalue <- pt(q = abs(statistic), df = n - 1, lower.tail = F) * 2
-    
-    if (!verbose){
+
+    if (!verbose) {
       pvalue
     } else {
       tibble::tibble(t = statistic, nu = n - 1, p = pvalue)
     }
-    
   }
-  
 }
 
 
@@ -118,7 +114,7 @@ normal_inference_pvalue <- function(y, mu, sigma = NULL, na.rm = TRUE, verbose =
 #' normal_auc(lower_bound = 0)
 #' normal_auc(upper_bound = 1)
 #' normal_auc(lower_bound = -1, upper_bound = 2)
-normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
+normal_auc <- function(lower_bound = -Inf, upper_bound = Inf, mean = 0, sd = 1) {
   pnorm(upper_bound, mean = mean, sd = sd) - pnorm(lower_bound, mean = mean, sd = sd)
 }
 
@@ -138,7 +134,7 @@ normal_auc <- function(lower_bound=-Inf, upper_bound=Inf, mean = 0, sd = 1){
 #' t_auc(lower_bound = 0, nu = 1)
 #' t_auc(upper_bound = 1, nu = 10)
 #' t_auc(lower_bound = -1, upper_bound = 2, nu = 25)
-t_auc <- function(lower_bound=-Inf, upper_bound=Inf, nu = 1){
+t_auc <- function(lower_bound = -Inf, upper_bound = Inf, nu = 1) {
   pt(upper_bound, df = nu) - pt(lower_bound, df = nu)
 }
 
@@ -154,48 +150,47 @@ t_auc <- function(lower_bound=-Inf, upper_bound=Inf, nu = 1){
 #'
 #' If the standard deviation is not assumed to be known, the confidence interval
 #' is calculated using the t-distribution.
-#' 
-#' @param y (numeric) A set of values assumed to be drawn independently from a normal distribution.
+#'
+#' @param y (numeric) A variable whose values are assumed to be drawn independently from a normal distribution.
+#' @param data (data frame) The data frame containing the y variable.
 #' @param level (numeric) The level of the confidence interval.
 #' @param sigma (numeric) If not NULL, the assumed value of the standard deviation
 #' @param na.rm (logical) When calculating the sufficient statistics, do we remove NA's
-#' 
+#'
 #' @return (numeric) The lower and upper bounds of the confidence interval
 #' @export
-#' 
+#'
 #' @examples
-#' y <- rnorm(10, mean = 5)
-#' normal_inference_confint(y)
-normal_inference_confint <- function(y, level = 0.95, sigma = NULL, na.rm = T){
-  
+#' normal_inference_confint(score, data = mathplacement)
+normal_inference_confint <- function(y, data, level = 0.95, sigma = NULL, na.rm = T) {
+  y <- dplyr::pull(data, {{ y }})
   ybar <- mean(y, na.rm = na.rm)
-  if (is.null(sigma)){
+  if (is.null(sigma)) {
     s <- sd(y, na.rm = na.rm)
   } else {
     s <- sigma
   }
-  
+
   n <- sum(!is.na(y))
-  standard_error <- s/sqrt(n)
-  
+  standard_error <- s / sqrt(n)
+
   if (!is.null(sigma)) {
-    scaling_factor <- qnorm(level + (1-level)/2)
-    
+    scaling_factor <- qnorm(level + (1 - level) / 2)
   } else {
-    scaling_factor <- qt(level + (1-level)/2, df = n-1)
+    scaling_factor <- qt(level + (1 - level) / 2, df = n - 1)
   }
-  
+
   ybar + c(-1, 1) * scaling_factor * standard_error
 }
 
 #' Plot a normal QQ-plot
-#' 
+#'
 #' Given a set of values, the quantiles (percentiles) of each value is
 #' calculated. The values in a standard normal corresponding to each quantile is
 #' calculated. The z-scores of the values of the variable are then plotted
 #' against their corresponding z-scores in the standard normal.
 #'
-#' @param var The variable to be compared to the 
+#' @param var The variable to be compared to the
 #' @param data The data frame contain the variable
 #'
 #' @return A ggplot object
@@ -203,16 +198,19 @@ normal_inference_confint <- function(y, level = 0.95, sigma = NULL, na.rm = T){
 #'
 #' @examples
 #' qqnormplot(score, mathplacement)
-qqnormplot <- function(var, data){
-  
-  data %>% 
-    mutate(y = {{var}},
-           z = (y - mean(y))/sd(y)) %>%
-    mutate(p = ecdf(y)(y),
-           x = qnorm(p)) %>% 
+qqnormplot <- function(var, data) {
+  data %>%
+    mutate(
+      y = {{ var }},
+      z = (y - mean(y)) / sd(y)
+    ) %>%
+    mutate(
+      p = ecdf(y)(y),
+      x = qnorm(p)
+    ) %>%
     ggplot(aes(x = x, y = z)) +
     geom_point(size = 0.5) +
-    ylab('Sample quantiles') +
-    xlab('Theoretical quantiles') +
-    geom_abline(intercept = 0, slope = 1, col='red')
+    ylab("Sample quantiles") +
+    xlab("Theoretical quantiles") +
+    geom_abline(intercept = 0, slope = 1, col = "red")
 }
