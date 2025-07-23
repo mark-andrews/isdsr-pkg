@@ -1,3 +1,71 @@
+#' PISA test scores by country, year, and gender (2000–2022)
+#'
+#' A tidy summary of the OECD Programme for International Student Assessment
+#' (PISA) student data. For every combination of survey year, country, and
+#' gender, this dataset contains the mean mathematics, reading, and science
+#' scores.
+#'
+#' @format A tibble with 1,020 rows and 7 variables:
+#' \describe{
+#'   \item{year}{Integer. PISA cycle year (e.g., 2000, 2003, …, 2022).}
+#'   \item{country}{Character. Three‑letter country/jurisdiction code (ISO3 where possible; some PISA special codes).}
+#'   \item{country_name}{Character. English country/jurisdiction name.}
+#'   \item{gender}{Factor with levels \code{"female"} and \code{"male"}.}
+#'   \item{math}{Numeric. Mean mathematics score for that group (OECD scale, mean ≈ 500, SD ≈ 100).}
+#'   \item{read}{Numeric. Mean reading score.}
+#'   \item{science}{Numeric. Mean science score.}
+#' }
+#'
+#' @details
+#' The dataset was created from the public PISA student microdata using the
+#' \pkg{learningtower} package. We then aggregate
+#' student-level scores with \code{dplyr::summarise()} after dropping records
+#' with missing \code{year}, \code{country}, or \code{gender}.
+#'
+#' @source OECD. Programme for International Student Assessment (PISA)
+#' public-use microdata; accessed via \pkg{learningtower}
+#' (\url{https://github.com/kevinwang09/learningtower}).
+#'
+#' @references
+#' OECD (various years). \emph{PISA Databases}. Paris: OECD.
+#'
+#' @seealso \code{\link{pisa2022uk}}
+#'
+#' @examples
+#' summarize(pisa, across(math:science, mean), .by = year)
+#'
+#' @keywords datasets
+"pisa"
+
+#' PISA 2022 United Kingdom student-level scores
+#'
+#' Individual student records from the 2022 PISA cycle for the United Kingdom
+#' (country code \code{"GBR"}). Contains mathematics, reading, and science
+#' scores plus gender.
+#'
+#' @format A tibble with 12,972 rows and 4 variables:
+#' \describe{
+#'   \item{math}{Numeric. Mathematics score.}
+#'   \item{read}{Numeric. Reading score.}
+#'   \item{science}{Numeric. Science score.}
+#'   \item{gender}{Factor with levels \code{"female"} and \code{"male"}.}
+#' }
+#'
+#' @details
+#' Rows with missing values in any of the four variables were removed.
+#' Scores are the PISA plausible-value based estimates as provided by
+#' \pkg{learningtower}.
+#'
+#' @source OECD PISA 2022 student file; subset obtained via
+#' \pkg{learningtower} and filtered to \code{country == "GBR"}.
+#'
+#' @seealso \code{\link{pisa}} for aggregated country-by-year summaries.
+#'
+#' @examples
+#' @keywords datasets
+"pisa2022uk"
+
+
 #' Visual versus Verbal Perception and Responses
 #'
 #' An experiment studying the interaction between visual versus perception and visual versus verbal responses.
