@@ -33,7 +33,8 @@ install_extras <- function() {
   extras <- setdiff(
     tools::package_dependencies(
       "isdsr",
-      which     = "Suggests", # look only at Suggests
+      which = "Suggests", # look only at Suggests
+      db = installed.packages(),
       recursive = FALSE # do not chase their own Suggests
     )$isdsr,
     rownames(installed.packages())
