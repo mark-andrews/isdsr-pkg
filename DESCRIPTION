@@ -24,7 +24,8 @@ Suggests:
     usethis (>= 3.1.0),
     haven (>= 2.5.4),
     writexl (>= 1.5.4),
-    openintro (>= 2.5.0)
+    effectsize (>= 1.0.1),
+    infer (>= 1.0.9)
 Depends: 
     R (>= 3.5)
 LazyData: true
