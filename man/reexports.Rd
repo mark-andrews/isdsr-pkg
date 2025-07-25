@@ -5,6 +5,8 @@
 \alias{reexports}
 \alias{skim}
 \alias{skewness}
+\alias{hedges_g}
+\alias{cohens_d}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,6 +14,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{effectsize}{\code{\link[effectsize]{cohens_d}}, \code{\link[effectsize:cohens_d]{hedges_g}}}
+
   \item{moments}{\code{\link[moments]{skewness}}}
 
   \item{skimr}{\code{\link[skimr]{skim}}}
