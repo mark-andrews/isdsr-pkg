@@ -13,3 +13,7 @@ effectsize::hedges_g
 #' @importFrom effectsize cohens_d
 #' @export
 effectsize::cohens_d
+
+#' @importFrom car leveneTest
+#' @export
+car::leveneTest
