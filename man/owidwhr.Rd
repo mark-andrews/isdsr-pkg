@@ -12,7 +12,7 @@ A tibble with \strong{1 765 rows} (country–year observations) and \strong{6 va
 \item{year}{Calendar year, 2011 – 2024.}
 \item{happiness}{Mean Cantril-ladder score, 0 = worst possible life … 10 = best.}
 \item{gdp}{GDP per capita, PPP-adjusted, constant-2021 international $.}
-\item{lgdp}{Natural logarithm of \code{gdp}.}
+\item{lgdp}{Logarithm, base 10, of \code{gdp}.}
 }
 }
 \source{

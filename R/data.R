@@ -180,7 +180,7 @@
 #'   \item{year}{Calendar year, 2011 – 2024.}
 #'   \item{happiness}{Mean Cantril-ladder score, 0 = worst possible life … 10 = best.}
 #'   \item{gdp}{GDP per capita, PPP-adjusted, constant-2021 international $.}
-#'   \item{lgdp}{Natural logarithm of `gdp`.}
+#'   \item{lgdp}{Logarithm, base 10, of `gdp`.}
 #' }
 #'
 #' @source Wellbeing Research Centre (2025) &ndash; *World Happiness Report 2025*
@@ -209,7 +209,7 @@
 #'   \item{iso3c}{Three-letter ISO-3166 country code.}
 #'   \item{happiness}{Average Cantril-ladder score for 2022 – 2024, reported by WHR as 2023.}
 #'   \item{gdp}{GDP per capita, PPP, constant-2021 international $.}
-#'   \item{lgdp}{Natural logarithm of `gdp`.}
+#'   \item{lgdp}{Logarithm, base 10, of `gdp`.}
 #'   \item{income}{Ordered factor with three levels: `low`, `medium`, `high`
 #'                 (terciles of `gdp`).}
 #' }

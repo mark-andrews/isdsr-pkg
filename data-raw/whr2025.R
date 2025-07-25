@@ -10,7 +10,7 @@ owidwhr <- read_csv("data-raw/raw_data_files/gdp-vs-happiness.csv") |>
     happiness = `Cantril ladder score`,
     gdp = `GDP per capita, PPP (constant 2021 international $)`
   ) |>
-  mutate(lgdp = log(gdp)) |>
+  mutate(lgdp = log10(gdp)) |>
   drop_na() |>
   filter(country != "World")
 

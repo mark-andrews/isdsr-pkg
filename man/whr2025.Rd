@@ -11,7 +11,7 @@ A tibble with \strong{139 rows} (one per country) and \strong{6 variables}
 \item{iso3c}{Three-letter ISO-3166 country code.}
 \item{happiness}{Average Cantril-ladder score for 2022 – 2024, reported by WHR as 2023.}
 \item{gdp}{GDP per capita, PPP, constant-2021 international $.}
-\item{lgdp}{Natural logarithm of \code{gdp}.}
+\item{lgdp}{Logarithm, base 10, of \code{gdp}.}
 \item{income}{Ordered factor with three levels: \code{low}, \code{medium}, \code{high}
 (terciles of \code{gdp}).}
 }
