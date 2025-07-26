@@ -24,7 +24,8 @@ Suggests:
     usethis (>= 3.1.0),
     haven (>= 2.5.4),
     writexl (>= 1.5.4),
-    infer (>= 1.0.9)
+    infer (>= 1.0.9),
+    broom (>= 1.0.8)
 Depends: 
     R (>= 3.5)
 LazyData: true
