@@ -1,14 +1,14 @@
-#' Visual diagnostics for linear models: residuals, Q–Q, scale–location, and leverage
+#' Visual diagnostics for linear models: residuals, Q–Q, scale–location, leverage, and histogram
 #'
 #' @description
-#' Produce one of four standard diagnostic plots for a fitted \code{lm} model
+#' Produce one of five standard diagnostic plots for a fitted \code{lm} model
 #' using \pkg{ggplot2} layers and \pkg{broom}’s augmented data.
 #' These plots help check the core assumptions of the normal linear model:
 #' a linear conditional mean, errors centred at zero, roughly constant variance,
 #' and error distributions close enough to normal for small‑sample \eqn{t}-based inference.
 #'
 #' @details
-#' The function draws one of four plots, selected via \code{type}.
+#' The function draws one of five plots, selected via \code{type}.
 #'
 #' \strong{1) \code{type = "resid"} — Residuals vs fitted}
 #'
@@ -17,63 +17,42 @@
 #'
 #' \emph{What to look for}
 #' \itemize{
-#'   \item \emph{Linearity:} Curvature (e.g., U‑shape) suggests the conditional mean is not linear in \eqn{x}.
-#'         Consider transforming a variable or changing the mean function.
-#'   \item \emph{Constant variance:} A funnel pattern—residual spread growing or shrinking with the fitted values—
-#'         indicates heteroskedasticity. Consequences include misleading standard errors and p‑values.
-#'         Remedies include variance‑stabilising transforms (e.g., logs), modelling the variance,
-#'         or reporting heteroskedasticity‑robust standard errors (which do not change \eqn{\hat\beta}, only the uncertainty).
-#'   \item \emph{Outliers:} Points far from 0 vertically (large residuals) may indicate outliers or data issues.
-#'   \item \emph{Structure / clustering:} Stripes or clusters can signal omitted groups, time dependence,
-#'         or different variances by subgroup.
+#'   \item \emph{Linearity:} Curvature suggests the conditional mean is not linear in \eqn{x}.
+#'   \item \emph{Constant variance:} Funnel shapes indicate heteroskedasticity.
+#'   \item \emph{Outliers / structure:} Large vertical distances or clustered stripes merit investigation.
 #' }
 #'
 #' \strong{2) \code{type = "qq"} — Normal Q–Q of standardised residuals}
 #'
 #' Ordered standardised residuals against theoretical normal quantiles with a reference line.
-#' Points should lie close to the line for approximate normality of errors.
-#' Departures in both tails indicate heavy tails; an S‑shape indicates skewness.
-#'
-#' \emph{What to look for}
-#' \itemize{
-#'   \item \emph{Heavy tails:} Points bending away from the line at both ends
-#'         (above in the upper tail, below in the lower tail) imply heavier tails than normal.
-#'   \item \emph{Skewness:} A systematic S‑shape (one tail above, the other below) indicates skew.
-#'         Transformations of the outcome may help.
-#'   \item \emph{Isolated extremes:} A few points far from the line are candidate outliers; investigate their influence.
-#' }
+#' Points close to the line indicate approximate normality; tail bending indicates heavy tails; an S‑shape indicates skewness.
 #'
 #' \strong{3) \code{type = "scale"} — Scale–location}
 #'
 #' Plots \eqn{\sqrt{|r_i|}}{sqrt(|r_i|)} versus fitted values, where \eqn{r_i} are standardised residuals.
-#' This stabilises the spread and makes trends in residual variability easier to see.
 #' A flat band supports constant variance; upward or downward trends suggest heteroskedasticity.
-#'
-#' \emph{What to look for}
-#' \itemize{
-#'   \item \emph{Flat band:} Supports the constant‑variance assumption.
-#'   \item \emph{Upward trend:} Variance increases with the mean—intervals may be too narrow at large fitted values.
-#'   \item \emph{Downward trend:} Variance decreases with the mean—intervals may be too wide at small fitted values.
-#' }
 #'
 #' \strong{4) \code{type = "lev"} — Standardised residuals vs leverage}
 #'
 #' Standardised residuals (\code{.std.resid}) versus leverage (\code{.hat}).
-#' Points far to the right have high leverage (unusual \eqn{x} values).
-#' Points far up or down have large residuals.
-#' Large influence typically arises when \emph{both} leverage and residual are large.
-#' A vertical reference line is drawn at \eqn{2p/n}, where \eqn{p} is the number of
-#' model coefficients (including the intercept) and \eqn{n} is the sample size.
+#' A vertical reference line is drawn at \eqn{2p/n}, where \eqn{p} is the number of coefficients
+#' (including the intercept) and \eqn{n} is the sample size.
 #' Horizontal lines at \eqn{\pm 2}{+/- 2} mark unusually large residuals.
 #' Point size encodes Cook’s distance (\code{.cooksd}) to cue overall influence.
 #'
 #' \emph{Reading the plot}
 #' \itemize{
-#'   \item Left band near 0: typical leverage; investigate residual structure with the other plots.
 #'   \item Right of \eqn{2p/n} with small residuals: high leverage but not influential.
 #'   \item Right of \eqn{2p/n} and beyond \eqn{|2|}{2}: candidates for strong influence.
-#'         Check data quality and model form before taking action.
 #' }
+#'
+#' \strong{5) \code{type = "hist"} — Histogram of residuals with normal overlay}
+#'
+#' Histogram of raw residuals on a density scale, overlaid with the normal density
+#' \eqn{N(0, \sigma^2)} where \eqn{\sigma} is the residual standard deviation
+#' (\code{sigma(model)}). A symmetric, bell‑shaped histogram centred at 0 that
+#' roughly follows the red curve supports the normal‑error assumption; visible skew
+#' or heavier‑than‑normal tails point to departures that may affect small‑sample inference.
 #'
 #' \strong{General guidance}
 #' \itemize{
@@ -89,10 +68,10 @@
 #'     \item \code{"resid"} — residuals vs fitted (with a loess smooth).
 #'     \item \code{"qq"} — Q–Q plot of standardised residuals with reference line.
 #'     \item \code{"scale"} — scale–location plot \eqn{\sqrt{|r_i|}}{sqrt(|r_i|)} vs fitted.
-#'     \item \code{"lev"} — standardised residuals vs leverage, with reference lines;
-#'           point size indicates Cook’s distance.
+#'     \item \code{"lev"} — standardised residuals vs leverage, with reference lines; point size indicates Cook’s distance.
+#'     \item \code{"hist"} — histogram of residuals with normal density overlay.
 #'   }
-#' @param alpha Point transparency (default \code{0.7}).
+#' @param alpha Point transparency for scatter plots (default \code{0.7}).
 #'
 #' @return A \code{ggplot} object, which you can further customise.
 #'
@@ -106,9 +85,10 @@
 #' lm_diagnostic_plot(fit, "qq")
 #' lm_diagnostic_plot(fit, "scale")
 #' lm_diagnostic_plot(fit, "lev")
+#' lm_diagnostic_plot(fit, "hist")
 #' @export
 lm_diagnostic_plot <- function(model,
-                               type = c("resid", "qq", "scale", "lev"),
+                               type = c("resid", "qq", "scale", "lev", "hist"),
                                alpha = 0.7) {
   stopifnot(inherits(model, "lm"))
   type <- match.arg(type)
@@ -173,4 +153,76 @@ lm_diagnostic_plot <- function(model,
         )
     )
   }
+
+  if (type == "hist") {
+    s <- stats::sigma(model) # residual standard deviation
+    return(
+      ggplot2::ggplot(aug, ggplot2::aes(.resid)) +
+        ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+          bins = 30, colour = "white"
+        ) +
+        ggplot2::stat_function(
+          fun = stats::dnorm,
+          args = list(mean = 0, sd = s),
+          colour = "red", linewidth = 0.8
+        ) +
+        ggplot2::geom_vline(xintercept = 0, colour = "grey50", linewidth = 0.3) +
+        ggplot2::labs(x = "Residual", y = "Density")
+    )
+  }
+}
+
+
+
+#' Bootstrap CIs for residual skewness and kurtosis
+#'
+#' Computes bootstrap percentile confidence intervals for the skewness
+#' and kurtosis of the residuals from an \code{lm} model.
+#'
+#' @param model A fitted \code{lm} object.
+#' @param reps  Number of bootstrap resamples. Default \code{10000}.
+#' @param level Confidence level. Default \code{0.95}.
+#' @param seed  Optional integer seed for reproducibility. Default \code{NULL}.
+#'
+#' @return A tibble with two rows and columns:
+#' \code{measure} (\code{"skewness"} or \code{"kurtosis"}),
+#' \code{estimate}, \code{lower}, \code{upper}, \code{n}, \code{reps}, \code{level}.
+#'
+#' @examples
+#' fit <- lm(mpg ~ wt, data = mtcars)
+#' residual_shape_ci(fit, reps = 2000, seed = 1)
+#' @export
+residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
+  stopifnot(inherits(model, "lm"))
+  if (!is.null(seed)) set.seed(seed)
+
+  # residuals
+  resids <- broom::augment(model)$.resid
+  resids <- resids[is.finite(resids)]
+  n <- length(resids)
+  if (n < 5) stop("Not enough finite residuals to compute moments.")
+
+  df_res <- tibble::tibble(.resid = resids)
+
+  skew_obs <- skewness(resids)
+  kurt_obs <- kurtosis(resids)
+
+  # bootstrap distributions using infer
+  boot <- df_res |>
+    infer::specify(response = .resid) |>
+    infer::generate(reps = reps, type = "bootstrap")
+
+  skew_boot <- dplyr::summarise(boot, stat = skewness(.resid))
+  kurt_boot <- dplyr::summarise(boot, stat = kurtosis(.resid))
+
+  # percentile CIs
+  skew_ci <- infer::get_confidence_interval(skew_boot, level = level, type = "percentile")
+  kurt_ci <- infer::get_confidence_interval(kurt_boot, level = level, type = "percentile")
+
+  tibble::tibble(
+    measure  = c("skewness", "kurtosis"),
+    estimate = c(skew_obs, kurt_obs),
+    lower    = c(skew_ci$lower_ci, kurt_ci$lower_ci),
+    upper    = c(skew_ci$upper_ci, kurt_ci$upper_ci)
+  )
 }
