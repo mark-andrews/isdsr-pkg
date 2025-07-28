@@ -159,7 +159,7 @@ lm_diagnostic_plot <- function(model,
     return(
       ggplot2::ggplot(aug, ggplot2::aes(.resid)) +
         ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
-          bins = 30, colour = "white"
+          bins = 20, colour = "white"
         ) +
         ggplot2::stat_function(
           fun = stats::dnorm,
