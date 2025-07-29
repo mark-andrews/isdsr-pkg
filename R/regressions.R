@@ -260,6 +260,7 @@ residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
 #' @param model A fitted \code{lm} object.
 #' @param reps  Number of bootstrap resamples (default 5000).
 #' @param level Confidence level (default 0.95).
+#' @param sigma Should confidence intervals for residual standard deviation be included?
 #' @param seed  Optional integer for reproducibility.
 #' @return A tibble with rows for each coefficient and for \code{sigma},
 #'   columns: \code{term}, \code{estimate}, \code{lower}, \code{upper}.
@@ -267,7 +268,7 @@ residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
 #' fit <- lm(mpg ~ wt + hp, data = mtcars)
 #' lm_bootstrap_ci(fit, reps = 2000, seed = 1)
 #' @export
-lm_bootstrap_ci <- function(model, reps = 5000, level = 0.95, seed = NULL) {
+lm_bootstrap_ci <- function(model, reps = 5000, level = 0.95, sigma = FALSE, seed = NULL) {
   stopifnot(inherits(model, "lm"))
   if (!is.null(seed)) set.seed(seed)
 
@@ -323,6 +324,11 @@ lm_bootstrap_ci <- function(model, reps = 5000, level = 0.95, seed = NULL) {
       .before = 1
     )
 
-  dplyr::bind_rows(coef_ci, sigma_ci) |>
-    dplyr::relocate(term, estimate, lower, upper)
+  if (sigma) {
+    results <- dplyr::bind_rows(coef_ci, sigma_ci)
+  } else {
+    results <- coef_ci
+  }
+
+  results |> dplyr::relocate(term, estimate, lower, upper)
 }

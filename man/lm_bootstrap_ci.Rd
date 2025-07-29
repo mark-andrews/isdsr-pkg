@@ -4,7 +4,7 @@
 \alias{lm_bootstrap_ci}
 \title{Bootstrap percentile CIs for all lm coefficients and sigma using infer}
 \usage{
-lm_bootstrap_ci(model, reps = 5000, level = 0.95, seed = NULL)
+lm_bootstrap_ci(model, reps = 5000, level = 0.95, sigma = FALSE, seed = NULL)
 }
 \arguments{
 \item{model}{A fitted \code{lm} object.}
@@ -12,6 +12,8 @@ lm_bootstrap_ci(model, reps = 5000, level = 0.95, seed = NULL)
 \item{reps}{Number of bootstrap resamples (default 5000).}
 
 \item{level}{Confidence level (default 0.95).}
+
+\item{sigma}{Should confidence intervals for residual standard deviation be included?}
 
 \item{seed}{Optional integer for reproducibility.}
 }
