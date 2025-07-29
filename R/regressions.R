@@ -226,3 +226,76 @@ residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
     upper    = c(skew_ci$upper_ci, kurt_ci$upper_ci)
   )
 }
+
+
+#' Bootstrap percentile CIs for all lm coefficients and sigma using infer
+#'
+#' @param model A fitted \code{lm} object.
+#' @param reps  Number of bootstrap resamples (default 5000).
+#' @param level Confidence level (default 0.95).
+#' @param seed  Optional integer for reproducibility.
+#' @return A tibble with rows for each coefficient and for \code{sigma},
+#'   columns: \code{term}, \code{estimate}, \code{lower}, \code{upper}.
+#' @examples
+#' fit <- lm(mpg ~ wt + hp, data = mtcars)
+#' lm_bootstrap_ci(fit, reps = 2000, seed = 1)
+#' @export
+lm_bootstrap_ci <- function(model, reps = 5000, level = 0.95, seed = NULL) {
+  stopifnot(inherits(model, "lm"))
+  if (!is.null(seed)) set.seed(seed)
+
+  df <- model.frame(model)
+  form <- stats::formula(model)
+
+  # observed estimates
+  beta_hat <- stats::coef(model)
+  sigma_hat <- stats::sigma(model)
+
+  # generate bootstrap resamples with infer (pairs bootstrap)
+  boots <- df |>
+    infer::specify(formula = form) |>
+    infer::generate(reps = reps, type = "bootstrap")
+
+  # fit the model in each replicate and collect coefficients and sigma
+  coef_boot <- boots |>
+    dplyr::group_by(replicate) |>
+    dplyr::group_modify(function(.x, .y) {
+      fit <- stats::lm(form, data = .x)
+      tibble::tibble(
+        term     = names(stats::coef(fit)),
+        estimate = unname(stats::coef(fit)),
+        sigma    = stats::sigma(fit)
+      )
+    }) |>
+    dplyr::ungroup()
+
+  # coefficient CIs (percentile)
+  alpha <- 1 - level
+  coef_ci <- coef_boot |>
+    dplyr::group_by(term) |>
+    dplyr::summarise(
+      lower = stats::quantile(estimate, probs = alpha / 2, names = FALSE, type = 7),
+      upper = stats::quantile(estimate, probs = 1 - alpha / 2, names = FALSE, type = 7),
+      .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      estimate = unname(beta_hat[term])
+    )
+
+  # sigma CI (summarise once per replicate, then percentile)
+  sigma_ci <- coef_boot |>
+    dplyr::distinct(replicate, sigma) |>
+    dplyr::summarise(
+      lower = stats::quantile(sigma, probs = alpha / 2, names = FALSE, type = 7),
+      upper = stats::quantile(sigma, probs = 1 - alpha / 2, names = FALSE, type = 7),
+      .groups = "drop"
+    ) |>
+    dplyr::mutate(
+      term = "sigma",
+      estimate = sigma_hat,
+      .before = 1
+    )
+
+  dplyr::bind_rows(coef_ci, sigma_ci) |>
+    dplyr::relocate(term, estimate, lower, upper)
+}
