@@ -8,7 +8,7 @@ lm_diagnostic_plot(
   model,
   type = c("resid", "qq", "scale", "lev", "hist"),
   alpha = 0.7,
-  label = FALSE
+  label = TRUE
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ lm_diagnostic_plot(
 \item{alpha}{Point transparency for scatter plots (default \code{0.7}).}
 
 \item{label}{Logical. If \code{TRUE} and \code{type == "lev"}, label
-influential points (Cook’s distance > 4/n or, if none, the three largest).
+influential points (Cook’s distance > 4/n).
 Requires \pkg{ggrepel}. Ignored for other plot types.}
 }
 \value{

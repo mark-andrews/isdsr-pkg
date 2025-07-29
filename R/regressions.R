@@ -73,7 +73,7 @@
 #'   }
 #' @param alpha Point transparency for scatter plots (default \code{0.7}).
 #' @param label Logical. If \code{TRUE} and \code{type == "lev"}, label
-#'   influential points (Cook’s distance > 4/n or, if none, the three largest).
+#'   influential points (Cook’s distance > 4/n).
 #'   Requires \pkg{ggrepel}. Ignored for other plot types.
 #' @return A \code{ggplot} object, which you can further customise.
 #'
@@ -92,7 +92,7 @@
 lm_diagnostic_plot <- function(model,
                                type = c("resid", "qq", "scale", "lev", "hist"),
                                alpha = 0.7,
-                               label = FALSE) {
+                               label = TRUE) {
   stopifnot(inherits(model, "lm"))
   type <- match.arg(type)
   aug <- broom::augment(model)
@@ -164,17 +164,16 @@ lm_diagnostic_plot <- function(model,
       } else {
         # choose influential points
         infl <- dplyr::filter(aug, .cooksd > 4 / n)
-        if (nrow(infl) == 0) {
-          infl <- dplyr::arrange(aug, dplyr::desc(.cooksd)) |> dplyr::slice_head(n = 3)
+        if (nrow(infl) > 0) {
+          base_plot <- base_plot +
+            ggrepel::geom_text_repel(
+              data = infl,
+              ggplot2::aes(label = .rowname),
+              size = 3,
+              max.overlaps = Inf,
+              box.padding = 0.4
+            )
         }
-        base_plot <- base_plot +
-          ggrepel::geom_text_repel(
-            data = infl,
-            ggplot2::aes(label = .rowname),
-            size = 3,
-            max.overlaps = Inf,
-            box.padding = 0.4
-          )
       }
     }
     return(base_plot)
