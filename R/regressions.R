@@ -72,7 +72,9 @@
 #'     \item \code{"hist"} — histogram of residuals with normal density overlay.
 #'   }
 #' @param alpha Point transparency for scatter plots (default \code{0.7}).
-#'
+#' @param label Logical. If \code{TRUE} and \code{type == "lev"}, label
+#'   influential points (Cook’s distance > 4/n or, if none, the three largest).
+#'   Requires \pkg{ggrepel}. Ignored for other plot types.
 #' @return A \code{ggplot} object, which you can further customise.
 #'
 #' @seealso
@@ -89,10 +91,15 @@
 #' @export
 lm_diagnostic_plot <- function(model,
                                type = c("resid", "qq", "scale", "lev", "hist"),
-                               alpha = 0.7) {
+                               alpha = 0.7,
+                               label = FALSE) {
   stopifnot(inherits(model, "lm"))
   type <- match.arg(type)
   aug <- broom::augment(model)
+
+  # row labels for possible use in the leverage plot
+  aug$.rowname <- rownames(model.frame(model))
+  if (is.null(aug$.rowname)) aug$.rowname <- seq_len(nrow(aug))
 
   if (type == "resid") {
     return(
@@ -130,35 +137,55 @@ lm_diagnostic_plot <- function(model,
     p <- length(stats::coef(model)) # includes intercept
     lev_thr <- 2 * p / n
 
-    return(
-      ggplot2::ggplot(
-        aug,
-        ggplot2::aes(x = .hat, y = .std.resid, size = sqrt(.cooksd))
+    base_plot <- ggplot2::ggplot(
+      aug,
+      ggplot2::aes(x = .hat, y = .std.resid, size = sqrt(.cooksd))
+    ) +
+      ggplot2::geom_hline(
+        yintercept = c(-2, 0, 2),
+        colour = c("grey70", "grey50", "grey70"),
+        linewidth = 0.3, linetype = c(2, 1, 2)
       ) +
-        ggplot2::geom_hline(
-          yintercept = c(-2, 0, 2),
-          colour = c("grey70", "grey50", "grey70"),
-          linewidth = 0.3, linetype = c(2, 1, 2)
-        ) +
-        ggplot2::geom_vline(
-          xintercept = lev_thr, colour = "red",
-          linewidth = 0.5, linetype = 2
-        ) +
-        ggplot2::geom_point(alpha = alpha) +
-        ggplot2::scale_size_continuous(range = c(1, 4), guide = "none") +
-        ggplot2::labs(
-          x = "Leverage (hat value)",
-          y = "Standardised residual",
-          caption = sprintf("Vertical line at 2p/n = %.3f", lev_thr)
-        )
-    )
+      ggplot2::geom_vline(
+        xintercept = lev_thr, colour = "red",
+        linewidth = 0.5, linetype = 2
+      ) +
+      ggplot2::geom_point(alpha = alpha) +
+      ggplot2::scale_size_continuous(range = c(1, 4), guide = "none") +
+      ggplot2::labs(
+        x       = "Leverage (hat value)",
+        y       = "Standardised residual",
+        caption = sprintf("Vertical line at 2p/n = %.3f", lev_thr)
+      )
+
+    if (label) {
+      if (!requireNamespace("ggrepel", quietly = TRUE)) {
+        warning("`label = TRUE` needs the ggrepel package; installing it is recommended.")
+      } else {
+        # choose influential points
+        infl <- dplyr::filter(aug, .cooksd > 4 / n)
+        if (nrow(infl) == 0) {
+          infl <- dplyr::arrange(aug, dplyr::desc(.cooksd)) |> dplyr::slice_head(n = 3)
+        }
+        base_plot <- base_plot +
+          ggrepel::geom_text_repel(
+            data = infl,
+            ggplot2::aes(label = .rowname),
+            size = 3,
+            max.overlaps = Inf,
+            box.padding = 0.4
+          )
+      }
+    }
+    return(base_plot)
   }
 
   if (type == "hist") {
-    s <- stats::sigma(model) # residual standard deviation
+    s <- stats::sigma(model)
     return(
       ggplot2::ggplot(aug, ggplot2::aes(.resid)) +
-        ggplot2::geom_histogram(ggplot2::aes(y = ggplot2::after_stat(density)),
+        ggplot2::geom_histogram(
+          ggplot2::aes(y = ggplot2::after_stat(density)),
           bins = 20, colour = "white"
         ) +
         ggplot2::stat_function(
@@ -171,6 +198,7 @@ lm_diagnostic_plot <- function(model,
     )
   }
 }
+
 
 
 

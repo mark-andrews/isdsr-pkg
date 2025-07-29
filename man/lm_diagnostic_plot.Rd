@@ -7,7 +7,8 @@
 lm_diagnostic_plot(
   model,
   type = c("resid", "qq", "scale", "lev", "hist"),
-  alpha = 0.7
+  alpha = 0.7,
+  label = FALSE
 )
 }
 \arguments{
@@ -23,6 +24,10 @@ lm_diagnostic_plot(
 }}
 
 \item{alpha}{Point transparency for scatter plots (default \code{0.7}).}
+
+\item{label}{Logical. If \code{TRUE} and \code{type == "lev"}, label
+influential points (Cook’s distance > 4/n or, if none, the three largest).
+Requires \pkg{ggrepel}. Ignored for other plot types.}
 }
 \value{
 A \code{ggplot} object, which you can further customise.
