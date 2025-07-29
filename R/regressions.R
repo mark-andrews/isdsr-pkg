@@ -258,7 +258,7 @@ residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
 #' Bootstrap percentile CIs for all lm coefficients and sigma using infer
 #'
 #' @param model A fitted \code{lm} object.
-#' @param reps  Number of bootstrap resamples (default 5000).
+#' @param reps  Number of bootstrap resamples (default 10000).
 #' @param level Confidence level (default 0.95).
 #' @param sigma Should confidence intervals for residual standard deviation be included?
 #' @param seed  Optional integer for reproducibility.
@@ -268,7 +268,7 @@ residual_shape_ci <- function(model, reps = 10000, level = 0.95, seed = NULL) {
 #' fit <- lm(mpg ~ wt + hp, data = mtcars)
 #' lm_bootstrap_ci(fit, reps = 2000, seed = 1)
 #' @export
-lm_bootstrap_ci <- function(model, reps = 5000, level = 0.95, sigma = FALSE, seed = NULL) {
+lm_bootstrap_ci <- function(model, reps = 10000, level = 0.95, sigma = FALSE, seed = NULL) {
   stopifnot(inherits(model, "lm"))
   if (!is.null(seed)) set.seed(seed)
 
