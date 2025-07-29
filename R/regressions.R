@@ -332,3 +332,44 @@ lm_bootstrap_ci <- function(model, reps = 10000, level = 0.95, sigma = FALSE, se
 
   results |> dplyr::relocate(term, estimate, lower, upper)
 }
+
+
+#' Show treatment‑coded dummy columns for one categorical predictor
+#'
+#' @param data  A data frame or tibble.
+#' @param var   A column name identifying a categorical variable.
+#'
+#' @return A tibble with the original factor column plus the \eqn{k-1} treatment
+#'   dummies that `lm()` would use.  Each row is a unique level combination, so
+#'   for a factor with \eqn{k} levels the tibble has \eqn{k} rows.
+#'
+#' @examples
+#' get_dummy_code(pisa2022uk, gender)
+#' get_dummy_code(iris, Species)
+#'
+#' @export
+get_dummy_code <- function(data, var) {
+  var_quo <- rlang::enquo(var)
+  var_name <- rlang::as_name(var_quo)
+
+  if (!var_name %in% names(data)) {
+    stop("Variable `", var_name, "` not found in `data`.", call. = FALSE)
+  }
+
+  # Ensure the variable is a factor (so model_matrix uses contrasts)
+  if (!is.factor(data[[var_name]])) {
+    data <- dplyr::mutate(data, !!var_quo := factor(.data[[var_name]]))
+  }
+
+  # Build design matrix with modelr; drop intercept column
+  mm <- modelr::model_matrix(data, stats::as.formula(paste0("~ ", var_name)))
+  mm <- mm[, colnames(mm) != "(Intercept)", drop = FALSE]
+
+  # Combine and keep one row per level
+  dplyr::bind_cols(
+    dplyr::select(data, !!var_quo),
+    tibble::as_tibble(mm)
+  ) |>
+    dplyr::distinct() |>
+    dplyr::arrange(!!var_quo)
+}
