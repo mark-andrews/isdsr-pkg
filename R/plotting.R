@@ -356,7 +356,7 @@ corr_plot <- function(data, ..., .sig = TRUE, .lab_size = 3.5, .axis_size = 12) 
         p < 0.001 ~ "***",
         p < 0.01 ~ "**",
         p < 0.05 ~ "*",
-        TRUE ~ "\u2070" # superscript 0
+        TRUE ~ "" # blank if not significant
       ),
       label = if (.sig) sprintf("%.2f%s", cor, stars) else sprintf("%.2f", cor),
       var1 = factor(var1, levels = var_names),
