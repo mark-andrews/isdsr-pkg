@@ -306,3 +306,74 @@ twoway_interaction_plot <- function(model, iv1, iv2, ylab, text_size = 8) {
 
   p1 + p2 + patchwork::plot_layout(ncol = 2) + patchwork::plot_annotation(tag_levels = "A")
 }
+
+
+#' Correlation Heatmap with Optional Significance Stars
+#'
+#' Creates a correlation heatmap from selected numeric variables in a data frame,
+#' optionally annotating correlation coefficients with significance stars.
+#'
+#' @param data A data frame or tibble.
+#' @param vars A tidyselect specification of numeric variables to include (e.g., -country, where(is.numeric), c(x, y, z)).
+#' @param sig Logical. If TRUE, annotate correlations with significance stars (***, **, *, ⁰). If FALSE, show plain correlations only.
+#'
+#' @return A `ggplot2` heatmap of pairwise correlations.
+#' @export
+#'
+#' @examples
+#' corr_plot(whr2024, -country)
+#' corr_plot(whr2024, c(happiness, hle, gdp), sig = FALSE)
+corr_plot <- function(data, vars, sig = TRUE) {
+  # Tidyselect evaluation
+  vars <- rlang::enquo(vars)
+  data_df <- dplyr::select(data, !!vars)
+
+  # Compute correlation and p-value matrices
+  cor_mat <- stats::cor(data_df, use = "complete.obs")
+  p_mat <- ggcorrplot::cor_pmat(data_df)
+
+  # Get consistent variable names
+  var_names <- colnames(cor_mat)
+
+  # Long-format correlation and p matrices
+  cor_df <- as.data.frame(cor_mat) |>
+    tibble::rownames_to_column("var1") |>
+    tidyr::pivot_longer(-var1, names_to = "var2", values_to = "cor")
+
+  p_df <- as.data.frame(p_mat) |>
+    tibble::rownames_to_column("var1") |>
+    tidyr::pivot_longer(-var1, names_to = "var2", values_to = "p")
+
+  # Merge and annotate
+  plot_df <- dplyr::left_join(cor_df, p_df, by = c("var1", "var2")) |>
+    dplyr::mutate(
+      stars = dplyr::case_when(
+        p < 0.001 ~ "***",
+        p < 0.01 ~ "**",
+        p < 0.05 ~ "*",
+        TRUE ~ "⁰"
+      ),
+      label = if (sig) {
+        sprintf("%.2f%s", cor, stars)
+      } else {
+        sprintf("%.2f", cor)
+      },
+      var1 = factor(var1, levels = var_names),
+      var2 = factor(var2, levels = var_names)
+    ) |>
+    dplyr::filter(as.integer(var1) < as.integer(var2)) # lower triangle only
+
+  # Create the plot
+  ggplot2::ggplot(plot_df, ggplot2::aes(x = var2, y = var1, fill = cor)) +
+    ggplot2::geom_tile(color = "white") +
+    ggplot2::geom_text(ggplot2::aes(label = label), size = 3) +
+    ggplot2::scale_fill_gradient2(
+      low = "blue", high = "red", mid = "white",
+      midpoint = 0, limit = c(-1, 1), space = "Lab",
+      name = "Pearson\nCorrelation"
+    ) +
+    ggplot2::theme_minimal() +
+    ggplot2::coord_fixed() +
+    ggplot2::labs(x = NULL, y = NULL) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1))
+}

@@ -35,6 +35,7 @@ Imports:
     effectsize (>= 1.0.1),
     emmeans (>= 1.11.0),
     formula.tools (>= 1.7.1),
+    ggcorrplot (>= 0.1.4.1),
     ggplot2 (>= 3.5.2),
     ggrepel (>= 0.9.6),
     latex2exp (>= 0.9.6),
