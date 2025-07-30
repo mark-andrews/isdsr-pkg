@@ -4,23 +4,27 @@
 \alias{corr_plot}
 \title{Correlation Heatmap with Optional Significance Stars}
 \usage{
-corr_plot(data, vars, sig = TRUE)
+corr_plot(data, ..., .sig = TRUE)
 }
 \arguments{
 \item{data}{A data frame or tibble.}
 
-\item{vars}{A tidyselect specification of numeric variables to include (e.g., -country, where(is.numeric), c(x, y, z)).}
+\item{...}{Tidyselect specification of numeric variables to include, such as \code{-country}, \code{c(happiness, hle)}, \code{where(is.numeric)}, etc.}
 
-\item{sig}{Logical. If TRUE, annotate correlations with significance stars (***, **, *, ⁰). If FALSE, show plain correlations only.}
+\item{.sig}{Logical. If TRUE (default), annotate correlation coefficients with significance stars based on their p-values. If FALSE, show plain coefficients.}
 }
 \value{
-A \code{ggplot2} heatmap of pairwise correlations.
+A \code{ggplot2} heatmap of pairwise correlations in the lower triangle.
 }
 \description{
-Creates a correlation heatmap from selected numeric variables in a data frame,
-optionally annotating correlation coefficients with significance stars.
+Creates a correlation heatmap from selected numeric variables in a data frame.
+You can select variables using tidyselect syntax and optionally annotate each
+correlation coefficient with significance stars (***, **, *, ⁰).
 }
 \examples{
 corr_plot(whr2024, -country)
-corr_plot(whr2024, c(happiness, hle, gdp), sig = FALSE)
+corr_plot(whr2024, -country, -gdp)
+corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE)
+corr_plot(whr2024, where(is.numeric))
+
 }

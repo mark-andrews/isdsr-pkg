@@ -307,26 +307,31 @@ twoway_interaction_plot <- function(model, iv1, iv2, ylab, text_size = 8) {
   p1 + p2 + patchwork::plot_layout(ncol = 2) + patchwork::plot_annotation(tag_levels = "A")
 }
 
-
 #' Correlation Heatmap with Optional Significance Stars
 #'
-#' Creates a correlation heatmap from selected numeric variables in a data frame,
-#' optionally annotating correlation coefficients with significance stars.
+#' Creates a correlation heatmap from selected numeric variables in a data frame.
+#' You can select variables using tidyselect syntax and optionally annotate each
+#' correlation coefficient with significance stars (***, **, *, ⁰).
 #'
 #' @param data A data frame or tibble.
-#' @param vars A tidyselect specification of numeric variables to include (e.g., -country, where(is.numeric), c(x, y, z)).
-#' @param sig Logical. If TRUE, annotate correlations with significance stars (***, **, *, ⁰). If FALSE, show plain correlations only.
+#' @param ... Tidyselect specification of numeric variables to include, such as `-country`, `c(happiness, hle)`, `where(is.numeric)`, etc.
+#' @param .sig Logical. If TRUE (default), annotate correlation coefficients with significance stars based on their p-values. If FALSE, show plain coefficients.
 #'
-#' @return A `ggplot2` heatmap of pairwise correlations.
-#' @export
+#' @return A `ggplot2` heatmap of pairwise correlations in the lower triangle.
 #'
 #' @examples
 #' corr_plot(whr2024, -country)
-#' corr_plot(whr2024, c(happiness, hle, gdp), sig = FALSE)
-corr_plot <- function(data, vars, sig = TRUE) {
-  # Tidyselect evaluation
-  vars <- rlang::enquo(vars)
-  data_df <- dplyr::select(data, !!vars)
+#' corr_plot(whr2024, -country, -gdp)
+#' corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE)
+#' corr_plot(whr2024, where(is.numeric))
+#'
+#' @import ggplot2
+#' @importFrom dplyr select left_join mutate case_when filter
+#' @importFrom tibble rownames_to_column
+#' @importFrom tidyr pivot_longer
+#' @export
+corr_plot <- function(data, ..., .sig = TRUE) {
+  data_df <- dplyr::select(data, ...)
 
   # Compute correlation and p-value matrices
   cor_mat <- stats::cor(data_df, use = "complete.obs")
@@ -351,19 +356,15 @@ corr_plot <- function(data, vars, sig = TRUE) {
         p < 0.001 ~ "***",
         p < 0.01 ~ "**",
         p < 0.05 ~ "*",
-        TRUE ~ "⁰"
+        TRUE ~ "\u2070" # superscript zero
       ),
-      label = if (sig) {
-        sprintf("%.2f%s", cor, stars)
-      } else {
-        sprintf("%.2f", cor)
-      },
+      label = if (.sig) sprintf("%.2f%s", cor, stars) else sprintf("%.2f", cor),
       var1 = factor(var1, levels = var_names),
       var2 = factor(var2, levels = var_names)
     ) |>
     dplyr::filter(as.integer(var1) < as.integer(var2)) # lower triangle only
 
-  # Create the plot
+  # Create the heatmap
   ggplot2::ggplot(plot_df, ggplot2::aes(x = var2, y = var1, fill = cor)) +
     ggplot2::geom_tile(color = "white") +
     ggplot2::geom_text(ggplot2::aes(label = label), size = 3) +
