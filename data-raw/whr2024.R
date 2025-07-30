@@ -26,6 +26,9 @@
 #     7. United States( 64,595)
 #     8. Hong Kong S.A.R. of China( 59,254)
 #
+# For this variable, by the way, the numbers in brackets are the original
+# per capita GDP, not the logs. The rest of the figure shows the the log
+#
 # The code below extracts the values for each country for each variable.
 
 library(tidyverse)
@@ -35,7 +38,7 @@ txt <- readLines("data-raw/raw_data_files/WHR24_Statistical_Appendix_figures_68-
 
 # ---------- 1. map headings → slug names ------------------------------------
 anchors <- c(
-  "natural log of" = "log_gdp",
+  "natural log of" = "gdp", # it is not the log, see above
   "social support" = "social_support",
   "healthy life expectancy" = "healthy_life_exp",
   "freedom to make life choices" = "freedom",
@@ -96,12 +99,15 @@ predictors <- bind_rows(out, .id = "variable") |>
   pivot_wider(names_from = variable, values_from = Value) |>
   rename(
     country = Country,
-    gdp = log_gdp,
     support = social_support,
     hle = healthy_life_exp,
     positive = positive_affect,
     negative = negative_affect
-  )
+  ) |>
+  mutate(lgdp = log10(gdp), .after = gdp) |>
+  # Let's leave out positive/negative.
+  # We want to keep the dataset relatively small.
+  select(-positive, -negative)
 
 # join with data providing happiness score
 whr2024 <- readxl::read_excel("data-raw/raw_data_files/WHR24_Data_Figure_2.1.xls") |>

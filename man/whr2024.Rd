@@ -5,18 +5,17 @@
 \alias{whr2024}
 \title{World Happiness Report 2024 Data}
 \format{
-A tibble with 131 rows and 10 variables:
+A tibble with 131 rows and 9 variables:
 \describe{
 \item{country}{Country name.}
 \item{happiness}{Average national response to the Cantril life ladder question, which asks respondents to evaluate their current life on a scale from 0 (worst possible life) to 10 (best possible life). This is the main measure of subjective well-being.}
 \item{gdp}{GDP per capita in purchasing power parity (PPP), constant 2017 international dollars. Sourced primarily from the World Bank World Development Indicators and Penn World Table.}
+\item{lgdp}{log10 of gdp}
 \item{support}{National average of responses (0 or 1) to the Gallup World Poll (GWP) question: "If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?"}
 \item{hle}{Healthy life expectancy at birth, measured in years. Based on WHO estimates for 2000, 2010, 2015, and 2019, with interpolation and extrapolation used to match the report’s period.}
 \item{freedom}{National average of responses to the GWP question: "Are you satisfied or dissatisfied with your freedom to choose what you do with your life?"}
 \item{generosity}{A measure of prosocial behavior, defined as the residual from a regression of the national average response to the GWP question "Have you donated money to a charity in the past month?" on GDP per capita.}
 \item{corruption}{Perception of corruption, defined as the average of two binary (0 or 1) GWP questions: "Is corruption widespread throughout the government or not?" and "Is corruption widespread within businesses or not?" If one is missing, the available one is used.}
-\item{positive}{Positive affect, defined as the national average of binary responses to three GWP questions: "Did you smile or laugh a lot yesterday?", "Did you experience enjoyment during a lot of the day yesterday?", and "Did you learn or do something interesting yesterday?"}
-\item{negative}{Negative affect, defined as the national average of binary responses to three GWP questions: "Did you experience worry during a lot of the day yesterday?", "Did you experience sadness?", and "Did you experience anger?"}
 }
 }
 \source{
