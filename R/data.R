@@ -560,3 +560,34 @@ NULL
 #' }
 #' @source This data is a transformed version of data sets obtained the \href{https://www.openlab.psu.edu/ansur2/}{Anthropometric Survey of US Army Personnel (ANSUR 2 or ANSUR II)}.
 NULL
+
+
+#' World Happiness Report 2024 Data
+#'
+#' A dataset comprising the 2024 country-level happiness scores and associated predictor variables,
+#' based on the Gallup World Poll and other international data sources, as used in the 2024 World Happiness Report.
+#'
+#' @format A tibble with 131 rows and 10 variables:
+#' \describe{
+#'   \item{country}{Country name.}
+#'   \item{happiness}{Average national response to the Cantril life ladder question, which asks respondents to evaluate their current life on a scale from 0 (worst possible life) to 10 (best possible life). This is the main measure of subjective well-being.}
+#'   \item{gdp}{GDP per capita in purchasing power parity (PPP), constant 2017 international dollars. Sourced primarily from the World Bank World Development Indicators and Penn World Table.}
+#'   \item{support}{National average of responses (0 or 1) to the Gallup World Poll (GWP) question: "If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?"}
+#'   \item{hle}{Healthy life expectancy at birth, measured in years. Based on WHO estimates for 2000, 2010, 2015, and 2019, with interpolation and extrapolation used to match the report’s period.}
+#'   \item{freedom}{National average of responses to the GWP question: "Are you satisfied or dissatisfied with your freedom to choose what you do with your life?"}
+#'   \item{generosity}{A measure of prosocial behavior, defined as the residual from a regression of the national average response to the GWP question "Have you donated money to a charity in the past month?" on GDP per capita.}
+#'   \item{corruption}{Perception of corruption, defined as the average of two binary (0 or 1) GWP questions: "Is corruption widespread throughout the government or not?" and "Is corruption widespread within businesses or not?" If one is missing, the available one is used.}
+#'   \item{positive}{Positive affect, defined as the national average of binary responses to three GWP questions: "Did you smile or laugh a lot yesterday?", "Did you experience enjoyment during a lot of the day yesterday?", and "Did you learn or do something interesting yesterday?"}
+#'   \item{negative}{Negative affect, defined as the national average of binary responses to three GWP questions: "Did you experience worry during a lot of the day yesterday?", "Did you experience sadness?", and "Did you experience anger?"}
+#' }
+#'
+#' @details
+#' The dataset was constructed by extracting figures from the World Happiness Report 2024 Statistical Appendix.
+#' GDP, life expectancy, and other predictors are sourced or derived from international data repositories and surveys.
+#' Happiness scores are based on "Data for Figure 2.1" for the 2024 report \url{https://files.worldhappiness.report/WHR24_Data_Figure_2.1.xlx}.
+#'
+#' @source \url{https://www.worldhappiness.report/ed/2024/}
+#'
+#' @examples
+#' summary(whr2024)
+"whr2024"
