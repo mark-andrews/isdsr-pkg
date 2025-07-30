@@ -4,7 +4,7 @@
 \alias{corr_plot}
 \title{Correlation Heatmap with Optional Significance Stars}
 \usage{
-corr_plot(data, ..., .sig = TRUE)
+corr_plot(data, ..., .sig = TRUE, .lab_size = 3.5, .axis_size = 12)
 }
 \arguments{
 \item{data}{A data frame or tibble.}
@@ -12,6 +12,10 @@ corr_plot(data, ..., .sig = TRUE)
 \item{...}{Tidyselect specification of numeric variables to include, such as \code{-country}, \code{c(happiness, hle)}, \code{where(is.numeric)}, etc.}
 
 \item{.sig}{Logical. If TRUE (default), annotate correlation coefficients with significance stars based on their p-values. If FALSE, show plain coefficients.}
+
+\item{.lab_size}{Numeric. Font size of correlation coefficient labels in the heatmap cells.}
+
+\item{.axis_size}{Numeric. Font size of axis tick labels.}
 }
 \value{
 A \code{ggplot2} heatmap of pairwise correlations in the lower triangle.
@@ -23,8 +27,8 @@ correlation coefficient with significance stars (***, **, *, ⁰).
 }
 \examples{
 corr_plot(whr2024, -country)
-corr_plot(whr2024, -country, -gdp)
-corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE)
-corr_plot(whr2024, where(is.numeric))
+corr_plot(whr2024, -country, -gdp, .lab_size = 5)
+corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE, .axis_size = 10)
+corr_plot(whr2024, where(is.numeric), .lab_size = 3.5, .axis_size = 11)
 
 }

@@ -307,6 +307,7 @@ twoway_interaction_plot <- function(model, iv1, iv2, ylab, text_size = 8) {
   p1 + p2 + patchwork::plot_layout(ncol = 2) + patchwork::plot_annotation(tag_levels = "A")
 }
 
+
 #' Correlation Heatmap with Optional Significance Stars
 #'
 #' Creates a correlation heatmap from selected numeric variables in a data frame.
@@ -316,31 +317,31 @@ twoway_interaction_plot <- function(model, iv1, iv2, ylab, text_size = 8) {
 #' @param data A data frame or tibble.
 #' @param ... Tidyselect specification of numeric variables to include, such as `-country`, `c(happiness, hle)`, `where(is.numeric)`, etc.
 #' @param .sig Logical. If TRUE (default), annotate correlation coefficients with significance stars based on their p-values. If FALSE, show plain coefficients.
+#' @param .lab_size Numeric. Font size of correlation coefficient labels in the heatmap cells.
+#' @param .axis_size Numeric. Font size of axis tick labels.
 #'
 #' @return A `ggplot2` heatmap of pairwise correlations in the lower triangle.
 #'
 #' @examples
 #' corr_plot(whr2024, -country)
-#' corr_plot(whr2024, -country, -gdp)
-#' corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE)
-#' corr_plot(whr2024, where(is.numeric))
+#' corr_plot(whr2024, -country, -gdp, .lab_size = 5)
+#' corr_plot(whr2024, c(happiness, support, freedom), .sig = FALSE, .axis_size = 10)
+#' corr_plot(whr2024, where(is.numeric), .lab_size = 3.5, .axis_size = 11)
 #'
 #' @import ggplot2
 #' @importFrom dplyr select left_join mutate case_when filter
 #' @importFrom tibble rownames_to_column
 #' @importFrom tidyr pivot_longer
 #' @export
-corr_plot <- function(data, ..., .sig = TRUE) {
+corr_plot <- function(data, ..., .sig = TRUE, .lab_size = 3.5, .axis_size = 12) {
   data_df <- dplyr::select(data, ...)
 
   # Compute correlation and p-value matrices
   cor_mat <- stats::cor(data_df, use = "complete.obs")
   p_mat <- ggcorrplot::cor_pmat(data_df)
 
-  # Get consistent variable names
   var_names <- colnames(cor_mat)
 
-  # Long-format correlation and p matrices
   cor_df <- as.data.frame(cor_mat) |>
     tibble::rownames_to_column("var1") |>
     tidyr::pivot_longer(-var1, names_to = "var2", values_to = "cor")
@@ -349,14 +350,13 @@ corr_plot <- function(data, ..., .sig = TRUE) {
     tibble::rownames_to_column("var1") |>
     tidyr::pivot_longer(-var1, names_to = "var2", values_to = "p")
 
-  # Merge and annotate
   plot_df <- dplyr::left_join(cor_df, p_df, by = c("var1", "var2")) |>
     dplyr::mutate(
       stars = dplyr::case_when(
         p < 0.001 ~ "***",
         p < 0.01 ~ "**",
         p < 0.05 ~ "*",
-        TRUE ~ "\u2070" # superscript zero
+        TRUE ~ "\u2070" # superscript 0
       ),
       label = if (.sig) sprintf("%.2f%s", cor, stars) else sprintf("%.2f", cor),
       var1 = factor(var1, levels = var_names),
@@ -364,10 +364,9 @@ corr_plot <- function(data, ..., .sig = TRUE) {
     ) |>
     dplyr::filter(as.integer(var1) < as.integer(var2)) # lower triangle only
 
-  # Create the heatmap
   ggplot2::ggplot(plot_df, ggplot2::aes(x = var2, y = var1, fill = cor)) +
     ggplot2::geom_tile(color = "white") +
-    ggplot2::geom_text(ggplot2::aes(label = label), size = 3) +
+    ggplot2::geom_text(ggplot2::aes(label = label), size = .lab_size) +
     ggplot2::scale_fill_gradient2(
       low = "blue", high = "red", mid = "white",
       midpoint = 0, limit = c(-1, 1), space = "Lab",
@@ -376,5 +375,8 @@ corr_plot <- function(data, ..., .sig = TRUE) {
     ggplot2::theme_minimal() +
     ggplot2::coord_fixed() +
     ggplot2::labs(x = NULL, y = NULL) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1))
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1, size = .axis_size),
+      axis.text.y = ggplot2::element_text(size = .axis_size)
+    )
 }
