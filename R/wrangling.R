@@ -41,3 +41,40 @@ to_fixed_digits <- function(data, ..., .digits = 3) {
     dplyr::mutate(data, dplyr::across(c(!!!dots) & dplyr::where(is.numeric), as_digits))
   }
 }
+
+#' Z-score selected numeric columns
+#'
+#' @param data  A data frame / tibble.
+#' @param ...   Tidy-select expression(s) that pick the columns to rescale.
+#'              If omitted, *all* numeric columns are standardised.
+#'
+#' @return A data frame of the same class as `data`.
+#' @examples
+#' # Format all numeric columns to 3 decimal places
+#' mtcars_df <- tibble::as_tibble(mtcars)
+#' re_scale(mtcars_df)
+#'
+#' # Just selected columns
+#' re_scale(mtcars_df, mpg:qsec)
+#'
+#' @export
+re_scale <- function(data, ...) {
+  dots <- rlang::enquos(...)
+
+  z <- function(x) {
+    s <- stats::sd(x, na.rm = TRUE)
+    if (is.finite(s) && s > 0) (x - mean(x, na.rm = TRUE)) / s else x
+  }
+
+  if (rlang::is_empty(dots)) {
+    dplyr::mutate(
+      data,
+      dplyr::across(dplyr::where(is.numeric), z)
+    )
+  } else {
+    dplyr::mutate(
+      data,
+      dplyr::across(c(!!!dots) & dplyr::where(is.numeric), z)
+    )
+  }
+}
