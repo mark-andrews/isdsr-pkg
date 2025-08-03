@@ -418,31 +418,45 @@ lm_model_summary <- function(model) {
     )
 }
 
-#' Extract R-squared from a fitted linear model
+#' R-squared with exact confidence interval
 #'
-#' Retrieves the coefficient of determination (\eqn{R^{2}}) from an object
-#' produced by \code{\link[stats]{lm}}.
+#' Extracts the in-sample coefficient of determination (\eqn{R^{2}}) from a
+#' fitted \code{\link[stats]{lm}} model and appends an exact two-sided
+#' confidence interval obtained by inverting the non-central \(F\) distribution.
 #'
-#' Internally the function calls \code{\link[stats]{summary.lm}} and returns
-#' the \code{r.squared} component.
-#' A descriptive error is issued if the supplied object is not of class
-#' \code{"lm"}.
+#' Internally the function calls \code{\link[performance]{r2}} with
+#' \code{ci_method = "analytical"}, which yields the Clopper–Pearson–type
+#' limits.
+#' The point estimate and limits are reshaped into a one-row tibble for
+#' convenient downstream use.
 #'
 #' @param model An object of class \code{"lm"}.
+#' @param level Confidence level to be passed on to
+#'   \code{performance::r2()} (default \code{0.95}).
 #'
-#' @return A numeric scalar giving the in-sample \eqn{R^{2}}.
+#' @return A tibble with three numeric columns:
+#'   \describe{
+#'     \item{\code{rsq}}{the sample \eqn{R^{2}}}
+#'     \item{\code{ci_low}}{lower confidence limit}
+#'     \item{\code{ci_high}}{upper confidence limit}
+#'   }
 #'
 #' @examples
-#' mod <- lm(mpg ~ wt + hp, data = mtcars)
-#' get_rsq(mod) # 0.8268
+#' fit <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_rsq(fit)
 #'
 #' @export
-get_rsq <- function(model) {
+get_rsq <- function(model, level = 0.95) {
   if (!inherits(model, "lm")) {
     stop("`model` must be an object of class \"lm\".", call. = FALSE)
   }
 
-  stats::summary.lm(model)$r.squared
+  R2_stats <- performance::r2(model, ci = level, ci_method = "analytical")$R2
+
+  R2_stats |>
+    tibble::enframe() |>
+    tidyr::pivot_wider(names_from = name, values_from = value) |>
+    dplyr::select(rsq = R2, ci_low = CI_low, ci_high = CI_high)
 }
 
 #' Extract overall F statistic and p-value from a fitted linear model

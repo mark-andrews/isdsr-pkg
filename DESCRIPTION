@@ -22,8 +22,7 @@ Suggests:
     styler (>= 1.10.3),
     usethis (>= 3.1.0),
     haven (>= 2.5.4),
-    writexl (>= 1.5.4),
-    infer (>= 1.0.9)
+    writexl (>= 1.5.4)
 Depends: 
     R (>= 3.5)
 LazyData: true
@@ -38,10 +37,12 @@ Imports:
     ggcorrplot (>= 0.1.4.1),
     ggplot2 (>= 3.5.2),
     ggrepel (>= 0.9.6),
+    infer (>= 1.0.9),
     latex2exp (>= 0.9.6),
     magrittr (>= 2.0.3),
     moments (>= 0.14.1),
     patchwork (>= 1.3.0),
+    performance (>= 0.15.0),
     purrr (>= 1.0.4),
     rlang (>= 1.1.6),
     scales (>= 1.3.0),

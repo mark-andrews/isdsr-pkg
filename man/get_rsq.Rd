@@ -2,28 +2,38 @@
 % Please edit documentation in R/regressions.R
 \name{get_rsq}
 \alias{get_rsq}
-\title{Extract R-squared from a fitted linear model}
+\title{R-squared with exact confidence interval}
 \usage{
-get_rsq(model)
+get_rsq(model, level = 0.95)
 }
 \arguments{
 \item{model}{An object of class \code{"lm"}.}
+
+\item{level}{Confidence level to be passed on to
+\code{performance::r2()} (default \code{0.95}).}
 }
 \value{
-A numeric scalar giving the in-sample \eqn{R^{2}}.
+A tibble with three numeric columns:
+\describe{
+\item{\code{rsq}}{the sample \eqn{R^{2}}}
+\item{\code{ci_low}}{lower confidence limit}
+\item{\code{ci_high}}{upper confidence limit}
+}
 }
 \description{
-Retrieves the coefficient of determination (\eqn{R^{2}}) from an object
-produced by \code{\link[stats]{lm}}.
+Extracts the in-sample coefficient of determination (\eqn{R^{2}}) from a
+fitted \code{\link[stats]{lm}} model and appends an exact two-sided
+confidence interval obtained by inverting the non-central \(F\) distribution.
 }
 \details{
-Internally the function calls \code{\link[stats]{summary.lm}} and returns
-the \code{r.squared} component.
-A descriptive error is issued if the supplied object is not of class
-\code{"lm"}.
+Internally the function calls \code{\link[performance]{r2}} with
+\code{ci_method = "analytical"}, which yields the Clopper–Pearson–type
+limits.
+The point estimate and limits are reshaped into a one-row tibble for
+convenient downstream use.
 }
 \examples{
-mod <- lm(mpg ~ wt + hp, data = mtcars)
-get_rsq(mod) # 0.8268
+fit <- lm(mpg ~ wt + hp, data = mtcars)
+get_rsq(fit)
 
 }
