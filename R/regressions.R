@@ -450,20 +450,20 @@ get_rsq <- function(model) {
 #' Returns the model-significance F statistic together with its p-value for an
 #' object produced by \code{\link[stats]{lm}}.
 #'
-#' The function pulls the \code{fstatistic} component from
-#' \code{\link[stats]{summary.lm}}, then computes the corresponding p-value via
-#' \code{\link[stats]{pf}}.
+#' Extracts the overall
+#' \eqn{F}-statistic, its numerator and denominator degrees of freedom,
+#' and the corresponding *p*-value from `broom::glance()`.
 #' A descriptive error is issued if the supplied object is not of class
 #' \code{"lm"}.
 #'
 #' @inheritParams get_rsq
 #'
-#' @return A named numeric vector with four elements:
+#' @return A tibble with four columns:
 #' \describe{
-#'   \item{\code{value}}{the observed F statistic}
-#'   \item{\code{numdf}}{numerator degrees of freedom}
-#'   \item{\code{dendf}}{denominator degrees of freedom}
-#'   \item{\code{pvalue}}{upper-tail p-value for the test}
+#'   \item{\code{fstat}}{the observed F statistic}
+#'   \item{\code{num_df}}{numerator degrees of freedom}
+#'   \item{\code{den_df}}{denominator degrees of freedom}
+#'   \item{\code{p_value}}{upper-tail p-value for the test}
 #' }
 #'
 #' @examples
@@ -476,11 +476,11 @@ get_fstat <- function(model) {
     stop("`model` must be an object of class \"lm\".", call. = FALSE)
   }
 
-  fstat <- stats::summary.lm(model)$fstatistic
-  pvalue <- stats::pf(fstat["value"],
-    df1 = fstat["numdf"],
-    df2 = fstat["dendf"], lower.tail = FALSE
-  )
-
-  c(fstat, pvalue = pvalue)
+  broom::glance(model) |>
+    dplyr::select(
+      fstat    = statistic,
+      num_df   = df,
+      den_df   = df.residual,
+      p_value  = p.value
+    )
 }

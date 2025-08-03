@@ -10,12 +10,12 @@ get_fstat(model)
 \item{model}{An object of class \code{"lm"}.}
 }
 \value{
-A named numeric vector with four elements:
+A tibble with four columns:
 \describe{
-\item{\code{value}}{the observed F statistic}
-\item{\code{numdf}}{numerator degrees of freedom}
-\item{\code{dendf}}{denominator degrees of freedom}
-\item{\code{pvalue}}{upper-tail p-value for the test}
+\item{\code{fstat}}{the observed F statistic}
+\item{\code{num_df}}{numerator degrees of freedom}
+\item{\code{den_df}}{denominator degrees of freedom}
+\item{\code{p_value}}{upper-tail p-value for the test}
 }
 }
 \description{
@@ -23,9 +23,9 @@ Returns the model-significance F statistic together with its p-value for an
 object produced by \code{\link[stats]{lm}}.
 }
 \details{
-The function pulls the \code{fstatistic} component from
-\code{\link[stats]{summary.lm}}, then computes the corresponding p-value via
-\code{\link[stats]{pf}}.
+Extracts the overall
+\eqn{F}-statistic, its numerator and denominator degrees of freedom,
+and the corresponding \emph{p}-value from \code{broom::glance()}.
 A descriptive error is issued if the supplied object is not of class
 \code{"lm"}.
 }
