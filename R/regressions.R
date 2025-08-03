@@ -459,6 +459,54 @@ get_rsq <- function(model, level = 0.95) {
     dplyr::select(rsq = R2, ci_low = CI_low, ci_high = CI_high)
 }
 
+#' Adjusted R-squared with exact confidence interval
+#'
+#' Retrieves the adjusted coefficient of determination (\eqn{R^{2}_{\text{adj}}})
+#' from a fitted \code{\link[stats]{lm}} model and attaches a two-sided
+#' confidence interval based on inversion of the non-central
+#' \emph{F} distribution.
+#'
+#' The function is a light wrapper around
+#' \code{\link[performance]{r2}(ci_method = "analytical")}, which computes
+#' both the point estimate and an exact Clopper–Pearson-type interval for the
+#' population value.
+#' Results are returned as a one-row tibble for tidy downstream processing.
+#'
+#' @param model An object of class \code{"lm"}.
+#' @param level Confidence level passed to \code{performance::r2()}
+#'   (default \code{0.95}).
+#'
+#' @return A tibble with three numeric columns:
+#'   \describe{
+#'     \item{\code{adj_rsq}}{sample adjusted \eqn{R^{2}}}
+#'     \item{\code{ci_low}}{lower confidence limit}
+#'     \item{\code{ci_high}}{upper confidence limit}
+#'   }
+#'
+#' @examples
+#' fit <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_adjrsq(fit)
+#' @export
+get_adjrsq <- function(model, level = 0.95) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  adjR2_stats <- performance::r2(model,
+    ci = level,
+    ci_method = "analytical"
+  )$R2_adjusted
+
+  adjR2_stats |>
+    tibble::enframe() |>
+    tidyr::pivot_wider(names_from = name, values_from = value) |>
+    dplyr::select(
+      adj_rsq = `adjusted R2`,
+      ci_low = CI_low,
+      ci_high = CI_high
+    )
+}
+
 #' Extract overall F statistic and p-value from a fitted linear model
 #'
 #' Returns the model-significance F statistic together with its p-value for an
