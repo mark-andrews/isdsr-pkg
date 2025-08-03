@@ -29,9 +29,8 @@ otherwise the value is shown as “\code{p = …}” with a fixed number of
 significant digits and \emph{without} scientific notation.
 }
 \examples{
-format_pval(0.0789) # "p = 0.079"
-format_pval(2e-05) # "p < 0.001"
+format_pval(0.0789)
+format_pval(2e-05)
 format_pval(0.00456, eps = 0.01, digits = 2)
-# "p = 0.0046"
 
 }
