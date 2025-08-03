@@ -373,3 +373,114 @@ get_dummy_code <- function(data, var) {
     dplyr::distinct() |>
     dplyr::arrange(!!var_quo)
 }
+
+
+#' Compact summary of key model statistics
+#'
+#' Extracts a reduced set of headline measures from a fitted `lm` object—
+#' the model \eqn{R^{2}} and adjusted \eqn{R^{2}}, the overall
+#' \eqn{F}-statistic, its numerator and denominator degrees of freedom,
+#' and the corresponding *p*-value—omitting AIC, BIC, deviance, and other
+#' information that `broom::glance()` ordinarily returns.
+#'
+#' @param model An object that inherits from class `"lm"`.
+#'
+#' @return A one-row tibble with columns
+#'   \describe{
+#'     \item{`r_sq`}{\eqn{R^{2}}.}
+#'     \item{`adj_r_sq`}{Adjusted \eqn{R^{2}}.}
+#'     \item{`fstat`}{Model \eqn{F}-statistic.}
+#'     \item{`num_df`}{Numerator degrees of freedom.}
+#'     \item{`den_df`}{Denominator (residual) degrees of freedom.}
+#'     \item{`p_value`}{Two-sided *p*-value for the overall \eqn{F} test.}
+#'   }
+#'
+#' @examples
+#' fit <- lm(mpg ~ disp + hp, data = mtcars)
+#' lm_model_summary(fit)
+#'
+#' @importFrom broom glance
+#' @importFrom dplyr select
+#' @export
+lm_model_summary <- function(model) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  broom::glance(model) |>
+    dplyr::select(
+      r_sq     = r.squared,
+      adj_r_sq = adj.r.squared,
+      fstat    = statistic,
+      num_df   = df,
+      den_df   = df.residual,
+      p_value  = p.value
+    )
+}
+
+#' Extract R-squared from a fitted linear model
+#'
+#' Retrieves the coefficient of determination (\eqn{R^{2}}) from an object
+#' produced by \code{\link[stats]{lm}}.
+#'
+#' Internally the function calls \code{\link[stats]{summary.lm}} and returns
+#' the \code{r.squared} component.
+#' A descriptive error is issued if the supplied object is not of class
+#' \code{"lm"}.
+#'
+#' @param model An object of class \code{"lm"}.
+#'
+#' @return A numeric scalar giving the in-sample \eqn{R^{2}}.
+#'
+#' @examples
+#' mod <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_rsq(mod) # 0.8268
+#'
+#' @export
+get_rsq <- function(model) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  stats::summary.lm(model)$r.squared
+}
+
+#' Extract overall F statistic and p-value from a fitted linear model
+#'
+#' Returns the model-significance F statistic together with its p-value for an
+#' object produced by \code{\link[stats]{lm}}.
+#'
+#' The function pulls the \code{fstatistic} component from
+#' \code{\link[stats]{summary.lm}}, then computes the corresponding p-value via
+#' \code{\link[stats]{pf}}.
+#' A descriptive error is issued if the supplied object is not of class
+#' \code{"lm"}.
+#'
+#' @inheritParams get_rsq
+#'
+#' @return A named numeric vector with four elements:
+#' \describe{
+#'   \item{\code{value}}{the observed F statistic}
+#'   \item{\code{numdf}}{numerator degrees of freedom}
+#'   \item{\code{dendf}}{denominator degrees of freedom}
+#'   \item{\code{pvalue}}{upper-tail p-value for the test}
+#' }
+#'
+#' @examples
+#' mod <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_fstat(mod)
+#'
+#' @export
+get_fstat <- function(model) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  fstat <- stats::summary.lm(model)$fstatistic
+  pvalue <- stats::pf(fstat["value"],
+    df1 = fstat["numdf"],
+    df2 = fstat["dendf"], lower.tail = FALSE
+  )
+
+  c(fstat, pvalue = pvalue)
+}
