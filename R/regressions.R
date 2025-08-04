@@ -624,14 +624,14 @@ vif <- function(model) {
 #' }
 #'
 #' @examples
-#' partial_cor(
+#' partial_corr(
 #'   var1     = mpg,
 #'   var2     = hp,
 #'   controls = -c(mpg, hp, cyl), # drop focal vars + cyl
 #'   data     = mtcars
 #' )
 #' @export
-partial_cor <- function(var1, var2, controls, data) {
+partial_corr <- function(var1, var2, controls, data) {
   stopifnot(inherits(data, "data.frame"))
 
   v1q <- rlang::enquo(var1)
