@@ -17,3 +17,15 @@ effectsize::cohens_d
 #' @importFrom car leveneTest
 #' @export
 car::leveneTest
+
+#' @importFrom broom tidy
+#' @export
+broom::tidy
+
+#' @importFrom broom augment
+#' @export
+broom::augment
+
+#' @importFrom broom glance
+#' @export
+broom::glance
