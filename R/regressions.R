@@ -622,21 +622,21 @@ vif <- function(model) {
 #' }
 #'
 #' @examples
-#' pcor_test(
+#' partial_cor(
 #'   var1     = mpg,
 #'   var2     = hp,
 #'   controls = -c(mpg, hp, cyl), # drop focal vars + cyl
 #'   data     = mtcars
 #' )
 #' @export
-pcor_test <- function(var1, var2, controls, data) {
+partial_cor <- function(var1, var2, controls, data) {
   stopifnot(inherits(data, "data.frame"))
 
   v1q <- rlang::enquo(var1)
   v2q <- rlang::enquo(var2)
   cq <- rlang::enquo(controls)
 
-  # focal selections ----------------------------------------------------------
+  # focal selections
   v1_sel <- tidyselect::eval_select(v1q, data = data)
   v2_sel <- tidyselect::eval_select(v2q, data = data)
 
@@ -647,7 +647,7 @@ pcor_test <- function(var1, var2, controls, data) {
     stop("`var1` and `var2` must refer to different columns.", call. = FALSE)
   }
 
-  # control selections --------------------------------------------------------
+  # control selections
   c_sel <- tidyselect::eval_select(cq, data = data)
   c_sel <- c_sel[setdiff(names(c_sel), c(names(v1_sel), names(v2_sel)))]
   if (length(c_sel) == 0L) {
@@ -658,7 +658,7 @@ pcor_test <- function(var1, var2, controls, data) {
   v2_name <- names(v2_sel)
   c_names <- names(c_sel)
 
-  # subset & drop NAs ---------------------------------------------------------
+  # subset & drop NAs
   df_sub <- data[, c(v1_name, v2_name, c_names), drop = FALSE]
   df_sub <- df_sub[stats::complete.cases(df_sub), , drop = FALSE]
 
