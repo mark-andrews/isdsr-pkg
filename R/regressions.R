@@ -580,3 +580,97 @@ vif <- function(model) {
   car::vif(model) |>
     tibble::enframe(name = "term", value = "vif")
 }
+
+
+#' Partial correlation with tidyselect helpers
+#'
+#' Calculates the Pearson partial correlation between two focal variables while
+#' controlling for one or more covariates, using
+#' \code{\link[ppcor]{pcor.test}} under the hood.
+#' Unlike \code{ppcor::pcor.test()}, the wrapper lets you choose columns with
+#' tidyselect syntax and unquoted names.
+#'
+#' @details
+#' \itemize{
+#'   \item \code{var1} and \code{var2} must each resolve to exactly one column
+#'     of \code{data}; an error is thrown otherwise.
+#'   \item \code{controls} can be any tidyselect expression; for example
+#'     \code{-c(country, var1, var2)} or \code{where(is.numeric)}.
+#'     Columns that overlap with \code{var1} or \code{var2} are silently
+#'     discarded, and at least one control variable must remain.
+#'   \item Rows containing missing values in any selected column are removed
+#'     before the test is performed.
+#'   \item The function always returns the Pearson partial correlation
+#'     coefficient.  For Spearman or Kendall partials, call
+#'     \code{ppcor::pcor.test()} directly.
+#' }
+#'
+#' @param var1,var2 Unquoted column names or tidyselect expressions identifying
+#'   the two focal variables.  Each must select exactly one column.
+#' @param controls Tidyselect expression specifying the set of covariates to
+#'   control for.  Must leave at least one column after \code{var1} and
+#'   \code{var2} have been removed.
+#' @param data A data frame.
+#'
+#' @return A one-row tibble with the following numeric columns:
+#' \describe{
+#'   \item{\code{estimate}}{partial correlation coefficient}
+#'   \item{\code{statistic}}{t statistic for testing \eqn{\rho = 0}}
+#'   \item{\code{p_value}}{two-sided p-value}
+#'   \item{\code{n}}{number of complete cases used}
+#'   \item{\code{gn}}{number of control variables}
+#' }
+#'
+#' @examples
+#' pcor_test(
+#'   var1     = mpg,
+#'   var2     = hp,
+#'   controls = -c(mpg, hp, cyl), # drop focal vars + cyl
+#'   data     = mtcars
+#' )
+#' @export
+pcor_test <- function(var1, var2, controls, data) {
+  stopifnot(inherits(data, "data.frame"))
+
+  v1q <- rlang::enquo(var1)
+  v2q <- rlang::enquo(var2)
+  cq <- rlang::enquo(controls)
+
+  # focal selections ----------------------------------------------------------
+  v1_sel <- tidyselect::eval_select(v1q, data = data)
+  v2_sel <- tidyselect::eval_select(v2q, data = data)
+
+  if (length(v1_sel) != 1L || length(v2_sel) != 1L) {
+    stop("`var1` and `var2` must each select exactly one column.", call. = FALSE)
+  }
+  if (identical(names(v1_sel), names(v2_sel))) {
+    stop("`var1` and `var2` must refer to different columns.", call. = FALSE)
+  }
+
+  # control selections --------------------------------------------------------
+  c_sel <- tidyselect::eval_select(cq, data = data)
+  c_sel <- c_sel[setdiff(names(c_sel), c(names(v1_sel), names(v2_sel)))]
+  if (length(c_sel) == 0L) {
+    stop("`controls` must select at least one control variable.", call. = FALSE)
+  }
+
+  v1_name <- names(v1_sel)
+  v2_name <- names(v2_sel)
+  c_names <- names(c_sel)
+
+  # subset & drop NAs ---------------------------------------------------------
+  df_sub <- data[, c(v1_name, v2_name, c_names), drop = FALSE]
+  df_sub <- df_sub[stats::complete.cases(df_sub), , drop = FALSE]
+
+  res <- ppcor::pcor.test(
+    x = df_sub[[v1_name]],
+    y = df_sub[[v2_name]],
+    z = df_sub[, c_names, drop = FALSE],
+    method = "pearson"
+  )
+
+  tibble::as_tibble(res) |>
+    dplyr::select(estimate, statistic,
+      p_value = p.value, n = n, gn = gp
+    )
+}
