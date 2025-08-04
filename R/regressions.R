@@ -308,7 +308,9 @@ lm_bootstrap_ci <- function(model, reps = 10000, level = 0.95, sigma = FALSE, se
     ) |>
     dplyr::mutate(
       estimate = unname(beta_hat[term])
-    )
+    ) |>
+    dplyr::arrange(match(term, names(beta_hat)))
+
 
   # sigma CI (summarise once per replicate, then percentile)
   sigma_ci <- coef_boot |>
