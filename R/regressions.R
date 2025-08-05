@@ -700,3 +700,29 @@ get_rss <- function(model) {
 
   sum(residuals.lm(model)^2)
 }
+
+
+#' Residual degrees of freedom of a fitted linear model
+#'
+#' Returns the residual degrees of freedom, \eqn{n - p - 1}, stored in an
+#' \code{\link[stats]{lm}} object.
+#' This quantity equals the sample size minus the number of fitted
+#' coefficients (intercept + slopes) and represents the amount of independent
+#' information left for estimating the error variance.
+#'
+#' @param model An object of class \code{"lm"}.
+#'
+#' @return A single integer giving the residual degrees of freedom.
+#'
+#' @examples
+#' fit <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_residual_df(fit)
+#'
+#' @export
+get_residual_df <- function(model) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  model[["df.residual"]]
+}
