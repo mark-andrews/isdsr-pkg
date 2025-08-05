@@ -590,3 +590,67 @@ NULL
 #' @examples
 #' summary(whr2024)
 "whr2024"
+
+#' 2021 General Social Survey subset
+#'
+#' A tibble drawn from the 2021 cross-section of the US
+#' General Social Survey (GSS). The data frame keeps just a few variables that
+#' are useful for investing predictors of personal earnings (`income`).
+#'
+#' @format A tibble with 2444 rows and 10 variables:
+#' \describe{
+#'   \item{`income`}{\code{double}. Respondent’s \emph{personal} earnings in
+#'     \strong{constant 1986 US dollars} (variable \code{REALRINC} in the
+#'     original GSS). Zero and negative values were
+#'     dropped.}
+#'   \item{`lincome`}{\code{double}. \code{log10(income)} – a log-scaled
+#'     version that is closer to normal and is the recommended dependent
+#'     variable for normal-linear models.}
+#'   \item{`degree`}{\code{factor} with 5 levels
+#'     \code{"<HS"}, \code{"HS"}, \code{"JrColl"}, \code{"BA"},
+#'     \code{"Grad"}; highest educational credential (GSS variable
+#'     \code{DEGREE}).}
+#'   \item{`sex`}{\code{factor} with levels \code{"Male"}, \code{"Female"}
+#'     (GSS \code{SEX}).}
+#'   \item{`age`}{\code{double}. Age in years (\code{AGE}).}
+#'   \item{`marital`}{\code{factor}. Marital status with the original GSS
+#'     labels (\code{MARITAL}).}
+#'   \item{`hours`}{\code{double}. Usual weekly hours of work
+#'     (\code{HRS1}); missing when not working.}
+#'   \item{`prestige`}{\code{double}. Occupational prestige score
+#'     (\code{PRESTG10}; range 16–86).}
+#'   \item{`childs`}{\code{double}. Number of children ever had
+#'     (\code{CHILDS}).}
+#'   \item{`fulltime`}{\code{factor} with levels \code{"Full-time"},
+#'     \code{"Other"}, derived from \code{WRKSTAT}.  “Full-time” corresponds
+#'     to \code{WRKSTAT == 1}.}
+#' }
+#'
+#' @details
+#' \itemize{
+#'   \item Only respondents with non-missing \code{income}, \code{degree},
+#'         \code{sex}, and \code{age} are kept.
+#'   \item The original “dbl + lbl” (labelled) SPSS columns were converted
+#'         to plain numerics or factors with \code{haven::as_factor()}.
+#'   \item Constant-dollar scaling means you can compare earnings across
+#'         survey years if you wish; for interpretations in 2021 dollars
+#'         multiply by \eqn{270.97 / 109.6 \approx 2.47} (CPI-U ratio).
+#' }
+#'
+#' @source NORC at the University of Chicago, \emph{General Social
+#'   Survey 1972–2024}: \url{https://gss.norc.org}.  SPSS release
+#'   \code{gss7224_r1.sav}; filtered and recoded by the package author
+#'   (see \code{data-raw/gss2021.R}).
+#'
+#' @references
+#' Smith, Tom W., Peter V. Marsden, Michael Hout, and Jibum Kim. 2022.
+#' *General Social Survey, 1972–2021*. NORC at the University of Chicago.
+#'
+#' @examples
+#' data(gss2021)
+#' # Gender × education on log income
+#' summary(aov(lincome ~ sex * degree, data = gss2021))
+#'
+#' # Add age as a covariate (ANCOVA)
+#' summary(aov(lincome ~ sex * degree + age, data = gss2021))
+"gss2021"

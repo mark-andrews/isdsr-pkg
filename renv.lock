@@ -5357,6 +5357,25 @@
       "Maintainer": "Hadley Wickham <hadley@rstudio.com>",
       "Repository": "CRAN"
     },
+    "ppcor": {
+      "Package": "ppcor",
+      "Version": "1.1",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Partial and Semi-Partial (Part) Correlation",
+      "Date": "2015-11-19",
+      "Author": "Seongho Kim",
+      "Maintainer": "Seongho Kim <biostatistician.kim@gmail.com>",
+      "Depends": [
+        "R (>= 2.6.0)",
+        "MASS"
+      ],
+      "Description": "Calculates partial and semi-partial (part) correlations along with p-value.",
+      "License": "GPL-2",
+      "NeedsCompilation": "no",
+      "Repository": "RSPM",
+      "Encoding": "UTF-8"
+    },
     "praise": {
       "Package": "praise",
       "Version": "1.0.0",
