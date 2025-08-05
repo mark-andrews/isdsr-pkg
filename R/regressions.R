@@ -676,3 +676,27 @@ partial_corr <- function(var1, var2, controls, data) {
       p_value = p.value, n = n, gn = gp
     )
 }
+
+#' Residual sum of squares (RSS) for an `lm` object
+#'
+#' Computes the residual sum of squares, \eqn{\sum_{i}\hat\varepsilon_i^{2}},
+#' from a fitted linear model.
+#' The quantity is sometimes called the error sum of squares.
+#'
+#' @param model An object of class \code{"lm"}.
+#'
+#' @return A single numeric value giving the residual sum of squares for the
+#'   fitted model.
+#'
+#' @examples
+#' fit <- lm(mpg ~ wt + hp, data = mtcars)
+#' get_rss(fit)
+#'
+#' @export
+get_rss <- function(model) {
+  if (!inherits(model, "lm")) {
+    stop("`model` must be an object of class \"lm\".", call. = FALSE)
+  }
+
+  sum(residuals.lm(model)^2)
+}
