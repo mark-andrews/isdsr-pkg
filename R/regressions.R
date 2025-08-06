@@ -549,6 +549,32 @@ get_fstat <- function(model) {
     )
 }
 
+#' Format an F-test for reporting
+#'
+#' Produce an APA-style string containing the F statistic,
+#' its numerator and denominator degrees of freedom,
+#' and the corresponding p-value.
+#'
+#' @param model An object that inherits from class \code{lm} or \code{aov}.
+#' @param digits A single integer giving the number of decimal places
+#'   to show for the F statistic.
+#'
+#' @return A length-one character vector like
+#'   \code{"F(4, 72) = 3.52, p = .011"}.
+#' @export
+#'
+#' @examples
+#' mod <- lm(mpg ~ factor(cyl), data = mtcars)
+#' sprintf_fstat(mod)
+sprintf_fstat <- function(model, digits = 2) {
+  FSTAT <- get_fstat(model)
+  df_1 <- round(FSTAT[["num_df"]])
+  df_2 <- round(FSTAT[["den_df"]])
+  fstat <- round(FSTAT[["fstat"]], digits)
+  p_value <- format_pval(FSTAT[["p_value"]])
+
+  sprintf("F(%d, %d) = %2.2f, %s", df_1, df_2, fstat, p_value)
+}
 
 #' Variance inflation factors (tidy output)
 #'
