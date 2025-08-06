@@ -11,6 +11,7 @@
 \alias{tidy}
 \alias{augment}
 \alias{glance}
+\alias{emmeans}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -23,6 +24,8 @@ below to see their documentation.
   \item{car}{\code{\link[car]{leveneTest}}}
 
   \item{effectsize}{\code{\link[effectsize]{cohens_d}}, \code{\link[effectsize:cohens_d]{hedges_g}}}
+
+  \item{emmeans}{\code{\link[emmeans]{emmeans}}}
 
   \item{moments}{\code{\link[moments]{skewness}}}
 

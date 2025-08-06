@@ -29,3 +29,7 @@ broom::augment
 #' @importFrom broom glance
 #' @export
 broom::glance
+
+#' @importFrom emmeans emmeans
+#' @export
+emmeans::emmeans
