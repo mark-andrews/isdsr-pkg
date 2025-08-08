@@ -369,7 +369,7 @@ get_dummy_code <- function(data, var) {
 
   # Combine and keep one row per level
   dplyr::bind_cols(
-    dplyr::select(data, !!var_quo),
+    dplyr::select(data, !!var_quo) |> drop_na(),
     tibble::as_tibble(mm)
   ) |>
     dplyr::distinct() |>
