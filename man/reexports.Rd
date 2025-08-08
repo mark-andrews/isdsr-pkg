@@ -13,6 +13,7 @@
 \alias{glance}
 \alias{emmeans}
 \alias{aov_car}
+\alias{nice}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -20,7 +21,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{afex}{\code{\link[afex]{aov_car}}}
+  \item{afex}{\code{\link[afex]{aov_car}}, \code{\link[afex]{nice}}}
 
   \item{broom}{\code{\link[broom:reexports]{augment}}, \code{\link[broom:reexports]{glance}}, \code{\link[broom:reexports]{tidy}}}
 
