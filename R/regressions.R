@@ -549,13 +549,13 @@ get_fstat <- function(model) {
     )
 }
 
-#' Format an F-test for reporting
+#' Format an lm() overall model null F-test for reporting
 #'
 #' Produce an APA-style string containing the F statistic,
 #' its numerator and denominator degrees of freedom,
 #' and the corresponding p-value.
 #'
-#' @param model An object that inherits from class \code{lm} or \code{aov}.
+#' @param model An object that inherits from class \code{lm}.
 #' @param digits A single integer giving the number of decimal places
 #'   to show for the F statistic.
 #'
@@ -803,4 +803,69 @@ tidy_anova_ssq <- function(model, type = c("II", "I", "III"), ...) {
   )
 
   tibble::as_tibble(out)
+}
+
+
+#' Format an individual term’s F-test from a tidy ANOVA tibble
+#'
+#' Produces an APA-style string of the form
+#' `"F(df1, df2) = f-value, p = .xxx"` for any term in a tibble
+#' created by [tidy_anova_ssq()].
+#' The numerator degrees of freedom and F statistic come from the
+#' requested term’s row; the denominator degrees of freedom come from the
+#' `"Residuals"` row.
+#'
+#' @param anova_tbl A tibble returned by [tidy_anova_ssq()].
+#' Must contain columns `term`, `df`, `statistic`, and `p.value`.
+#' @param term Character scalar. A value that appears in
+#'   `anova_tbl$term`; identifies which F-test to report.
+#' @param digits Integer; number of decimal places to show for the
+#'   F statistic.  Defaults to 2.
+#'
+#' @return A length-one character vector such as
+#'   `"F(4, 72) = 3.52, p = .011"`.
+#'
+#' @details
+#' \describe{
+#'   \item{Numerator df}{Taken from the `df` column of the specified term.}
+#'   \item{Denominator df}{Taken from the `df` value on the `"Residuals"`
+#'     row. The function errors if that row is missing.}
+#'   \item{F statistic & p-value}{From the `statistic` and `p.value`
+#'     columns of the specified term.}
+#' }
+#'
+#' @export
+#'
+#' @examples
+#' mod_tbl <- tidy_anova_ssq(aov(mpg ~ factor(cyl) * am, data = mtcars))
+#' sprintf_term_fstat(mod_tbl, term_name = "factor(cyl)")
+sprintf_term_fstat <- function(anova_tbl, term_name, digits = 2) {
+  ## --- sanity checks -------------------------------------------------------
+  req_cols <- c("term", "df", "statistic", "p.value")
+  if (!all(req_cols %in% names(anova_tbl))) {
+    stop(
+      "`anova_tbl` must contain columns: ",
+      paste(req_cols, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  if (!"Residuals" %in% anova_tbl$term) {
+    stop("`anova_tbl` must include a 'Residuals' row.", call. = FALSE)
+  }
+
+  term_row <- dplyr::filter(anova_tbl, term == term_name)
+
+  if (nrow(term_row) == 0L) {
+    stop("Term '", term_name, "' not found in `anova_tbl$term`.", call. = FALSE)
+  }
+
+  ## --- pull needed pieces --------------------------------------------------
+  df1 <- term_row$df
+  df2 <- anova_tbl$df[anova_tbl$term == "Residuals"]
+  fstat <- round(term_row$statistic, digits)
+  pval <- format_pval(term_row$p.value) # your existing helper
+
+  ## --- glue together -------------------------------------------------------
+  sprintf("F(%d, %d) = %.*f, %s", df1, df2, digits, fstat, pval)
 }

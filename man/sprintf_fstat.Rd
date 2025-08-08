@@ -2,12 +2,12 @@
 % Please edit documentation in R/regressions.R
 \name{sprintf_fstat}
 \alias{sprintf_fstat}
-\title{Format an F-test for reporting}
+\title{Format an lm() overall model null F-test for reporting}
 \usage{
 sprintf_fstat(model, digits = 2)
 }
 \arguments{
-\item{model}{An object that inherits from class \code{lm} or \code{aov}.}
+\item{model}{An object that inherits from class \code{lm}.}
 
 \item{digits}{A single integer giving the number of decimal places
 to show for the F statistic.}
