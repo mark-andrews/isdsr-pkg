@@ -2,28 +2,36 @@
 % Please edit documentation in R/plotting.R
 \name{twoway_interaction_plot}
 \alias{twoway_interaction_plot}
-\title{Interaction plot using expected marginal means}
+\title{Two-way interaction plot from estimated marginal means}
 \usage{
 twoway_interaction_plot(model, iv1, iv2, ylab, text_size = 8)
 }
 \arguments{
-\item{model}{A model such as afex::aov_car of a two-way interaction.}
+\item{model}{A fitted model that \code{\link[emmeans:emmip]{emmeans::emmip()}} can handle
+(e.g. \code{lm}, \code{aov}, \code{afex::aov_car}, \code{lmerMod}, …) containing the
+two factors of interest.}
 
-\item{iv1}{One of the two independent variables (variable name must be quoted)}
+\item{iv1, iv2}{The two \strong{factor variables} that form the interaction.
+Supply them \emph{unquoted} (preferred tidyverse style) or in quotes—
+both \code{degree} and \code{"degree"} work.}
 
-\item{iv2}{The other of the two independent variables (variable name must be quoted)}
+\item{ylab}{Character string for the y-axis label.}
 
-\item{ylab}{The y-axis label}
-
-\item{text_size}{The size of the font in the legend}
+\item{text_size}{Numeric. Font size (points) for legend text and title.}
 }
 \value{
-A \code{patchwork} object
+A \strong{patchwork} object (two \code{ggplot}s arranged in one row).
 }
 \description{
-Interaction plot using expected marginal means
+Produces the classic side-by-side interaction plots returned by
+\code{\link[emmeans:emmip]{emmeans::emmip()}} and wraps them into a single \strong{patchwork} object:
+\emph{Left panel} – \emph{iv1} on the x-axis, \emph{iv2} as the trace;
+\emph{Right panel} – the roles reversed.
 }
 \examples{
-M <- afex::aov_car(nc_erp ~ category + Error(id / change), data = catknowledge)
-twoway_interaction_plot(M, "category", "change", ylab = "Nc ERP amplitude")
+m <- afex::aov_car(nc_erp ~ category * change + Error(id / change),
+  data = catknowledge
+)
+twoway_interaction_plot(m, category, change, ylab = "Nc ERP amplitude")
+
 }

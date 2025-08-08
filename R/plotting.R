@@ -267,46 +267,69 @@ histogram <- function(x, data, by = NULL, position = "stack", facet = NULL, face
   p1 + scale_x_continuous(labels = scales::comma)
 }
 
-#' Interaction plot using expected marginal means
+#' Two-way interaction plot from estimated marginal means
 #'
-#' @param model A model such as afex::aov_car of a two-way interaction.
-#' @param iv1 One of the two independent variables (variable name must be quoted)
-#' @param iv2 The other of the two independent variables (variable name must be quoted)
-#' @param ylab The y-axis label
-#' @param text_size The size of the font in the legend
+#' Produces the classic side-by-side interaction plots returned by
+#' [emmeans::emmip()] and wraps them into a single **patchwork** object:
+#' *Left panel* – *iv1* on the x-axis, *iv2* as the trace;
+#' *Right panel* – the roles reversed.
 #'
-#' @return A `patchwork` object
+#' @param model  A fitted model that [emmeans::emmip()] can handle
+#'   (e.g. `lm`, `aov`, `afex::aov_car`, `lmerMod`, …) containing the
+#'   two factors of interest.
+#' @param iv1,iv2  The two **factor variables** that form the interaction.
+#'   Supply them *unquoted* (preferred tidyverse style) or in quotes—
+#'   both ``degree`` and `"degree"` work.
+#' @param ylab  Character string for the y-axis label.
+#' @param text_size  Numeric. Font size (points) for legend text and title.
+#'
+#' @return A **patchwork** object (two `ggplot`s arranged in one row).
 #' @export
 #'
 #' @examples
-#' M <- afex::aov_car(nc_erp ~ category + Error(id / change), data = catknowledge)
-#' twoway_interaction_plot(M, "category", "change", ylab = "Nc ERP amplitude")
-twoway_interaction_plot <- function(model, iv1, iv2, ylab, text_size = 8) {
-  IV1 <- rlang::sym(iv1)
-  IV2 <- rlang::sym(iv2)
+#' m <- afex::aov_car(nc_erp ~ category * change + Error(id / change),
+#'   data = catknowledge
+#' )
+#' twoway_interaction_plot(m, category, change, ylab = "Nc ERP amplitude")
+#'
+twoway_interaction_plot <- function(model,
+                                    iv1,
+                                    iv2,
+                                    ylab,
+                                    text_size = 8) {
+  ## 1.  Convert iv1 / iv2 to symbols (accepts bare or quoted)
+  iv1_sym <- rlang::ensym(iv1)
+  iv2_sym <- rlang::ensym(iv2)
 
-  formula_1 <- rlang::expr(!!IV1 ~ !!IV2)
-  formula_2 <- rlang::expr(!!IV2 ~ !!IV1)
+  if (rlang::as_name(iv1_sym) == rlang::as_name(iv2_sym)) {
+    stop("`iv1` and `iv2` must be different variables.", call. = FALSE)
+  }
 
-  G <-
-    ggplot2::theme_classic() +
+  ## 2.  Build the two emmip formulas
+  f1 <- rlang::expr(!!iv1_sym ~ !!iv2_sym)
+  f2 <- rlang::expr(!!iv2_sym ~ !!iv1_sym)
+
+  ## 3.  Reusable theme snippet
+  base_theme <- ggplot2::theme_classic() +
     ggplot2::theme(
       legend.position = "bottom",
-      legend.text = element_text(size = text_size),
-      legend.title = element_text(size = text_size)
+      legend.text     = ggplot2::element_text(size = text_size),
+      legend.title    = ggplot2::element_text(size = text_size)
     )
 
-  p1 <- emmeans::emmip(model, formula_1, ylab = ylab) +
-    ggplot2::scale_color_brewer(palette = "Set1") +
-    G
+  ## 4.  Panels via emmeans::emmip()
+  p1 <- emmeans::emmip(model, f1, ylab = ylab) +
+    ggplot2::scale_colour_brewer(palette = "Set1") +
+    base_theme
 
-  p2 <- emmeans::emmip(model, formula_2, ylab = ylab) +
-    ggplot2::scale_color_brewer(palette = "Set1") +
-    G
+  p2 <- emmeans::emmip(model, f2, ylab = ylab) +
+    ggplot2::scale_colour_brewer(palette = "Set1") +
+    base_theme
 
-  p1 + p2 + patchwork::plot_layout(ncol = 2) + patchwork::plot_annotation(tag_levels = "A")
+  ## 5.  Stitch together with patchwork
+  patchwork::wrap_plots(p1, p2, ncol = 2) +
+    patchwork::plot_annotation(tag_levels = "A")
 }
-
 
 #' Correlation Heatmap with Optional Significance Stars
 #'
