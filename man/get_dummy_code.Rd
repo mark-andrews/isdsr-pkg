@@ -2,25 +2,30 @@
 % Please edit documentation in R/regressions.R
 \name{get_dummy_code}
 \alias{get_dummy_code}
-\title{Show treatment‑coded dummy columns for one categorical predictor}
+\title{Show treatment-coded dummy columns for one or more categorical predictors}
 \usage{
-get_dummy_code(data, var)
+get_dummy_code(data, vars)
 }
 \arguments{
 \item{data}{A data frame or tibble.}
 
-\item{var}{A column name identifying a categorical variable.}
+\item{vars}{An expression of categorical variables, e.g.
+\code{gender}, \code{gender * degree}, or \code{factor1 + factor2}.}
 }
 \value{
-A tibble with the original factor column plus the \eqn{k-1} treatment
-dummies that \code{lm()} would use.  Each row is a unique level combination, so
-for a factor with \eqn{k} levels the tibble has \eqn{k} rows.
+A tibble containing the involved factor columns (after coercing
+them to \code{factor} if needed) and the corresponding dummy columns.
+Rows are unique combinations of factor levels; the intercept column
+is dropped.
 }
 \description{
-Show treatment‑coded dummy columns for one categorical predictor
+Creates the design-matrix columns (\code{model.matrix}) that \code{lm()} would use
+under default \emph{treatment} contrasts.  Handles any combination of factors,
+including interactions, supplied as an \strong{unquoted expression}.
 }
 \examples{
 get_dummy_code(pisa2022uk, gender)
 get_dummy_code(iris, Species)
+get_dummy_code(gss2021, sex * degree)
 
 }

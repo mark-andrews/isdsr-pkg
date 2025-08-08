@@ -335,46 +335,66 @@ lm_bootstrap_ci <- function(model, reps = 10000, level = 0.95, sigma = FALSE, se
   results |> dplyr::relocate(term, estimate, lower, upper)
 }
 
-
-#' Show treatment‑coded dummy columns for one categorical predictor
+#' Show treatment-coded dummy columns for one or more categorical predictors
 #'
-#' @param data  A data frame or tibble.
-#' @param var   A column name identifying a categorical variable.
+#' Creates the design-matrix columns (`model.matrix`) that `lm()` would use
+#' under default *treatment* contrasts.  Handles any combination of factors,
+#' including interactions, supplied as an **unquoted expression**.
 #'
-#' @return A tibble with the original factor column plus the \eqn{k-1} treatment
-#'   dummies that `lm()` would use.  Each row is a unique level combination, so
-#'   for a factor with \eqn{k} levels the tibble has \eqn{k} rows.
+#' @param data A data frame or tibble.
+#' @param vars An expression of categorical variables, e.g.
+#'   `gender`, `gender * degree`, or `factor1 + factor2`.
+#'
+#' @return A tibble containing the involved factor columns (after coercing
+#'   them to `factor` if needed) and the corresponding dummy columns.
+#'   Rows are unique combinations of factor levels; the intercept column
+#'   is dropped.
 #'
 #' @examples
 #' get_dummy_code(pisa2022uk, gender)
 #' get_dummy_code(iris, Species)
+#' get_dummy_code(gss2021, sex * degree)
 #'
 #' @export
-get_dummy_code <- function(data, var) {
-  var_quo <- rlang::enquo(var)
-  var_name <- rlang::as_name(var_quo)
+get_dummy_code <- function(data, vars) {
+  ## 1. Capture the expression and discover which columns it uses
+  expr_chr <- rlang::expr_text(rlang::enexpr(vars))
+  fml <- stats::as.formula(paste0("~", expr_chr))
+  var_names <- all.vars(fml)
 
-  if (!var_name %in% names(data)) {
-    stop("Variable `", var_name, "` not found in `data`.", call. = FALSE)
+  ## 2. Sanity checks
+  missing_vars <- setdiff(var_names, names(data))
+  if (length(missing_vars)) {
+    stop("Variable(s) ", paste(missing_vars, collapse = ", "),
+      " not found in `data`.",
+      call. = FALSE
+    )
   }
 
-  # Ensure the variable is a factor (so model_matrix uses contrasts)
-  if (!is.factor(data[[var_name]])) {
-    data <- dplyr::mutate(data, !!var_quo := factor(.data[[var_name]]))
+  ## 3. Coerce to factor if needed & drop NA rows
+  data2 <- data
+  for (v in var_names) {
+    if (!is.factor(data2[[v]])) {
+      data2[[v]] <- factor(data2[[v]])
+    }
   }
+  data2 <- tidyr::drop_na(data2, dplyr::all_of(var_names))
 
-  # Build design matrix with modelr; drop intercept column
-  mm <- modelr::model_matrix(data, stats::as.formula(paste0("~ ", var_name)))
+  ## 4. Build the treatment-coded design matrix (no intercept)
+  mm <- stats::model.matrix(fml, data2)
   mm <- mm[, colnames(mm) != "(Intercept)", drop = FALSE]
 
-  # Combine and keep one row per level
+  ## 5. Bind and return unique rows
   dplyr::bind_cols(
-    dplyr::select(data, !!var_quo) |> drop_na(),
+    dplyr::select(data2, dplyr::all_of(var_names)),
     tibble::as_tibble(mm)
   ) |>
     dplyr::distinct() |>
-    dplyr::arrange(!!var_quo)
+    dplyr::arrange(dplyr::across(dplyr::all_of(var_names)))
 }
+
+
+
 
 
 #' Compact summary of key model statistics
@@ -787,15 +807,15 @@ get_residual_df <- function(model) {
 #' tidy_anova_ssq(fit, "III") # Type III
 #' @export
 tidy_anova_ssq <- function(model, type = c("II", "I", "III"), ...) {
-  ## validate model class -----------------------------------------------------
+  ## validate model class
   if (!inherits(model, c("aov", "lm"))) {
     stop("'model' must be an object of class 'aov' or 'lm'", call. = FALSE)
   }
 
-  ## validate & normalise `type` ---------------------------------------------
+  ## validate & normalise `type`
   type <- toupper(match.arg(type))
 
-  ## dispatch by `type` -------------------------------------------------------
+  ## dispatch by `type`
   out <- switch(type,
     "I"   = broom::tidy(model, ...), # Type I via stats::anova
     "II"  = broom::tidy(car::Anova(model, type = 2, ...)),
@@ -840,7 +860,7 @@ tidy_anova_ssq <- function(model, type = c("II", "I", "III"), ...) {
 #' mod_tbl <- tidy_anova_ssq(aov(mpg ~ factor(cyl) * am, data = mtcars))
 #' sprintf_term_fstat(mod_tbl, term_name = "factor(cyl)")
 sprintf_term_fstat <- function(anova_tbl, term_name, digits = 2) {
-  ## --- sanity checks -------------------------------------------------------
+  ## --- sanity checks
   req_cols <- c("term", "df", "statistic", "p.value")
   if (!all(req_cols %in% names(anova_tbl))) {
     stop(
@@ -860,12 +880,12 @@ sprintf_term_fstat <- function(anova_tbl, term_name, digits = 2) {
     stop("Term '", term_name, "' not found in `anova_tbl$term`.", call. = FALSE)
   }
 
-  ## --- pull needed pieces --------------------------------------------------
+  ## --- pull needed pieces
   df1 <- term_row$df
   df2 <- anova_tbl$df[anova_tbl$term == "Residuals"]
   fstat <- round(term_row$statistic, digits)
   pval <- format_pval(term_row$p.value) # your existing helper
 
-  ## --- glue together -------------------------------------------------------
+  ## --- glue together
   sprintf("F(%d, %d) = %.*f, %s", df1, df2, digits, fstat, pval)
 }
