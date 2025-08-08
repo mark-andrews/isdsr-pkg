@@ -752,3 +752,55 @@ get_residual_df <- function(model) {
 
   model[["df.residual"]]
 }
+
+#' Tidy ANOVA sums-of-squares table
+#'
+#' @description
+#' Returns **Type I**, **II**, or **III** sums-of-squares for an `aov` or
+#' `lm` model as a tibble, leveraging **car** and **broom**.
+#'
+#' @param model An object of class [`aov`] or [`lm`].
+#' @param type  Character string specifying the sums-of-squares type:
+#'   `"I"`, `"II"`, or `"III"` (case-insensitive).
+#'   Defaults to `"II"`, in line with many applied-statistics conventions.
+#' @param ...   Additional arguments passed to [car::Anova()] when
+#'   `type` is `"II"` or `"III"`.
+#'
+#' @return A tibble with one row per model term and columns
+#'   `term`, `df`, `sumsq`, `meansq` (where available),
+#'   a test statistic (`statistic`, e.g. *F*), and `p.value`.
+#'
+#' @details
+#' * **Computation pathway**
+#'   \describe{
+#'     \item{Type I}{Calculated by applying [broom::tidy()] directly to the
+#'       fitted model object (`aov` or `lm`), which reproduces the sequential
+#'       sums-of-squares from `stats::anova()`.}
+#'     \item{Type II & III}{Calculated with [car::Anova()]—using
+#'       `type = 'II'` or `type = 'III'`—and the resulting object is then converted
+#'       to a tibble via [broom::tidy()].}
+#'   }
+#' @examples
+#' fit <- aov(lincome ~ degree * sex, data = gss2021)
+#' tidy_anova_ssq(fit) # default Type II
+#' tidy_anova_ssq(fit, "I") # Type I
+#' tidy_anova_ssq(fit, "III") # Type III
+#' @export
+tidy_anova_ssq <- function(model, type = c("II", "I", "III"), ...) {
+  ## validate model class -----------------------------------------------------
+  if (!inherits(model, c("aov", "lm"))) {
+    stop("'model' must be an object of class 'aov' or 'lm'", call. = FALSE)
+  }
+
+  ## validate & normalise `type` ---------------------------------------------
+  type <- toupper(match.arg(type))
+
+  ## dispatch by `type` -------------------------------------------------------
+  out <- switch(type,
+    "I"   = broom::tidy(model, ...), # Type I via stats::anova
+    "II"  = broom::tidy(car::Anova(model, type = 2, ...)),
+    "III" = broom::tidy(car::Anova(model, type = 3, ...))
+  )
+
+  tibble::as_tibble(out)
+}
