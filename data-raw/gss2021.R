@@ -48,7 +48,9 @@ gss2021 <- gss7224_r1 |>
   mutate(across(
     where(haven::is.labelled), # <-- selects every dbl+lbl column
     as.numeric # strips the “labelled” class, keeps the numbers
-  ))
+  )) |>
+  # drop empty levels; particularly `marital`
+  droplevels()
 
 
 usethis::use_data(gss2021, overwrite = TRUE)
