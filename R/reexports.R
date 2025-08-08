@@ -33,3 +33,7 @@ broom::glance
 #' @importFrom emmeans emmeans
 #' @export
 emmeans::emmeans
+
+#' @importFrom afex aov_car
+#' @export
+afex::aov_car
