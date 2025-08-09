@@ -14,6 +14,7 @@
 \alias{emmeans}
 \alias{aov_car}
 \alias{nice}
+\alias{lmer}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -30,6 +31,8 @@ below to see their documentation.
   \item{effectsize}{\code{\link[effectsize]{cohens_d}}, \code{\link[effectsize:cohens_d]{hedges_g}}}
 
   \item{emmeans}{\code{\link[emmeans]{emmeans}}}
+
+  \item{lme4}{\code{\link[lme4]{lmer}}}
 
   \item{moments}{\code{\link[moments]{skewness}}}
 

@@ -41,3 +41,7 @@ afex::aov_car
 #' @importFrom afex nice
 #' @export
 afex::nice
+
+#' @importFrom lme4 lmer
+#' @export
+lme4::lmer
