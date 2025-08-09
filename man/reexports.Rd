@@ -32,7 +32,7 @@ below to see their documentation.
 
   \item{emmeans}{\code{\link[emmeans]{emmeans}}}
 
-  \item{lme4}{\code{\link[lme4]{lmer}}}
+  \item{lmerTest}{\code{\link[lmerTest]{lmer}}}
 
   \item{moments}{\code{\link[moments]{skewness}}}
 
