@@ -654,3 +654,58 @@ NULL
 #' # Add age as a covariate (ANCOVA)
 #' summary(aov(lincome ~ sex * degree + age, data = gss2021))
 "gss2021"
+
+#' Reaction times in a sleep-deprivation study
+#'
+#' The average reaction time per day (in milliseconds) for subjects in a sleep
+#' deprivation study. Days 0–1 were adaptation/training (T1/T2), day 2 was
+#' baseline (B); sleep deprivation started after day 2.
+#'
+#' @format
+#' A tibble with 180 rows and 3 variables:
+#' \describe{
+#'   \item{Reaction}{Numeric. Average reaction time (ms).}
+#'   \item{Days}{Numeric. Number of days of sleep deprivation.}
+#'   \item{Subject}{Factor. Subject identifier.}
+#' }
+#'
+#' @details
+#' These data are from the study described in Belenky et al. (2003), for the
+#' most sleep-deprived group (3 hours time-in-bed) and for the first 10 days of
+#' the study, up to the recovery period. The original analysis modeled speed
+#' \eqn{(1/\text{reaction time})} and treated day as a categorical predictor.
+#'
+#' @source
+#' Adapted from \pkg{lme4}’s \code{sleepstudy} dataset; provided here as a
+#' tibble for convenience.
+#'
+#' @references
+#' Belenky, G., Wesensten, N. J., Thorne, D. R., Thomas, M. L., Sing, H. C.,
+#' Redmond, D. P., Russo, M. B., & Balkin, T. J. (2003).
+#' Patterns of performance degradation and restoration during sleep restriction
+#' and subsequent recovery: A sleep dose–response study.
+#' \emph{Journal of Sleep Research}, 12(1), 1–12.
+#'
+#' @seealso \code{\link[lme4]{sleepstudy}} in \pkg{lme4}
+#'
+#' @examples
+#' # Basic structure
+#' dplyr::glimpse(sleepstudy)
+#'
+#' # Small multiples by subject (if ggplot2 is available)
+#' ggplot2::ggplot(sleepstudy, ggplot2::aes(Days, Reaction)) +
+#'   ggplot2::geom_point(alpha = 0.6) +
+#'   ggplot2::geom_smooth(method = "lm", se = FALSE) +
+#'   ggplot2::facet_wrap(~Subject) +
+#'   ggplot2::labs(
+#'     x = "Days of sleep deprivation",
+#'     y = "Average reaction time (ms)"
+#'   )
+#'
+#' # Mixed model (if lme4 is available)
+#' fm1 <- lme4::lmer(Reaction ~ Days + (Days | Subject),
+#'   data = sleepstudy,
+#'   subset = Days >= 2
+#' )
+#' summary(fm1)
+"sleepstudy"
