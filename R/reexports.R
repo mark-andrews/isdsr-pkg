@@ -45,3 +45,6 @@ afex::nice
 #' @importFrom lmerTest lmer
 #' @export
 lmerTest::lmer
+
+#' @import broom.mixed
+NULL
