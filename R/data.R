@@ -709,3 +709,173 @@ NULL
 #' )
 #' summary(fm1)
 "sleepstudy"
+
+
+#' Heart Disease (Cleveland) — Reduced Variables
+#'
+#' A compact version of the UCI Heart Disease (Cleveland) dataset with three variables
+#' for illustrating binary classification and simple modelling.
+#' Each row is a patient assessed for suspected heart disease.
+#'
+#' @format A tibble with 303 rows and 3 variables:
+#' \describe{
+#'   \item{resting_bp}{Numeric.
+#'     Resting blood pressure on admission, in mm Hg (original variable: \code{trestbps}).}
+#'   \item{angina}{Factor with levels \code{no}, \code{yes}.
+#'     Exercise-induced angina (\code{exang}: 0 = no, 1 = yes) recoded to labels.}
+#'   \item{heart_disease}{Factor with levels \code{no}, \code{yes}.
+#'     Angiographic disease status (\code{num}) recoded to binary:
+#'     0 = \code{no}, 1–4 = \code{yes}.}
+#' }
+#'
+#' @details
+#' This dataset is derived from the Cleveland subset of the UCI Heart Disease data.
+#' From the original 14 attributes, we retain \code{trestbps}, \code{exang}, and \code{num}.
+#' We rename \code{trestbps} to \code{resting_bp}, recode \code{exang} to the factor \code{angina},
+#' and collapse \code{num} to a binary factor \code{heart_disease} indicating presence of disease.
+#' Missing values coded as \code{"?"} in the source are treated as \code{NA}.
+#'
+#' @source
+#' UCI Machine Learning Repository: Heart Disease Data Set (Cleveland subset).
+#' Data accessed via \url{https://archive.ics.uci.edu/ml/datasets/heart+Disease}
+#' and mirrored by Data Science Dojo (\code{processed.cleveland.data}).
+#'
+#' @seealso
+#' \code{\link[stats]{glm}} for logistic regression examples using \code{heart_disease} as an outcome.
+#'
+#' @examples
+#' # (Minimal) logistic regression example
+#' fit <- glm(heart_disease ~ resting_bp + angina,
+#'   data = heartdisease, family = binomial()
+#' )
+#' summary(fit)
+#'
+#' @keywords datasets
+#' @encoding UTF-8
+"heartdisease"
+
+
+
+#' Volunteering Study (Cowles & Davis, 1987)
+#'
+#' A reproduction of \code{carData::Cowles}, provided in \pkg{isdsr} as
+#' \code{volunteering}. Each row is a participant from a study on personality
+#' determinants of volunteering for psychological research.
+#'
+#' @format A tibble with 1,421 rows and 4 variables:
+#' \describe{
+#'   \item{neuroticism}{Numeric score from the Eysenck Personality Inventory.}
+#'   \item{extraversion}{Numeric score from the Eysenck Personality Inventory.}
+#'   \item{sex}{Factor with levels \code{female}, \code{male}.}
+#'   \item{volunteer}{Factor indicating whether the person volunteered
+#'     for psychological research with levels \code{no}, \code{yes}.}
+#' }
+#'
+#' @details
+#' This dataset is copied from \pkg{carData} (\code{Cowles}) into \pkg{isdsr}
+#' for convenience in teaching and examples. Variable names and values are
+#' unchanged from the source.
+#'
+#' @source
+#' Cowles, M., & Davis, C. (1987). The subject matter of psychology:
+#' Volunteers. \emph{British Journal of Social Psychology}, \strong{26}, 97–102.
+#'
+#' @seealso \code{carData::Cowles} for the original dataset.
+#'
+#' @examples
+#' fit <- glm(volunteer ~ extraversion + neuroticism + sex,
+#'   data = volunteering, family = binomial()
+#' )
+#' summary(fit)
+#'
+#' @keywords datasets
+#' @encoding UTF-8
+"volunteering"
+
+
+#' Gapminder (1952, excluding Oceania)
+#'
+#' A single-year slice of the Gapminder data filtered to \code{year == 1952}
+#' and with the \code{Oceania} continent removed.
+#'
+#' @format A tibble with 140 rows and 6 variables:
+#' \describe{
+#'   \item{country}{Country name (factor).}
+#'   \item{continent}{Continent (factor with levels \code{Africa}, \code{Americas}, \code{Asia}, \code{Europe}).}
+#'   \item{year}{Observation year (constant \code{1952}).}
+#'   \item{lifeExp}{Life expectancy at birth (years).}
+#'   \item{pop}{Total population.}
+#'   \item{gdpPercap}{GDP per capita (US\$, inflation-adjusted).}
+#' }
+#'
+#' @details
+#' Derived from \pkg{gapminder}:\code{gapminder} by subsetting to the first year
+#' available (1952) and excluding observations from \code{Oceania}.
+#' Variable names and definitions are unchanged from the source.
+#'
+#' @source
+#' Gapminder Foundation, \url{https://www.gapminder.org/data/}.
+#' Original R package: \pkg{gapminder}.
+#'
+#' @seealso \code{gapminder::gapminder} for the full multi-year dataset.
+#'
+#' @examples
+#'
+#' # Life expectancy vs GDP per capita (1952)
+#' \donttest{
+#' plot(lifeExp ~ gdpPercap, data = gap52, log = "x")
+#' }
+#'
+#' @keywords datasets
+#' @encoding UTF-8
+"gap52"
+
+
+#' NHANES: Depressed Mood, Sleep, and Work (Adults 18+)
+#'
+#' A small subset of \pkg{NHANES} focusing on self-reported depressed mood,
+#' usual sleep duration, and employment status for participants aged 18 and over.
+#' Rows are participants from the resampled NHANES 2009–2012 teaching dataset.
+#'
+#' @format A tibble with 3 variables:
+#' \describe{
+#'   \item{Depressed}{Ordered factor with levels
+#'     \code{None < Several < Most}, indicating how often in the past 30 days
+#'     the participant felt down, depressed, or hopeless (asked of ages 18+).}
+#'   \item{SleepHrsNight}{Self-reported number of hours usually slept at night
+#'     on weekdays/workdays (asked of ages 16+).}
+#'   \item{Work}{Employment status, a factor with levels \code{NotWorking},
+#'     \code{Working}.}
+#' }
+#'
+#' @details
+#' Derived from \code{NHANES::NHANES} by filtering to adults (\code{Age >= 18}),
+#' retaining \code{Depressed}, \code{SleepHrsNight}, and \code{Work},
+#' ordering the \code{Depressed} levels as \code{None < Several < Most}, and
+#' restricting \code{Work} to \code{NotWorking}/\code{Working}.
+#'
+#' The \code{NHANES} dataset in the \pkg{NHANES} package is a resampled
+#' teaching version of the original complex-survey data and can be treated,
+#' for educational purposes, as if it were a simple random sample.
+#' See the NHANES documentation for caveats about weighting and design.
+#'
+#' @source
+#' U.S. National Center for Health Statistics (NCHS), NHANES 2009–2012.
+#' Educational resample provided by the \pkg{NHANES} R package.
+#' NHANES information: \url{https://www.cdc.gov/nchs/nhanes/}.
+#'
+#' @seealso \code{NHANES::NHANES} for the parent dataset and full variable list.
+#'
+#' @examples
+#' # Structure
+#' str(depsleep)
+#'
+#' # Cross-tabulation of employment by depressed mood
+#' with(depsleep, table(Work, Depressed))
+#'
+#' # Mean sleep hours by depressed-mood category
+#' aggregate(SleepHrsNight ~ Depressed, depsleep, mean, na.rm = TRUE)
+#'
+#' @keywords datasets
+#' @encoding UTF-8
+"depsleep"

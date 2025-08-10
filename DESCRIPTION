@@ -22,7 +22,9 @@ Suggests:
     styler (>= 1.10.3),
     usethis (>= 3.1.0),
     haven (>= 2.5.4),
-    writexl (>= 1.5.4)
+    writexl (>= 1.5.4),
+    gapminder,
+    NHANES (>= 2.1.0)
 Depends: 
     R (>= 3.5)
 LazyData: true
