@@ -44,6 +44,7 @@ Imports:
     latex2exp (>= 0.9.6),
     lmerTest (>= 3.1.3),
     magrittr (>= 2.0.3),
+    MASS (>= 7.3.65),
     moments (>= 0.14.1),
     nnet (>= 7.3.20),
     patchwork (>= 1.3.0),

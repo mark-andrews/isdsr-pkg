@@ -52,3 +52,7 @@ NULL
 #' @importFrom nnet multinom
 #' @export
 nnet::multinom
+
+#' @importFrom MASS polr
+#' @export
+MASS::polr
