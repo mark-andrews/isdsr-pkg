@@ -16,7 +16,9 @@
 \alias{nice}
 \alias{lmer}
 \alias{multinom}
+\alias{glm.nb}
 \alias{polr}
+\alias{zeroinfl}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -24,7 +26,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{MASS}{\code{\link[MASS]{polr}}}
+  \item{MASS}{\code{\link[MASS]{glm.nb}}, \code{\link[MASS]{polr}}}
 
   \item{afex}{\code{\link[afex]{aov_car}}, \code{\link[afex]{nice}}}
 
@@ -41,6 +43,8 @@ below to see their documentation.
   \item{moments}{\code{\link[moments]{skewness}}}
 
   \item{nnet}{\code{\link[nnet]{multinom}}}
+
+  \item{pscl}{\code{\link[pscl]{zeroinfl}}}
 
   \item{skimr}{\code{\link[skimr]{skim}}}
 }}

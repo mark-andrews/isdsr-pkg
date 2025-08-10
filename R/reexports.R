@@ -53,6 +53,14 @@ NULL
 #' @export
 nnet::multinom
 
+#' @importFrom MASS glm.nb
+#' @export
+MASS::glm.nb
+
 #' @importFrom MASS polr
 #' @export
 MASS::polr
+
+#' @importFrom pscl zeroinfl
+#' @export
+pscl::zeroinfl
