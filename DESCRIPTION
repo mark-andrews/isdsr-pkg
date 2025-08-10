@@ -23,7 +23,7 @@ Suggests:
     usethis (>= 3.1.0),
     haven (>= 2.5.4),
     writexl (>= 1.5.4),
-    gapminder,
+    gapminder (>= 1.0.1),
     NHANES (>= 2.1.0)
 Depends: 
     R (>= 3.5)
