@@ -879,3 +879,42 @@ NULL
 #' @keywords datasets
 #' @encoding UTF-8
 "depsleep"
+
+
+#' NHANES subset for count models (adults, 2011–2012)
+#'
+#' A minimal NHANES slice containing only the variables used in Chapter 13
+#' (Poisson, quasi-Poisson, negative binomial, zero-inflated Poisson, and
+#' Poisson with offset). Rows are limited to adults and the 2011–2012 wave.
+#'
+#' @details
+#' Created from \pkg{NHANES}::\code{NHANES} with:
+#' \itemize{
+#' \item Filter: \code{Age >= 18} and \code{SurveyYr == "2011_12"}.
+#' \item Variables kept:
+#'   \code{Age},
+#'   \code{DaysPhysHlthBad},
+#'   \code{AlcoholYear},
+#'   \code{SexNumPartnLife},
+#'   \code{SexAge},
+#'   \code{SurveyYr}.
+#' }
+#'
+#' @format A tibble with columns:
+#' \describe{
+#'   \item{SurveyYr}{Factor. Survey wave; here always \code{"2011_12"}.}
+#'   \item{Age}{Numeric. Age in years (also used as offset in one model).}
+#'   \item{DaysPhysHlthBad}{Integer. # days physical health was “not good” (last 30 days).}
+#'   \item{AlcoholYear}{Integer. # days drank alcohol in the last year.}
+#'   \item{SexNumPartnLife}{Integer. Lifetime number of sexual partners.}
+#'   \item{SexAge}{Numeric. Age at first sexual intercourse.}
+#' }
+#'
+#' @source \pkg{NHANES} package, dataset \code{NHANES}.
+#'
+#' @examples
+#' # Poisson example from the book:
+#' # glm(DaysPhysHlthBad ~ Age, data = nhanes1112, family = poisson(link = "log"))
+#'
+#' @keywords datasets
+"nhanes1112"
