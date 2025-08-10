@@ -15,6 +15,7 @@
 \alias{aov_car}
 \alias{nice}
 \alias{lmer}
+\alias{multinom}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -35,6 +36,8 @@ below to see their documentation.
   \item{lmerTest}{\code{\link[lmerTest]{lmer}}}
 
   \item{moments}{\code{\link[moments]{skewness}}}
+
+  \item{nnet}{\code{\link[nnet]{multinom}}}
 
   \item{skimr}{\code{\link[skimr]{skim}}}
 }}

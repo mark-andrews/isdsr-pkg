@@ -48,3 +48,7 @@ lmerTest::lmer
 
 #' @import broom.mixed
 NULL
+
+#' @importFrom nnet multinom
+#' @export
+nnet::multinom
