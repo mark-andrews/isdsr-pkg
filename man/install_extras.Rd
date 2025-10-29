@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{install_extras}
 \alias{install_extras}
-\title{Install the packages listed in isdsr's \emph{Suggests}}
+\title{Install the packages listed in sgsur's \emph{Suggests}}
 \usage{
 install_extras()
 }
@@ -11,11 +11,11 @@ Called for its side effect of installing packages; invisibly returns
 the character vector of packages that were requested for installation.
 }
 \description{
-The core functionality of isdsr works after you install the package
+The core functionality of sgsur works after you install the package
 itself and any packages in its \emph{Imports} field.
 However, throughout the accompanying textbook, we will use some packages
 that are not \emph{Imports} dependencies.
-These are not required for isdsr code to work, but are used or are recommended
+These are not required for sgsur code to work, but are used or are recommended
 in the book.
 This function installs all these extra packages.
 }
@@ -31,8 +31,8 @@ present.
 }
 \examples{
 \dontrun{
-# After installing isdsr:
-isdsr::install_extras()
+# After installing sgsur:
+sgsur::install_extras()
 }
 
 }

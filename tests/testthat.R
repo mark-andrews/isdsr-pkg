@@ -1,4 +1,4 @@
 library(testthat)
-library(isdsr)
+library(sgsur)
 
-test_check("isdsr")
+test_check("sgsur")

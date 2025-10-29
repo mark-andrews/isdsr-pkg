@@ -30,8 +30,8 @@ recorded in this data set.
 }
 \details{
 This data is taken from Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
-Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
+Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{sgsur}.
 }
 \references{
-\insertRef{behmer2017spatial}{isdsr}
+\insertRef{behmer2017spatial}{sgsur}
 }

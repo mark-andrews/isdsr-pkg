@@ -1,10 +1,10 @@
-#' Install the packages listed in isdsr's *Suggests*
+#' Install the packages listed in sgsur's *Suggests*
 #'
-#' The core functionality of isdsr works after you install the package
+#' The core functionality of sgsur works after you install the package
 #' itself and any packages in its *Imports* field.
 #' However, throughout the accompanying textbook, we will use some packages
 #' that are not *Imports* dependencies.
-#' These are not required for isdsr code to work, but are used or are recommended
+#' These are not required for sgsur code to work, but are used or are recommended
 #' in the book.
 #' This function installs all these extra packages.
 #'
@@ -22,8 +22,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' # After installing isdsr:
-#' isdsr::install_extras()
+#' # After installing sgsur:
+#' sgsur::install_extras()
 #' }
 #'
 #' @seealso \code{\link[utils]{install.packages}},
@@ -32,11 +32,11 @@
 install_extras <- function() {
   extras <- setdiff(
     tools::package_dependencies(
-      "isdsr",
+      "sgsur",
       which = "Suggests", # look only at Suggests
       db = installed.packages(),
       recursive = FALSE # do not chase their own Suggests
-    )$isdsr,
+    )$sgsur,
     rownames(installed.packages())
   )
 
@@ -54,7 +54,7 @@ install_extras <- function() {
 #' Copy a file from *inst/extdata* into the working directory
 #'
 #' This helper lets users experiment with the small demo files that ship
-#' with **isdsr** (or any other package) without asking them to locate the
+#' with **sgsur** (or any other package) without asking them to locate the
 #' installation directory.  It looks for `filename` inside the package’s
 #' *inst/extdata* folder, checks a few safety conditions, then copies the
 #' file to `getwd()`.

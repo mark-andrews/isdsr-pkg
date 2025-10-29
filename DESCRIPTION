@@ -1,15 +1,13 @@
-Package: isdsr
-Title: Tools and Datasets to Accompany ISDSR Textbook
+Package: sgsur
+Title: Tools and Datasets to Accompany SGSUR Textbook
 Version: 0.0.0.9000
 Authors@R: 
     person("Mark", "Andrews", , "mark.andrews@ntu.ac.uk", role = c("aut", "cre"))
-Description: Tools and datasets that are used in the textbook "Introduction to
-    Statistics and Data Science Using R" by Mark Andrews & Lucy V. Justice
-    (forthcoming), SAGE.
+Description: Tools and datasets that are used in the textbook "A Student's Guide to Statistics Using R" by Mark Andrews & Lucy V. Justice (2026), SAGE.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: 
     assertthat (>= 0.2.1),
     here (>= 1.0.1),

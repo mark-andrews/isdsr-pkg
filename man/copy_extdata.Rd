@@ -22,7 +22,7 @@ an error or warning.
 }
 \description{
 This helper lets users experiment with the small demo files that ship
-with \strong{isdsr} (or any other package) without asking them to locate the
+with \strong{sgsur} (or any other package) without asking them to locate the
 installation directory.  It looks for \code{filename} inside the package’s
 \emph{inst/extdata} folder, checks a few safety conditions, then copies the
 file to \code{getwd()}.

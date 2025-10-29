@@ -465,9 +465,9 @@ NULL
 #'   logarithm of the time to type the first letter on each trial.} }
 #'
 #' @details This data is taken from the keyboard visible condition of Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
-#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
+#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{sgsur}.
 #' @references
-#' \insertRef{behmer2017spatial}{isdsr}
+#' \insertRef{behmer2017spatial}{sgsur}
 #' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
 NULL
 
@@ -494,9 +494,9 @@ NULL
 #'   logarithm of the time to type the first letter on each trial.} }
 #'
 #' @details This data is taken from Experiment 1 that is described in the 2017 paper "Spatial Knowledge during Skilled
-#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{isdsr}.
+#' Action Sequencing: Hierarchical versus Nonhierarchical Representations" \insertCite{behmer2017spatial}{sgsur}.
 #' @references
-#' \insertRef{behmer2017spatial}{isdsr}
+#' \insertRef{behmer2017spatial}{sgsur}
 #' @source The original raw data are available on \href{https://github.com/CrumpLab/statistics/blob/master/data/exp1_BehmerCrumpAPP.csv}{GitHub} under a CC-BY-SA-4.0 licence. The published paper is available at \href{https://link.springer.com/article/10.3758/s13414-017-1389-3}{https://link.springer.com/article/10.3758/s13414-017-1389-3}.
 NULL
 
@@ -533,9 +533,9 @@ NULL
 #' @details This data is from Experiment 1 in the paper "Nonverbal category
 #'     knowledge limits the amount of information encoded in object
 #'     representations: EEG evidence from 12-month-old infants" by Pomoiechowska
-#'     and Gliga (2021). \insertCite{pomiechowska2021nonverbal}{isdsr}.
+#'     and Gliga (2021). \insertCite{pomiechowska2021nonverbal}{sgsur}.
 #' @references
-#'   \insertRef{pomiechowska2021nonverbal}{isdsr}
+#'   \insertRef{pomiechowska2021nonverbal}{sgsur}
 #' @source The original raw data set is publicly available on the Open Science Foundation at \href{https://osf.io/652cp/}{https://osf.io/652cp/}.
 NULL
 
@@ -758,7 +758,7 @@ NULL
 
 #' Volunteering Study (Cowles & Davis, 1987)
 #'
-#' A reproduction of \code{carData::Cowles}, provided in \pkg{isdsr} as
+#' A reproduction of \code{carData::Cowles}, provided in \pkg{sgsur} as
 #' \code{volunteering}. Each row is a participant from a study on personality
 #' determinants of volunteering for psychological research.
 #'
@@ -772,7 +772,7 @@ NULL
 #' }
 #'
 #' @details
-#' This dataset is copied from \pkg{carData} (\code{Cowles}) into \pkg{isdsr}
+#' This dataset is copied from \pkg{carData} (\code{Cowles}) into \pkg{sgsur}
 #' for convenience in teaching and examples. Variable names and values are
 #' unchanged from the source.
 #'

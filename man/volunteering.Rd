@@ -23,12 +23,12 @@ Volunteers. \emph{British Journal of Social Psychology}, \strong{26}, 97–102.
 volunteering
 }
 \description{
-A reproduction of \code{carData::Cowles}, provided in \pkg{isdsr} as
+A reproduction of \code{carData::Cowles}, provided in \pkg{sgsur} as
 \code{volunteering}. Each row is a participant from a study on personality
 determinants of volunteering for psychological research.
 }
 \details{
-This dataset is copied from \pkg{carData} (\code{Cowles}) into \pkg{isdsr}
+This dataset is copied from \pkg{carData} (\code{Cowles}) into \pkg{sgsur}
 for convenience in teaching and examples. Variable names and values are
 unchanged from the source.
 }

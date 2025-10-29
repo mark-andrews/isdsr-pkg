@@ -40,8 +40,8 @@ the amplitude of the negative central wave (Nc) event related potential
 This data is from Experiment 1 in the paper "Nonverbal category
 knowledge limits the amount of information encoded in object
 representations: EEG evidence from 12-month-old infants" by Pomoiechowska
-and Gliga (2021). \insertCite{pomiechowska2021nonverbal}{isdsr}.
+and Gliga (2021). \insertCite{pomiechowska2021nonverbal}{sgsur}.
 }
 \references{
-\insertRef{pomiechowska2021nonverbal}{isdsr}
+\insertRef{pomiechowska2021nonverbal}{sgsur}
 }
